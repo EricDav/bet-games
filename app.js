@@ -18,6 +18,6 @@ app.get('/bet9ja/:bookingCode', (req, res) => {
     }
 });
 
-app.listen(port, () => console.log(`Hello world app listening on port ${port}!`));
+app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
 
 
