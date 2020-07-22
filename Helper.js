@@ -8,7 +8,9 @@ const puppeteer = require('puppeteer');
 
     static getGameFromBet9jaBookingCode(bookingCode, res) {
             (async () => {
-                const browser = await puppeteer.launch();
+                const browser = await puppeteer.launch({
+                    ignoreDefaultArgs: ['--disable-extensions'],
+                });
                 const page = await browser.newPage();
                 await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
               
