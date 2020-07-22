@@ -10,6 +10,10 @@ const puppeteer = require('puppeteer');
             (async () => {
                 const browser = await puppeteer.launch({
                     ignoreDefaultArgs: ['--disable-extensions'],
+                    args: [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                      ],
                 });
                 const page = await browser.newPage();
                 await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
