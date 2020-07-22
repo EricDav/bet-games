@@ -48,12 +48,15 @@ const puppeteer = require('puppeteer');
                     const dates = [];
                     const fixtures = [];
                     const outcomes = [];
+                    const originalDate = [];
                   
                     optionsResult.forEach(function(item) {
                       const itemArr = item.split('==');
+                      // console.log(itemArr[1]);
                       const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
-                     // console.log(dt);
+                      // console.log(dt);
                       dates.push(dt);
+                      originalDate.push(itemArr[1]);
                       fixtures.push(itemArr[2]);
                       outcomes.push(itemArr[4]);
                     });
@@ -64,10 +67,10 @@ const puppeteer = require('puppeteer');
                         outcomes: outcomes
                     }
                   
-                    await page.pdf({path: 'hn.pdf', format: 'A4'});
+                   // await page.pdf({path: 'hn.pdf', format: 'A4'});
                   
                     await browser.close();
-                    res.send({data: ans, success: true});
+                    res.send({data: ans, original: originalDate, success: true});
                     
                 } catch(e) {
                     const val = page.$('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
