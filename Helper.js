@@ -52,9 +52,9 @@ const puppeteer = require('puppeteer');
                   
                     optionsResult.forEach(function(item) {
                       const itemArr = item.split('==');
-                      // console.log(itemArr[1]);
+                      console.log(itemArr[1]);
                       const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
-                      // console.log(dt);
+                      console.log(dt);
                       dates.push(dt);
                       originalDate.push(itemArr[1]);
                       fixtures.push(itemArr[2]);
@@ -96,7 +96,7 @@ const puppeteer = require('puppeteer');
         var utcDate = (newDate.getUTCFullYear()).toString() +
             '-' + Helper.format(newDate.getUTCMonth()) +
             '-' + Helper.format(newDate.getUTCDate()) +
-            ' ' + Helper.format(newDate.getUTCHours()) +
+            ' ' + Helper.format(newDate.getHours() - 1) +
             ':' + Helper.format(newDate.getUTCMinutes());
         
         // console.log(utcDate);
