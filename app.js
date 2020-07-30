@@ -18,6 +18,14 @@ app.get('/bet9ja/:bookingCode', (req, res) => {
     }
 });
 
+app.get('/soccer24/live-score', (req, res) => {
+    try {
+        helper.getLiveScoresFromSoccer24(res);
+    } catch (e) {
+        res.send({});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
 
 

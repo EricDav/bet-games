@@ -3,59 +3,38 @@ const puppeteer = require('puppeteer');
 (async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
+ 
+  await page.setDefaultNavigationTimeout(0);
+ 
+    await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
 
-  await page.type('#s_w_PC_cCoupon_txtPrenotatore', 'ZLNBHQ6');
-  await page.click('#s_w_PC_cCoupon_lnkLoadPrenotazione');
-  await page
-  .waitForSelector('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
+    const text = await page.$$eval('.event__match', (options) => {
 
+        const result = options.map(option => option.innerText.split("\n"));
+        return result;
+    });
 
-  await page.click('#s_w_PC_cCoupon_lnkAvanti');
-  await page.waitFor(4000);
+    var data = [];
+    let match;
+    text.forEach(function(item, index) {
+        match = {}
+        if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
+            match.time = item[0];
+            match.home_name = item[1];
+            match.away_name = item[2];
+            match.score  = item[3] + item[4] + item[5];
+            data.push(match);
+        } else if (item[0] == 'Cancelled' || item[0] == 'Postponed') {
+            match.time = item[0];
+            match.home_name = item[1];
+            match.away_name = item[2];
+            data.push(match);
+        }
+    });
 
-  const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
+    await browser.close();
 
-  const optionsResult = await frame.$$eval('.rep > .item', (options) => {
-    const result = options.map(option => option.innerText);
+    // return data;
 
-    const f = [];
-
-    for(let i = 0; i < result.length; i++) {
-        if (i == 0)
-            continue;
-        
-        f.push(result[i].replace(/(\r\n|\n|\r)/gm, "=="));
-    }
-
-    return f;
-  });
-
-  dates = [];
-  fixtures = [];
-  outcomes = [];
-
-  optionsResult.forEach(function(item) {
-    itemArr = item.split('==');
-    dates.push(itemArr[1]);
-    fixtures.push(itemArr[2]);
-    outcomes.push(itemArr[4]);
-  });
-
-  ans = {
-      dates: dates,
-      fixtures: fixtures,
-      outcomes: outcomes
-  }
-
-  console.log(ans);
-
-
-    console.log(optionsResult);
-
-//   await page
-//   .waitForSelector('#prenSco');
-  await page.pdf({path: 'hn.pdf', format: 'A4'});
-
-  await browser.close();
+    console.log(data);
 })();
