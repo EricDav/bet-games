@@ -105,7 +105,13 @@ const puppeteer = require('puppeteer');
 
     static getLiveScoresFromSoccer24(res) {
         (async () => {
-            const browser = await puppeteer.launch();
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
             const page = await browser.newPage();
            
             await page.setDefaultNavigationTimeout(0);
@@ -122,7 +128,7 @@ const puppeteer = require('puppeteer');
               let match;
               text.forEach(function(item, index) {
                   match = {}
-                  if (item[0] == 'Finished' || !isNaN(item[0].trim())) {
+                  if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
                       match.time = item[0];
                       match.home_name = item[1];
                       match.away_name = item[2];
