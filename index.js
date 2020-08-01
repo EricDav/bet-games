@@ -4,28 +4,30 @@ const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2');
+  await page.goto('https://shop.bet9ja.com/sport/default.aspx');
 
-  // console.log(page);
+  await page.type('#h_w_PC_ctl05_txtCodiceCoupon', 'B93TETSRZPAPP-7704684');
+  await page.click('#h_w_PC_ctl05_lnkCheckCoupon');
 
-  // example: get innerHTML of an element s_w_PC_cCoupon_txtPrenotatore
-  const someContent = await page.$eval('#s_w_PC_cCoupon_txtPrenotatore', el => el.innerHTML);
+  const frame = await page.frames().find(frame => frame.name() === 'iframeCC');
+  await frame.waitForSelector('#popUp_PC_btnRebet');
 
-  console.log(someContent);
+  await frame.click('#popUp_PC_btnRebet');
 
-  // Use Promise.all to wait for two actions (navigation and click)
-  await Promise.all([
-    // page.waitForNavigation(), // wait for navigation to happen
-    page.type('#s_w_PC_cCoupon_txtPrenotatore', 'ZLQ5THB'),
-    page.click('#s_w_PC_cCoupon_lnkLoadPrenotazione'), // click link to cause navigation
-  ]);
+  await page.waitForSelector('#s_w_PC_cCoupon_lnkAvanti');
+  await page.click('#s_w_PC_cCoupon_lnkAvanti');
 
-  // another example, this time using the evaluate function to return innerText of body
-  const moreContent = await page.evaluate(() => document.body.innerText);
-  console.log(moreContent);
+  const frame2 = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
+  await frame2.waitForSelector('.rep');
 
-  // click another button
-  // await page.click('#button');
+  const bookingCode = await frame2.$$eval('#bookHead > .number', (options) => {
+    const result = options.map(option => option.innerText);
+    return result;
+  });
+
+  bookingCode[0].split(':')[1];
+
+  await page.pdf({path: 'hn.pdf', format: 'A4'});
 
   // close brower when we are done
   await browser.close();

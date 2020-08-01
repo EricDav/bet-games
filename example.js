@@ -8,10 +8,10 @@ const puppeteer = require('puppeteer');
             '--disable-setuid-sandbox',
           ],
     });
-    
+
   const page = await browser.newPage();
  
-  await page.setDefaultNavigationTimeout(0);
+    await page.setDefaultNavigationTimeout(0);
  
     await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
 
@@ -40,8 +40,6 @@ const puppeteer = require('puppeteer');
     });
 
     await browser.close();
-
-    // return data;
 
     console.log(data);
 })();

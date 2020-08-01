@@ -26,6 +26,12 @@ app.get('/soccer24/live-score', (req, res) => {
     }
 });
 
+app.get('/gen-booking-code/:betslip', (req, res) => {
+    try {
+        helper.getBookingCodeFromBetslip(req.params.betslip, res);
+    } catch (e) {
+        res.send({});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
-
-
