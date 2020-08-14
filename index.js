@@ -1,34 +1,55 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--disable-extensions'],
+      args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+        ],
+  });
+  
+const page = await browser.newPage();
 
-  await page.goto('https://shop.bet9ja.com/sport/default.aspx');
+await page.setDefaultNavigationTimeout(0);
 
-  await page.type('#h_w_PC_ctl05_txtCodiceCoupon', 'B93TETSRZPAPP-7704684');
-  await page.click('#h_w_PC_ctl05_lnkCheckCoupon');
+  await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
 
-  const frame = await page.frames().find(frame => frame.name() === 'iframeCC');
-  await frame.waitForSelector('#popUp_PC_btnRebet');
-
-  await frame.click('#popUp_PC_btnRebet');
-
-  await page.waitForSelector('#s_w_PC_cCoupon_lnkAvanti');
-  await page.click('#s_w_PC_cCoupon_lnkAvanti');
-
-  const frame2 = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
-  await frame2.waitForSelector('.rep');
-
-  const bookingCode = await frame2.$$eval('#bookHead > .number', (options) => {
-    const result = options.map(option => option.innerText);
-    return result;
+  const text = await page.$$eval('.event__match', (options) => {
+      const result = options.map(option => option.innerText.split("\n"));
+      return result;
   });
 
-  bookingCode[0].split(':')[1];
+  const text2 = await page.$$eval('.event__match', (options) => {
+    const f = options.map(option => option.getAttribute('id'));
+    return f;
+  });
 
-  await page.pdf({path: 'hn.pdf', format: 'A4'});
+  var data = [];
+  let match;
+  var index = 0;
+  text.forEach(function(item, index) {
+      match = {}
+      if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
+          match.time = item[0];
+          match.home_name = item[1];
+          match.away_name = item[2];
+          match.score  = item[3] + item[4] + item[5];
+          match.match_id = text2[index].split('_')[2];
+          data.push(match);
+      } else if (item[0] == 'Cancelled' || item[0] == 'Postponed') {
+          match.time = item[0];
+          match.home_name = item[1];
+          match.away_name = item[2];
+          match.match_id = text2[index].split('_')[2];
+          data.push(match);
+      }
+      index +=1;
+  });
 
-  // close brower when we are done
+
   await browser.close();
-})();
+
+
+    return res.send({data: data, success: true});
+})(); 

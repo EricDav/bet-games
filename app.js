@@ -10,7 +10,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/bet9ja/:bookingCode', (req, res) => {
-    // console.log(req.params.bookingCode);
     try {
         helper.getGameFromBet9jaBookingCode(req.params.bookingCode, res);
     } catch (e) {
