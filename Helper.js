@@ -120,9 +120,8 @@ const puppeteer = require('puppeteer');
             await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
         
             const text = await page.$$eval('.event__match', (options) => {
-                const f = options.map(option => option);
                 const result = options.map(option => option.innerText.split("\n"));
-                return [result, f];
+                return result;
             });
         
             const text2 = await page.$$eval('.event__match', (options) => {
