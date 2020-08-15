@@ -13,43 +13,62 @@ const page = await browser.newPage();
 
 await page.setDefaultNavigationTimeout(0);
 
-  await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
+  await page.goto('https://www.soccer24.com/match/rcPFzuRE/#match-summary', {waitUntil: 'networkidle2'});
 
-  const text = await page.$$eval('.event__match', (options) => {
+  const htFt = await page.$$eval('.detailMS__headerScore', (options) => {
       const result = options.map(option => option.innerText.split("\n"));
       return result;
   });
 
-  const text2 = await page.$$eval('.event__match', (options) => {
-    const f = options.map(option => option.getAttribute('id'));
-    return f;
+    const text = await page.$$eval('.detailMS__incidentRow', (options) => {
+      const result = options.map(option => option.innerText.split("\n"));
+      return result;
   });
+
+  const text2 = await page.$$eval('.detailMS__incidentRow', (options) => {
+    const result = options.map(option => option.getAttribute("class"));
+    return result;
+  });
+
+  const icons = await page.$$eval('.icon-box ', (options) => {
+    const result = options.map(option => option.getAttribute("class"));
+    return result;
+  });
+
 
   var data = [];
-  let match;
+  let event;
   var index = 0;
   text.forEach(function(item, index) {
-      match = {}
-      if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
-          match.time = item[0];
-          match.home_name = item[1];
-          match.away_name = item[2];
-          match.score  = item[3] + item[4] + item[5];
-          match.match_id = text2[index].split('_')[2];
-          data.push(match);
-      } else if (item[0] == 'Cancelled' || item[0] == 'Postponed') {
-          match.time = item[0];
-          match.home_name = item[1];
-          match.away_name = item[2];
-          match.match_id = text2[index].split('_')[2];
-          data.push(match);
-      }
-      index +=1;
+      event = {}
+      event.time = item[0];
+      event.player = item[2].includes('(') ? item[3] : item[2];
+      event.type = text2[index].includes('away') ? 'away' : 'home';
+      event.action = getAction(icons[index]);
+      data.push(event);
   });
 
 
+  var statistics = [];
+  await page.click('#a-match-statistics');
+  await page.waitForSelector('#tab-statistics-0-statistic');
+
+  const stats = await page.$$eval('#tab-statistics-0-statistic > .statRow', (options) => {
+    const result = options.map(option => option.innerText.split("\n"));
+    return result;
+  });
+
+  stat = {}
+
+  stats.forEach(function(item, index) {
+    stat = {};
+    stat.home_val = item[0];
+    stat.name = item[1];
+    stat.away_val = item[2];
+    statistics.push(stat);
+  });
+
   await browser.close();
+  // return res.send({data: data, success: true});
+})();
 
-
-    return res.send({data: data, success: true});
-})(); 

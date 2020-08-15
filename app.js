@@ -25,6 +25,14 @@ app.get('/soccer24/live-score', (req, res) => {
     }
 });
 
+app.get('/soccer24/live-score/:matchId', (req, res) => {
+    try {
+        helper.getMatchDetails(req.params.matchId, res);
+    } catch (e) {
+        res.send({});
+    }
+});
+
 app.get('/gen-booking-code/:betslip', (req, res) => {
     try {
         helper.getBookingCodeFromBetslip(req.params.betslip, res);
