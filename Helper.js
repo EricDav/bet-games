@@ -866,7 +866,7 @@ const puppeteer = require('puppeteer');
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
 
-                const s = await Helper.getSportybetData(sportybetUrl);
+                const s = await Helper.get1xbetData(xbetUrl);
 
                 return res.send({data: s});
             
