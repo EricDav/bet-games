@@ -544,6 +544,8 @@ const puppeteer = require('puppeteer');
                     drawOdds: drawOdds,
                     lostOdds: lostOdds
                 }
+
+                console.log(data);
         
                 return data;
             });
@@ -557,8 +559,6 @@ const puppeteer = require('puppeteer');
     }
 
     static async  get1xbetData(url) {
-        console.log(url);
-
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -573,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('.dashboard');
+            await page.waitFor('#maincontent');
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -659,9 +659,10 @@ const puppeteer = require('puppeteer');
                 lAmount+=1;
             }
         }
+
         let awAmount = wAmount*w;
-        let adAmount = wAmount*d;
-        let alAmount = wAmount*l;
+        let adAmount = dAmount*d;
+        let alAmount = lAmount*l;
 
         
         return {'amount_to_play': [wAmount, dAmount, lAmount], 
@@ -981,6 +982,8 @@ const puppeteer = require('puppeteer');
             let splitMoneyOdd = Helper.splitOddMoney(hOdd['win']['oddValue'], hOdd['draw']['oddValue'], hOdd['lost']['oddValue'], amount);
             hOdd['eval'] = splitMoneyOdd;
             maxGames.push(hOdd);
+            console.log(amount, splitMoneyOdd['amount_to_win'][0]);
+            console.log(splitMoneyOdd['amount_to_win'][0] > amount);
             if (splitMoneyOdd['amount_to_win'][0] > amount) {
                 risklessGames.push(hOdd);
             }
