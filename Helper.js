@@ -16,7 +16,7 @@ const puppeteer = require('puppeteer');
                       ],
                 });
                 const page = await browser.newPage();
-                await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
+                await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {timeout: 60000, waitUntil: 'domcontentloaded'});
               
                 await page.type('#s_w_PC_cCoupon_txtPrenotatore', bookingCode);
                 await page.click('#s_w_PC_cCoupon_lnkLoadPrenotazione');
