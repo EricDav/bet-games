@@ -557,6 +557,8 @@ const puppeteer = require('puppeteer');
     }
 
     static async  get1xbetData(url) {
+        console.log(url);
+
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -571,8 +573,8 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#games_content');
-            //const teams = [];
+            await page.waitFor('.dashboard');
+
             const t = await page.evaluate(() => {
                 const matches = [];
                 const winOdds = [];
