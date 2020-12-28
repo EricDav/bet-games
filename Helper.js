@@ -573,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor(6000);
+            await page.waitForSelector('#maincontent');
 
             const t = await page.evaluate(() => {
                 const matches = [];
