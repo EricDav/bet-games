@@ -573,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor(4000);
+            await page.waitFor(6000);
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -869,10 +869,12 @@ const puppeteer = require('puppeteer');
             
             
                 try {
+                    const xb = await Helper.get1xbetData(xbetUrl);
+                    console.log(xb);
                     const allGames = {
                         bet9ja : await Helper.getBet9jaData(bet9jaUrl),
                         sportybet: await Helper.getSportybetData(sportybetUrl),
-                        xbet: await Helper.get1xbetData(xbetUrl),
+                        xbet: xb,
                         nairabet: await Helper.getNairabetData(nairabetUrl),
                         betking: await Helper.getBetkingData(betKingUrl)
                     }
