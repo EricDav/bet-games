@@ -561,6 +561,7 @@ const puppeteer = require('puppeteer');
     static async  get1xbetData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -572,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor(3000);
+            await page.waitFor(6000);
 
             const t = await page.evaluate(() => {
                 const matches = [];
