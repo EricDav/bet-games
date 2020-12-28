@@ -52,9 +52,7 @@ const puppeteer = require('puppeteer');
                   
                     optionsResult.forEach(function(item) {
                       const itemArr = item.split('==');
-                      console.log(itemArr[1]);
                       const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
-                      console.log(dt);
                       dates.push(dt);
                       originalDate.push(itemArr[1]);
                       fixtures.push(itemArr[2]);
@@ -259,7 +257,7 @@ const puppeteer = require('puppeteer');
         }
     }
 
-    static getBookingCodeFromBetslip(betslip, res) {
+    static  getBookingCodeFromBetslip(betslip, res) {
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -305,6 +303,688 @@ const puppeteer = require('puppeteer');
 
             return res.send({success: true, bookingCode: bookingCode[0].split(':')[1]});
           })();
+    }
+
+    static async  getSportybetData(url) {
+        const promise = (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.waitFor('#importMatch');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const matches = [];
+                const winOdds = [];
+                const lostOdds = [];
+                const drawOdds = [];
+                let items;
+            
+                awayTeam = document.querySelectorAll('.away-team')
+                document.querySelectorAll('.home-team').forEach(function(item, index) {
+                    matches.push(item.textContent.trim() + ' - ' + awayTeam[index].textContent.trim());
+                });
+
+                document.querySelectorAll('.market-cell').forEach(function(item) {
+                    items = item.textContent.trim().split(' ');
+            
+                    if (items.length < 3) {
+                        winOdds.push('-');
+                        drawOdds.push('-');
+                        lostOdds.push('-');
+                    } else {
+                        winOdds.push(items[0]);
+                        drawOdds.push(items[1]);
+                        lostOdds.push(retrieveLostOdds(items[2]));
+                    }
+                    // console.log(items);
+            
+                })
+            
+                function retrieveLostOdds(mixOdds) {
+                    let odd = '';
+                    let startCount = false;
+                    let countAfterDot = 0;
+                    for(i = 0; i < mixOdds.length; i++) {
+                        if (countAfterDot == 2)
+                            break;
+                        
+                        odd+=mixOdds[i];
+                        if (startCount) {
+                            countAfterDot+=1;
+                        }
+                        if (mixOdds[i] == '.') {
+                            startCount = true;
+                        }
+                    }
+            
+                    return odd;
+                }
+            
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+            });
+        
+            await browser.close();
+
+            return t;
+        })();
+
+        return promise;
+    }
+
+    static async  getNairabetData(url) {
+        const promise = (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.waitFor('#eventListHeaderMarketList1');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const matches = [];
+                const winOdds = [];
+                const lostOdds = [];
+                const drawOdds = [];
+                let items;
+            
+                document.querySelectorAll('.event-name').forEach(function(item) {
+                    matches.push(item.textContent.trim());
+                });
+            
+                document.querySelectorAll('.game').forEach(function(item,index) {
+                    if (index%2 == 0) {
+                        items = item.textContent.trim().replace(/  +/g, ' ').split(' ');
+                        winOdds.push(items[0]);
+                        drawOdds.push(items[1]);
+                        lostOdds.push(items[2]);
+                    }
+                });
+
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+            });
+        
+            await browser.close();
+
+            return t;
+        })();
+
+        return promise;
+        
+    }
+
+    static async  getBetkingData(url) {
+        const promise = (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.waitFor('#eventsWrapper');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const matches = [];
+                const winOdds = [];
+                const lostOdds = [];
+                const drawOdds = [];
+            
+                document.querySelectorAll('.matchName').forEach(function(item) {
+                    matches.push(item.textContent.trim());
+                })
+            
+                document.querySelectorAll('.eventOdd-0').forEach(function(item) {
+                    winOdds.push(item.textContent.trim());
+                })
+            
+            
+                document.querySelectorAll('.eventOdd-1').forEach(function(item) {
+                    drawOdds.push(item.textContent.trim());
+                })
+                document.querySelectorAll('.eventOdd-2').forEach(function(item) {
+                    lostOdds.push(item.textContent.trim());
+                });
+
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+            });
+        
+            await browser.close();
+
+            return t;
+        })();
+
+        return promise;
+    }
+
+    static async getBet9jaData(url) {
+        const promise = (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.waitFor('#MainContent');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const matches = [];
+                const winOdds = [];
+                const lostOdds = [];
+                const drawOdds = [];
+            
+                document.querySelectorAll('.Event').forEach(function(item) {
+                    matches.push(item.textContent.trim());
+                })
+            
+                document.querySelectorAll('.odd').forEach(function(item, index) {
+                    if (index%8 == 0) {
+                        winOdds.push(item.textContent.trim().substring(1))
+                    } else if (index%8 == 1) {
+                        drawOdds.push(item.textContent.trim().substring(1))
+                    } else if (index%8 == 2) {
+                        lostOdds.push(item.textContent.trim().substring(1))
+                    }
+                });
+
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+            });
+        
+            await browser.close();
+
+            return t;
+        })();
+
+        return promise;
+    }
+
+    static async  get1xbetData(url) {
+        const promise = (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.waitFor('#games_content');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const matches = [];
+                const winOdds = [];
+                const lostOdds = [];
+                const drawOdds = [];
+                let odds;
+                let count;
+            
+                document.querySelectorAll('.c-events__teams').forEach(function(item) {
+                    matches.push(item.title);
+                });
+            
+                document.querySelectorAll('.c-bets').forEach(function(item, index) {
+                    if (index != 0) {
+                    
+                    count = 0
+                    odds = item.textContent.trim().split("\n");
+            
+                    for(i = 0; i < odds.length; i++) {
+                        if (odds[i].trim()) {
+                            if (count == 0) {
+                                winOdds.push(odds[i].trim());
+                            }
+                            if (count == 1) {
+                                drawOdds.push(odds[i].trim());
+                            }
+                            if (count == 2) {
+                                lostOdds.push(odds[i].trim());
+                            }
+                            count+=1;
+                        }
+                    }
+                 }
+                });
+
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+            });
+        
+            await browser.close();
+
+            return t
+        })();
+
+        return promise;
+    }
+
+    static splitOddMoney(w,d,l,amount) {
+        const fractionOfD = w/d;
+        const fractionOfL = w/l;
+        
+        let wAmount = amount/(fractionOfD + fractionOfL + 1);
+        let dAmount = wAmount * fractionOfD;
+        let lAmount = wAmount * fractionOfL;
+
+        wAmount = Math.round(wAmount);
+        dAmount = Math.round(dAmount);
+        lAmount = Math.round(lAmount);
+
+        if ((wAmount + dAmount + lAmount ) > amount) {
+            if ((wAmount*w) > (dAmount*d) && (wAmount*w) > (lAmount*l))  {
+                wAmount-=1;
+            } else if ((dAmount*d) > (wAmount*w) && (dAmount*d) > (lAmount*l)) {
+                dAmount-=1;
+            } else if ((lAmount*l) > (wAmount*w) && (lAmount*l) > (dAmount*d)) {
+                lAmount-=1;
+            }
+        }
+
+        if ((wAmount + dAmount + lAmount ) < amount) {
+            if ((wAmount*w) < (dAmount*d) && (wAmount*w) < (lAmount*l))  {
+                wAmount+=1;
+            } else if ((dAmount*d) < (wAmount*w) && (dAmount*d) < (lAmount*l)) {
+                dAmount+=1;
+            } else if ((lAmount*l) < (wAmount*w) && (lAmount*l) < (dAmount*d)) {
+                lAmount+=1;
+            }
+        }
+        let awAmount = wAmount*w;
+        let adAmount = wAmount*d;
+        let alAmount = wAmount*l;
+
+        
+        return {'amount_to_play': [wAmount, dAmount, lAmount], 
+                'amount_to_win' : [awAmount.toFixed(2), adAmount.toFixed(2), alAmount.toFixed(2)]};
+    }
+
+    static determineHighestOdds(platformObj) {
+        const maxWinOdd = {oddValue: 0};
+        const maxDrawOdd = {oddValue: 0};
+        const maxLostOdd = {oddValue: 0};
+    
+        platformObj.platformOdds.forEach(function(platformOdd) {
+            if (platformOdd['odds'][0] != '-' && parseFloat(platformOdd['odds'][0]) > maxWinOdd.oddValue) {
+                maxWinOdd.oddValue = parseFloat(platformOdd['odds'][0]);
+                maxWinOdd['platform'] = platformOdd['platform'];
+            }
+    
+            if (platformOdd['odds'][1] != '-' &&  parseFloat(platformOdd['odds'][1]) > maxDrawOdd['oddValue']) {
+                maxDrawOdd['oddValue'] = parseFloat(platformOdd['odds'][1])
+                maxDrawOdd['platform'] = platformOdd['platform']
+            }
+            
+            if (platformOdd['odds'][2] != '-' &&  parseFloat(platformOdd['odds'][2]) > maxLostOdd['oddValue']) {
+                maxLostOdd['oddValue'] = parseFloat(platformOdd['odds'][2])
+                maxLostOdd['platform']= platformOdd['platform']
+            }
+        });
+    
+        return {
+            'match':   platformObj.match,
+            'win':  maxWinOdd,
+            'draw': maxDrawOdd,
+            'lost': maxLostOdd,
+        }
+    }
+
+    static isMatch(matchA, matchB) {
+        matchA = matchA.toLowerCase().replace('.', '').trim().replace('—', '-');
+        matchB = matchB.toLowerCase().replace('.', '').trim().replace('—', '-');
+
+        if (matchA == matchB)
+            return true;
+
+        let matchAHomeAway = matchA.split("-");
+        let matchBHomeAway = matchB.split("-");
+
+        let matchAHome = matchAHomeAway[0].trim();
+        let matchAAway = matchAHomeAway[1].trim();
+
+        let matchBHome = matchBHomeAway[0].trim();
+        let matchBAway = matchBHomeAway[1].trim();
+
+        if (matchAHome == matchBHome && matchAAway == matchBAway) {
+            return true;
+        }
+
+        if ((matchBHome.includes(matchAHome) || matchAHome.includes(matchBHome)) && (matchBAway.includes(matchAAway) || matchAAway.includes(matchBAway))) {
+            return true;
+        }
+
+        return Helper.isMatchTeam(matchAHome, matchBHome) && Helper.isMatchTeam(matchAAway, matchBAway)
+    }
+
+
+    static isMatchTeam(teamA, teamB) {
+        const teamAr = teamA.split(' ');
+        const teamBr = teamB.split(' ');
+
+        if (teamAr.length == 1 && teamBr.length == 1) {
+            return teamAr[0] == teamBr[0];
+        }
+
+
+        if (teamAr.length == 1 || teamBr.length == 1) {
+            return teamB.includes(teamA) || teamA.includes(teamB);
+        }
+
+        for(let i = 0; i < teamAr.length; i++) {
+            let a = teamAr[i];
+            for(let j = 0; j < teamBr.length; j++) {
+                let b = teamBr[j];
+                if ( (a.length > 2 && b.length > 2) && (!['city', 'united', 'fc', 'cd', 'cf'].includes(a.toLowerCase()) && !['city', 'united', 'fc', 'cd', 'cf'].includes(b.toLowerCase())) && 
+                    (a.includes(b) || b.includes(a)) ) {
+                        return true;
+                }
+            }
+        }
+
+        return false;
+        
+    }
+    
+
+    static getRiskless(competitionId, amount, res) {
+        (async () => {
+            const PREMIER_LEAGUE = 1
+            const LALIGA = 2
+            const BUNDESLIGA = 3
+            const FRANCE_LEAGUE = 4
+            const PORTUGAL_PREMIER_LIGA = 5
+            const SERIE_A = 6
+            const SWEDEN_ALLSVENSKAN = 7
+            const NETHERLANDS_EREDIVISIE = 8
+            const CHAMPIONS_LEAGUE = 9
+            const NORWAY_ELITESERIEN = 10
+            const EUROPE_LEAGUE = 11
+            const CHAMPIONSHIP = 12;
+                
+                const URLS = {
+                    1: {
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170880',
+                        'xbet': 'https://1xbet.ng/en/line/Football/88637-England-Premier-League',
+                        'nairabet': 'https://nairabet.com/categories/18871',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-premier-league/0/0',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:17'
+                    },
+                    6: {
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=167856',
+                        'xbet': 'https://1xbet.ng/en/line/Football/110163-Italy-Serie-A/',
+                        'nairabet': 'https://nairabet.com/categories/18767',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/italy/ita-serie-a/0/0',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:31/sr:tournament:23'   
+                    },
+                    2: {
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180928',
+                        'xbet': 'https://1xbet.ng/en/line/Football/127733-Spain-La-Liga/',
+                        'nairabet': 'https://nairabet.com/categories/18726',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/spain/esp-laliga/0/0',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:32/sr:tournament:8'  
+                    },
+                    4: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/12821-France-Ligue-1/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:7/sr:tournament:34' ,
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=950503',
+                        'nairabet': 'https://nairabet.com/categories/18883',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/france/fra-ligue-1/0/0',
+                    },
+                    3: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/96463-Germany-Bundesliga/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:30/sr:tournament:35',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180923',
+                        'nairabet': 'https://nairabet.com/categories/18767',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/germany/ger-bundesliga/0/0',
+                    },
+                    5: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/118663-Portugal-Primeira-Liga/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:44/sr:tournament:238',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180967',
+                        'nairabet': 'https://nairabet.com/categories/18955',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/portugal/por-primeira-liga/0/0',
+                    },
+                    7: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/212425-Sweden-Allsvenskan/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:9/sr:tournament:40',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817651',
+                        'nairabet': 'https://nairabet.com/categories/18875',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/sweden/swe-allsvenskan/0/0',
+                    },
+
+                    8: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/2018750-Netherlands-Eredivisie/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:35/sr:tournament:370', 
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1016657',
+                        'nairabet': 'https://nairabet.com/categories/18732',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/netherlands/ned-eredivisie/0/0',
+                    },
+                10: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/1793471-Norway-Eliteserien/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:5/sr:tournament:20',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817648',
+                        'nairabet': 'https://nairabet.com/categories/18927',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/norway/nor-eliteserien/0/0'
+                    },
+                    9: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/118587-UEFA-Champions-League/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:7',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062457',
+                        'nairabet': 'https://nairabet.com/categories/18727',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/champions-l/uefa-champions-league/0/0'
+                    },
+                    11: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/118593-UEFA-Europa-League/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:679',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062916',
+                        'nairabet': 'https://nairabet.com/categories/18749',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/europa-l/uefa-europa-league/0/0'
+                    },
+                
+                    12: {
+                        'xbet': 'https://1xbet.ng/en/line/Football/105759-England-Championship/',
+                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:18',
+                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170881',
+                        'nairabet': 'https://www.nairabet.com/categories/18935',
+                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-championship/0/0'
+                    }
+                }
+
+                const urls = URLS[competitionId];
+                const xbetUrl = urls['xbet']
+                const sportybetUrl = urls['sportybet']
+                const bet9jaUrl = urls['bet9ja']
+                const nairabetUrl = urls['nairabet'];
+                const betKingUrl = urls['betking'];
+            
+            
+
+                const allGames = {
+                    bet9ja : await Helper.getBet9jaData(bet9jaUrl),
+                    sportybet: await Helper.getSportybetData(sportybetUrl),
+                    xbet: await Helper.get1xbetData(xbetUrl),
+                    nairabet: await Helper.getNairabetData(nairabetUrl),
+                    betking: await Helper.getBetkingData(betKingUrl)
+                }
+
+
+                const results = [];
+                const stats = {
+                    'bet9ja': {'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': []},
+                    'betking': {'num_games_retrieved': allGames['betking'].length, 'unmatched_matches': []},
+                    'sportybet': {'num_games_retrieved': allGames['sportybet'].length, 'unmatched_matches': []},
+                    'nairabet': {'num_games_retrieved': allGames['nairabet'].length, 'unmatched_matches': []},
+                    'xbet': {'num_games_retrieved': allGames['xbet'].length, 'unmatched_matches': []}
+                }
+                let isxbetMatch = false
+                let isbet9jaMatch = false;
+                let isNairabetMatch = false;
+                let isSportybetMatch = false;
+
+                for(let i = 0; i < allGames.betking.matches.length; i++) {
+                    let match = allGames['betking']['matches'][i];
+                    let winOdd = allGames['betking']['winOdds'][i];
+                    let drawOdd = allGames['betking']['drawOdds'][i];
+                    let lostOdd = allGames['betking']['lostOdds'][i];
+                    let obj = {
+                        'match': match,
+                        'platformOdds': [{'platform': 'betking', 'odds': [winOdd, drawOdd, lostOdd]}]
+                    };
+
+                    for(let j = 0; j < allGames.bet9ja.matches.length; j++) {
+                        let bet9jaMatch = allGames['bet9ja']['matches'][j]
+                        isbet9jaMatch = false
+                        if (Helper.isMatch(match, bet9jaMatch)) {
+                            let bet9jaWinOdd = allGames['bet9ja']['winOdds'][j];
+                            let bet9jaDrawOdd = allGames['bet9ja']['drawOdds'][j];
+                            let bet9jaLostOdd = allGames['bet9ja']['lostOdds'][j];
+                            obj['platformOdds'].push({'platform': 'bet9ja', 'odds': [bet9jaWinOdd, bet9jaDrawOdd, bet9jaLostOdd]});
+                            isbet9jaMatch = true;
+                            break;
+                        }
+                    }
+
+                    for(let k = 0; k < allGames.sportybet.matches.length; k++) {
+                        let sportybetMatch = allGames['sportybet']['matches'][k]
+                        isSportybetMatch = false
+                        if (Helper.isMatch(match, sportybetMatch)) {
+                            let sportybetWinOdd = allGames['sportybet']['winOdds'][k];
+                            let sportybetDrawOdd = allGames['sportybet']['drawOdds'][k];
+                            let sportybetLostOdd = allGames['sportybet']['lostOdds'][k];
+                            obj['platformOdds'].push({'platform': 'sportybet', 'odds': [sportybetWinOdd, sportybetDrawOdd, sportybetLostOdd]});
+                            isSportybetMatch = true;
+                            break;
+                        }
+                    }
+
+                    for(let m = 0; m < allGames.nairabet.matches.length; m++) {
+                        let nairabetMatch = allGames['nairabet']['matches'][m]
+                        isNairabetMatch = false
+                        if (Helper.isMatch(match, nairabetMatch)) {
+                            let nairabetWinOdd = allGames['nairabet']['winOdds'][m];
+                            let nairabetDrawOdd = allGames['nairabet']['drawOdds'][m];
+                            let nairabetLostOdd = allGames['nairabet']['lostOdds'][m];
+                            obj['platformOdds'].push({'platform': 'nairabet', 'odds': [nairabetWinOdd, nairabetDrawOdd, nairabetLostOdd]});
+                            isNairabetMatch = true;
+                            break;
+                        }
+                    }
+
+                    for(let n = 0; n < allGames.xbet.matches.length; n++) {
+                        let xbetMatch = allGames['xbet']['matches'][n]
+                        isxbetMatch = false
+                        if (Helper.isMatch(match, xbetMatch)) {
+                            let xbetWinOdd = allGames['xbet']['winOdds'][n];
+                            let xbetDrawOdd = allGames['xbet']['drawOdds'][n];
+                            let xbetLostOdd = allGames['xbet']['lostOdds'][n];
+                            obj['platformOdds'].push({'platform': 'xbet', 'odds': [xbetWinOdd, xbetDrawOdd, xbetLostOdd]});
+                            isxbetMatch = true;
+                            break;
+                        }
+                    }
+
+                    if (!isbet9jaMatch)
+                        stats['bet9ja']['unmatched_matches'].push(match)
+
+                    if (!isSportybetMatch)
+                        stats['sportybet']['unmatched_matches'].push(match)
+
+                    if (!isNairabetMatch)
+                        stats['nairabet']['unmatched_matches'].push(match)
+
+                    if (!isxbetMatch)
+                        stats['xbet']['unmatched_matches'].push(match)
+                    results.push(obj)
+                }
+
+                const resultData = Helper.determineRsiklessGames(results, amount);
+
+                return res.send({success: true, data: {result: resultData, stat: stats, urls: urls }});
+        })();
+    }
+
+    static determineRsiklessGames(data, amount) {
+        const maxGames = [];
+        const risklessGames = [];
+
+        data.forEach(function(mData) {
+            let hOdd = Helper.determineHighestOdds(mData);
+            let splitMoneyOdd = Helper.splitOddMoney(hOdd['win']['oddValue'], hOdd['draw']['oddValue'], hOdd['lost']['oddValue'], amount);
+            hOdd['eval'] = splitMoneyOdd;
+            maxGames.push(hOdd);
+            if (splitMoneyOdd['amount_to_win'][0] > amount) {
+                risklessGames.push(hOdd);
+            }
+        });
+
+        return {'all': maxGames, 'won': risklessGames}
     }
 }
 
