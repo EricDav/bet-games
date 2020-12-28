@@ -569,11 +569,16 @@ const puppeteer = require('puppeteer');
             });
         
             const page = await browser.newPage();
+
+            const text2 = await page.$$eval('.event__match', (options) => {
+                const f = options.map(option => option.getAttribute('id'));
+                return f;
+              });
          
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitForSelector('#maincontent');
+            await page.waitFor(7000);
 
             const t = await page.evaluate(() => {
                 const matches = [];
