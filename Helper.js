@@ -865,6 +865,10 @@ const puppeteer = require('puppeteer');
                 const bet9jaUrl = urls['bet9ja']
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
+
+                const s = await Helper.getSportybetData(sportybetUrl);
+
+                return res.send({data: s});
             
             
                 try {
