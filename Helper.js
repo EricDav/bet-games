@@ -573,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#maincontent');
+            await page.waitForTimeout(4000);
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -872,11 +872,12 @@ const puppeteer = require('puppeteer');
                 const allGames = {
                     bet9ja : await Helper.getBet9jaData(bet9jaUrl),
                     sportybet: await Helper.getSportybetData(sportybetUrl),
+                    xbet: await Helper.get1xbetData(xbetUrl),
                     nairabet: await Helper.getNairabetData(nairabetUrl),
                     betking: await Helper.getBetkingData(betKingUrl)
                 }
 
-                console.log(allGames);
+               // console.log(allGames);
 
 
                 const results = [];
@@ -983,8 +984,6 @@ const puppeteer = require('puppeteer');
             let splitMoneyOdd = Helper.splitOddMoney(hOdd['win']['oddValue'], hOdd['draw']['oddValue'], hOdd['lost']['oddValue'], amount);
             hOdd['eval'] = splitMoneyOdd;
             maxGames.push(hOdd);
-            console.log(amount, splitMoneyOdd['amount_to_win'][0]);
-            console.log(splitMoneyOdd['amount_to_win'][0] > amount);
             if (splitMoneyOdd['amount_to_win'][0] > amount) {
                 risklessGames.push(hOdd);
             }
