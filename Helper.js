@@ -868,110 +868,111 @@ const puppeteer = require('puppeteer');
                 const betKingUrl = urls['betking'];
             
             
-
-                const allGames = {
-                    bet9ja : await Helper.getBet9jaData(bet9jaUrl),
-                    sportybet: await Helper.getSportybetData(sportybetUrl),
-                    xbet: await Helper.get1xbetData(xbetUrl),
-                    nairabet: await Helper.getNairabetData(nairabetUrl),
-                    betking: await Helper.getBetkingData(betKingUrl)
+                try {
+                    const allGames = {
+                        bet9ja : await Helper.getBet9jaData(bet9jaUrl),
+                        sportybet: await Helper.getSportybetData(sportybetUrl),
+                        xbet: await Helper.get1xbetData(xbetUrl),
+                        nairabet: await Helper.getNairabetData(nairabetUrl),
+                        betking: await Helper.getBetkingData(betKingUrl)
+                    }
+                    const results = [];
+                    const stats = {
+                        'bet9ja': {'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': []},
+                        'betking': {'num_games_retrieved': allGames['betking'].length, 'unmatched_matches': []},
+                        'sportybet': {'num_games_retrieved': allGames['sportybet'].length, 'unmatched_matches': []},
+                        'nairabet': {'num_games_retrieved': allGames['nairabet'].length, 'unmatched_matches': []},
+                        'xbet': {'num_games_retrieved': allGames['xbet'].length, 'unmatched_matches': []}
+                    }
+                    let isxbetMatch = false
+                    let isbet9jaMatch = false;
+                    let isNairabetMatch = false;
+                    let isSportybetMatch = false;
+    
+                    for(let i = 0; i < allGames.betking.matches.length; i++) {
+                        let match = allGames['betking']['matches'][i];
+                        let winOdd = allGames['betking']['winOdds'][i];
+                        let drawOdd = allGames['betking']['drawOdds'][i];
+                        let lostOdd = allGames['betking']['lostOdds'][i];
+                        let obj = {
+                            'match': match,
+                            'platformOdds': [{'platform': 'betking', 'odds': [winOdd, drawOdd, lostOdd]}]
+                        };
+    
+                        for(let j = 0; j < allGames.bet9ja.matches.length; j++) {
+                            let bet9jaMatch = allGames['bet9ja']['matches'][j]
+                            isbet9jaMatch = false
+                            if (Helper.isMatch(match, bet9jaMatch)) {
+                                let bet9jaWinOdd = allGames['bet9ja']['winOdds'][j];
+                                let bet9jaDrawOdd = allGames['bet9ja']['drawOdds'][j];
+                                let bet9jaLostOdd = allGames['bet9ja']['lostOdds'][j];
+                                obj['platformOdds'].push({'platform': 'bet9ja', 'odds': [bet9jaWinOdd, bet9jaDrawOdd, bet9jaLostOdd]});
+                                isbet9jaMatch = true;
+                                break;
+                            }
+                        }
+    
+                        for(let k = 0; k < allGames.sportybet.matches.length; k++) {
+                            let sportybetMatch = allGames['sportybet']['matches'][k]
+                            isSportybetMatch = false
+                            if (Helper.isMatch(match, sportybetMatch)) {
+                                let sportybetWinOdd = allGames['sportybet']['winOdds'][k];
+                                let sportybetDrawOdd = allGames['sportybet']['drawOdds'][k];
+                                let sportybetLostOdd = allGames['sportybet']['lostOdds'][k];
+                                obj['platformOdds'].push({'platform': 'sportybet', 'odds': [sportybetWinOdd, sportybetDrawOdd, sportybetLostOdd]});
+                                isSportybetMatch = true;
+                                break;
+                            }
+                        }
+    
+                        for(let m = 0; m < allGames.nairabet.matches.length; m++) {
+                            let nairabetMatch = allGames['nairabet']['matches'][m]
+                            isNairabetMatch = false
+                            if (Helper.isMatch(match, nairabetMatch)) {
+                                let nairabetWinOdd = allGames['nairabet']['winOdds'][m];
+                                let nairabetDrawOdd = allGames['nairabet']['drawOdds'][m];
+                                let nairabetLostOdd = allGames['nairabet']['lostOdds'][m];
+                                obj['platformOdds'].push({'platform': 'nairabet', 'odds': [nairabetWinOdd, nairabetDrawOdd, nairabetLostOdd]});
+                                isNairabetMatch = true;
+                                break;
+                            }
+                        }
+    
+                        for(let n = 0; n < allGames.xbet.matches.length; n++) {
+                            let xbetMatch = allGames['xbet']['matches'][n]
+                            isxbetMatch = false
+                            if (Helper.isMatch(match, xbetMatch)) {
+                                let xbetWinOdd = allGames['xbet']['winOdds'][n];
+                                let xbetDrawOdd = allGames['xbet']['drawOdds'][n];
+                                let xbetLostOdd = allGames['xbet']['lostOdds'][n];
+                                obj['platformOdds'].push({'platform': 'xbet', 'odds': [xbetWinOdd, xbetDrawOdd, xbetLostOdd]});
+                                isxbetMatch = true;
+                                break;
+                            }
+                        }
+    
+                        if (!isbet9jaMatch)
+                            stats['bet9ja']['unmatched_matches'].push(match)
+    
+                        if (!isSportybetMatch)
+                            stats['sportybet']['unmatched_matches'].push(match)
+    
+                        if (!isNairabetMatch)
+                            stats['nairabet']['unmatched_matches'].push(match)
+    
+                        if (!isxbetMatch)
+                            stats['xbet']['unmatched_matches'].push(match)
+                        results.push(obj)
+                    }
+    
+                    const resultData = Helper.determineRsiklessGames(results, amount);
+    
+                    return res.send({success: true, data: {result: resultData, stat: stats, urls: urls }});
+                } catch(e) {
+                    return res.send({success: false, data: []});
                 }
 
                // console.log(allGames);
-
-
-                const results = [];
-                const stats = {
-                    'bet9ja': {'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': []},
-                    'betking': {'num_games_retrieved': allGames['betking'].length, 'unmatched_matches': []},
-                    'sportybet': {'num_games_retrieved': allGames['sportybet'].length, 'unmatched_matches': []},
-                    'nairabet': {'num_games_retrieved': allGames['nairabet'].length, 'unmatched_matches': []},
-                    'xbet': {'num_games_retrieved': allGames['xbet'].length, 'unmatched_matches': []}
-                }
-                let isxbetMatch = false
-                let isbet9jaMatch = false;
-                let isNairabetMatch = false;
-                let isSportybetMatch = false;
-
-                for(let i = 0; i < allGames.betking.matches.length; i++) {
-                    let match = allGames['betking']['matches'][i];
-                    let winOdd = allGames['betking']['winOdds'][i];
-                    let drawOdd = allGames['betking']['drawOdds'][i];
-                    let lostOdd = allGames['betking']['lostOdds'][i];
-                    let obj = {
-                        'match': match,
-                        'platformOdds': [{'platform': 'betking', 'odds': [winOdd, drawOdd, lostOdd]}]
-                    };
-
-                    for(let j = 0; j < allGames.bet9ja.matches.length; j++) {
-                        let bet9jaMatch = allGames['bet9ja']['matches'][j]
-                        isbet9jaMatch = false
-                        if (Helper.isMatch(match, bet9jaMatch)) {
-                            let bet9jaWinOdd = allGames['bet9ja']['winOdds'][j];
-                            let bet9jaDrawOdd = allGames['bet9ja']['drawOdds'][j];
-                            let bet9jaLostOdd = allGames['bet9ja']['lostOdds'][j];
-                            obj['platformOdds'].push({'platform': 'bet9ja', 'odds': [bet9jaWinOdd, bet9jaDrawOdd, bet9jaLostOdd]});
-                            isbet9jaMatch = true;
-                            break;
-                        }
-                    }
-
-                    for(let k = 0; k < allGames.sportybet.matches.length; k++) {
-                        let sportybetMatch = allGames['sportybet']['matches'][k]
-                        isSportybetMatch = false
-                        if (Helper.isMatch(match, sportybetMatch)) {
-                            let sportybetWinOdd = allGames['sportybet']['winOdds'][k];
-                            let sportybetDrawOdd = allGames['sportybet']['drawOdds'][k];
-                            let sportybetLostOdd = allGames['sportybet']['lostOdds'][k];
-                            obj['platformOdds'].push({'platform': 'sportybet', 'odds': [sportybetWinOdd, sportybetDrawOdd, sportybetLostOdd]});
-                            isSportybetMatch = true;
-                            break;
-                        }
-                    }
-
-                    for(let m = 0; m < allGames.nairabet.matches.length; m++) {
-                        let nairabetMatch = allGames['nairabet']['matches'][m]
-                        isNairabetMatch = false
-                        if (Helper.isMatch(match, nairabetMatch)) {
-                            let nairabetWinOdd = allGames['nairabet']['winOdds'][m];
-                            let nairabetDrawOdd = allGames['nairabet']['drawOdds'][m];
-                            let nairabetLostOdd = allGames['nairabet']['lostOdds'][m];
-                            obj['platformOdds'].push({'platform': 'nairabet', 'odds': [nairabetWinOdd, nairabetDrawOdd, nairabetLostOdd]});
-                            isNairabetMatch = true;
-                            break;
-                        }
-                    }
-
-                    for(let n = 0; n < allGames.xbet.matches.length; n++) {
-                        let xbetMatch = allGames['xbet']['matches'][n]
-                        isxbetMatch = false
-                        if (Helper.isMatch(match, xbetMatch)) {
-                            let xbetWinOdd = allGames['xbet']['winOdds'][n];
-                            let xbetDrawOdd = allGames['xbet']['drawOdds'][n];
-                            let xbetLostOdd = allGames['xbet']['lostOdds'][n];
-                            obj['platformOdds'].push({'platform': 'xbet', 'odds': [xbetWinOdd, xbetDrawOdd, xbetLostOdd]});
-                            isxbetMatch = true;
-                            break;
-                        }
-                    }
-
-                    if (!isbet9jaMatch)
-                        stats['bet9ja']['unmatched_matches'].push(match)
-
-                    if (!isSportybetMatch)
-                        stats['sportybet']['unmatched_matches'].push(match)
-
-                    if (!isNairabetMatch)
-                        stats['nairabet']['unmatched_matches'].push(match)
-
-                    if (!isxbetMatch)
-                        stats['xbet']['unmatched_matches'].push(match)
-                    results.push(obj)
-                }
-
-                const resultData = Helper.determineRsiklessGames(results, amount);
-
-                return res.send({success: true, data: {result: resultData, stat: stats, urls: urls }});
         })();
     }
 
