@@ -561,6 +561,7 @@ const puppeteer = require('puppeteer');
     static async  get1xbetData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
+                headless:false,
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
