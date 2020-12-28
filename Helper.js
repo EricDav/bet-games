@@ -320,7 +320,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#importMatch');
+            await page.waitForSelector('#importMatch');
             //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -403,7 +403,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#eventListHeaderMarketList1');
+            await page.waitForSelector('#eventListHeaderMarketList1');
             //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -459,7 +459,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#eventsWrapper');
+            await page.waitForSelector('#eventsWrapper');
             //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -516,7 +516,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('#MainContent');
+            await page.waitForSelector('#MainContent');
             //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -573,7 +573,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor(6000);
+            await page.waitForSelector('#maincontent');
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -869,15 +869,26 @@ const puppeteer = require('puppeteer');
             
             
                 try {
-                    const xb = await Helper.get1xbetData(xbetUrl);
-                    console.log(xb);
-                    const allGames = {
-                        bet9ja : await Helper.getBet9jaData(bet9jaUrl),
-                        sportybet: await Helper.getSportybetData(sportybetUrl),
-                        xbet: xb,
-                        nairabet: await Helper.getNairabetData(nairabetUrl),
-                        betking: await Helper.getBetkingData(betKingUrl)
-                    }
+                    let allGames = await Promise.all(
+                        [
+                            Helper.getBet9jaData(bet9jaUrl),
+                            Helper.get1xbetData(xbetUrl),
+                            Helper.getSportybetData(sportybetUrl),
+                            Helper.getNairabetData(nairabetUrl),
+                            Helper.getBetkingData(betKingUrl)
+                        ]
+                    );
+
+                    allGames = {
+                        bet9ja: allGames[0],
+                        xbet: allGames[1],
+                        sportybet: allGames[2],
+                        nairabet: allGames[3],
+                        betking: allGames[4]
+                    };
+
+                    console.log(allGames)
+
                     const results = [];
                     const stats = {
                         'bet9ja': {'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': []},
@@ -971,6 +982,7 @@ const puppeteer = require('puppeteer');
     
                     return res.send({success: true, data: {result: resultData, stat: stats, urls: urls }});
                 } catch(e) {
+                    console.log(e);
                     return res.send({success: false, data: []});
                 }
 
