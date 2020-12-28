@@ -666,7 +666,7 @@ const puppeteer = require('puppeteer');
 
         
         return {'amount_to_play': [wAmount, dAmount, lAmount], 
-                'amount_to_win' : [awAmount.toFixed(2), adAmount.toFixed(2), alAmount.toFixed(2)]};
+                'amount_to_win' : [Number.parseFloat(awAmount.toFixed(2)), Number.parseFloat(adAmount.toFixed(2)), Number.parseFloat(alAmount.toFixed(2))]};
     }
 
     static determineHighestOdds(platformObj) {
@@ -872,10 +872,11 @@ const puppeteer = require('puppeteer');
                 const allGames = {
                     bet9ja : await Helper.getBet9jaData(bet9jaUrl),
                     sportybet: await Helper.getSportybetData(sportybetUrl),
-                    xbet: await Helper.get1xbetData(xbetUrl),
                     nairabet: await Helper.getNairabetData(nairabetUrl),
                     betking: await Helper.getBetkingData(betKingUrl)
                 }
+
+                console.log(allGames);
 
 
                 const results = [];
