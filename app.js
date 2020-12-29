@@ -60,4 +60,22 @@ app.get('/riskless', (req, res) => {
     }
 });
 
+app.get('/zoom-fixtures', (req, res) => {
+    try {
+        helper.getZoomFixtures(res);
+    } catch (e) {
+        console.log(e);
+        res.send({success: false, data: {}});
+    }
+});
+
+app.get('/zoom-scores', (req, res) => {
+    try {
+        helper.getZoomScores(res);
+    } catch (e) {
+        console.log(e);
+        res.send({success: false, data: {}});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));

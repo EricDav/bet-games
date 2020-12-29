@@ -867,9 +867,9 @@ const puppeteer = require('puppeteer');
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
 
-                const s = await Helper.get1xbetData(xbetUrl);
+                // const s = await Helper.get1xbetData(xbetUrl);
 
-                return res.send({data: s});
+                // return res.send({data: s});
             
             
                 try {
@@ -891,7 +891,7 @@ const puppeteer = require('puppeteer');
                         betking: allGames[4]
                     };
 
-                    console.log(allGames)
+                    // console.log(allGames)
 
                     const results = [];
                     const stats = {
@@ -991,6 +991,133 @@ const puppeteer = require('puppeteer');
                 }
 
                // console.log(allGames);
+        })();
+    }
+
+    static getZoomFixtures(res) {
+        (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto('https://web.bet9ja.com/Sport/Odds?EventID=567161', {waitUntil: 'networkidle2'});
+            await page.waitFor('#MainContent');
+            //const teams = [];
+            const t = await page.evaluate(() => {
+                const fixtures = [];
+                const odds = [];
+                let odd = {};
+        
+                document.querySelectorAll('.Event').forEach(function(item) {
+                    const homeAway = item.textContent.split('-');
+                    fixtures.push({home: homeAway[0].trim(), away: homeAway[1].trim()});
+                });
+        
+                document.querySelectorAll('.odd').forEach(function(item, index) {
+                    if (index == 0 || (index != 0 && index%8 == 0)) {
+                        if (index != 0 && index%8 == 0) {
+                            odds.push(odd);
+                            odd = {};
+                        }
+        
+                        odd['1'] = item.textContent.replace('1', '');
+                    }
+        
+                    if (index%8 == 1) {
+                        odd['X'] = item.textContent.replace('X', '')
+                    }
+        
+                    if (index%8 == 2) {
+                        odd['2'] = item.textContent.replace('2', '');
+                    }
+        
+                    if (index%8 == 3) {
+                        odd['1X'] = item.textContent.replace('1X', '');
+                    }
+        
+                    if (index%8 == 4) {
+                        odd['12'] = item.textContent.replace('12', '');
+                    }
+        
+                    if (index%8 == 5) {
+                        odd['X2'] = item.textContent.replace('X2', '')
+                    }
+        
+                    if (index%8 == 6) {
+                        let val = item.textContent.replace('Over', '');
+                        val = val.replace('2.5', '');
+                        odd['Over 2.5'] = val;
+                    }
+        
+                    if (index%8 == 7) {
+                        let val = item.textContent.replace('Under', '');
+                        val = val.replace('2.5', '');
+                        odd['Under 2.5'] = val;
+                    }
+        
+                    if (index == 79) {
+                        odds.push(odd);
+                    }
+                });
+        
+                fixtures.forEach(function(item, index) {
+                    item.odds = odds[index]
+                })
+        
+                return fixtures;
+            });
+
+            await browser.close();
+        
+            return res.send({success: true, data: t});
+        })();
+    }
+
+    static getZoomScores(res) {
+        (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                  ],
+            });
+        
+            const page = await browser.newPage();
+         
+            await page.setDefaultNavigationTimeout(0);
+         
+            await page.goto('https://zoomapi.bet9ja.com/zoom/results/premier-zoom?clientId=202&notMobile=1&offset=3600000', {waitUntil: 'networkidle2'});
+            await page.waitFor('.zoom-wrap');
+
+            const t = await page.evaluate(() => {
+                const teams = [];
+
+                const homeElem = document.querySelectorAll('tbody tr .txt-r');
+                const awayElem = document.querySelectorAll('tbody tr .txt-l');
+                const scoreElem = document.querySelectorAll('tbody tr .txt-primary');
+            
+                homeElem.forEach(function(item, index) {
+                    if (index%2 == 0) {
+                        teams.push({home: item.textContent, away: awayElem[index].textContent, 
+                            score: scoreElem[index].textContent, 
+                            htScore: scoreElem[index+ 1].textContent.replace('ht', '')});
+                    }
+                })
+            
+                return teams
+            });
+            await browser.close();
+
+            return res.send({success: true, data: t});
         })();
     }
 
