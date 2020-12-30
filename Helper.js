@@ -573,7 +573,10 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitForSelector('#maincontent');
+            await page.waitFor(4000);
+            const image = await page.screenshot({fullPage : true});
+
+            return image;
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -867,9 +870,9 @@ const puppeteer = require('puppeteer');
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
 
-                // const s = await Helper.get1xbetData(xbetUrl);
-
-                // return res.send({data: s});
+                const s = await Helper.get1xbetData(xbetUrl);
+                res.set('Content-Type', 'image/png');
+                return res.send(s);
             
             
                 try {
@@ -1010,7 +1013,7 @@ const puppeteer = require('puppeteer');
          
             await page.goto('https://web.bet9ja.com/Sport/Odds?EventID=567161', {waitUntil: 'networkidle2'});
             await page.waitFor('#MainContent');
-            //const teams = [];
+
             const t = await page.evaluate(() => {
                 const fixtures = [];
                 const odds = [];
@@ -1108,8 +1111,8 @@ const puppeteer = require('puppeteer');
                 homeElem.forEach(function(item, index) {
                     if (index%2 == 0) {
                         teams.push({home: item.textContent, away: awayElem[index].textContent, 
-                            score: scoreElem[index].textContent, 
-                            htScore: scoreElem[index+ 1].textContent.replace('ht', '')});
+                        score: scoreElem[index].textContent, 
+                        htScore: scoreElem[index+ 1].textContent.replace('ht', '')});
                     }
                 })
             
