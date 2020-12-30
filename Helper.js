@@ -777,48 +777,48 @@ const puppeteer = require('puppeteer');
                 const URLS = {
                     1: {
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170880',
-                        'xbet': 'https://1xbet.ng/en/line/Football/88637-England-Premier-League',
+                        'xbet': 'https://1xbet.com/en/line/Football/88637-England-Premier-League',
                         'nairabet': 'https://nairabet.com/categories/18871',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-premier-league/0/0',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:17'
                     },
                     6: {
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=167856',
-                        'xbet': 'https://1xbet.ng/en/line/Football/110163-Italy-Serie-A/',
+                        'xbet': 'https://1xbet.com/en/line/Football/110163-Italy-Serie-A/',
                         'nairabet': 'https://nairabet.com/categories/18767',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/italy/ita-serie-a/0/0',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:31/sr:tournament:23'   
                     },
                     2: {
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180928',
-                        'xbet': 'https://1xbet.ng/en/line/Football/127733-Spain-La-Liga/',
+                        'xbet': 'https://1xbet.com/en/line/Football/127733-Spain-La-Liga/',
                         'nairabet': 'https://nairabet.com/categories/18726',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/spain/esp-laliga/0/0',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:32/sr:tournament:8'  
                     },
                     4: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/12821-France-Ligue-1/',
+                        'xbet': 'https://1xbet.com/en/line/Football/12821-France-Ligue-1/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:7/sr:tournament:34' ,
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=950503',
                         'nairabet': 'https://nairabet.com/categories/18883',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/france/fra-ligue-1/0/0',
                     },
                     3: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/96463-Germany-Bundesliga/',
+                        'xbet': 'https://1xbet.com/en/line/Football/96463-Germany-Bundesliga/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:30/sr:tournament:35',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180923',
                         'nairabet': 'https://nairabet.com/categories/18767',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/germany/ger-bundesliga/0/0',
                     },
                     5: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/118663-Portugal-Primeira-Liga/',
+                        'xbet': 'https://1xbet.com/en/line/Football/118663-Portugal-Primeira-Liga/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:44/sr:tournament:238',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180967',
                         'nairabet': 'https://nairabet.com/categories/18955',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/portugal/por-primeira-liga/0/0',
                     },
                     7: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/212425-Sweden-Allsvenskan/',
+                        'xbet': 'https://1xbet.com/en/line/Football/212425-Sweden-Allsvenskan/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:9/sr:tournament:40',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817651',
                         'nairabet': 'https://nairabet.com/categories/18875',
@@ -826,28 +826,28 @@ const puppeteer = require('puppeteer');
                     },
 
                     8: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/2018750-Netherlands-Eredivisie/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:35/sr:tournament:370', 
+                        'xbet': 'https://1xbet.com/en/line/Football/2018750-Netherlands-Eredivisie/',
+                        'sportybet': 'https://www.sportybet.comcom/sport/football/sr:category:35/sr:tournament:370', 
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1016657',
                         'nairabet': 'https://nairabet.com/categories/18732',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/netherlands/ned-eredivisie/0/0',
                     },
                 10: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/1793471-Norway-Eliteserien/',
+                        'xbet': 'https://1xbet.com/en/line/Football/1793471-Norway-Eliteserien/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:5/sr:tournament:20',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817648',
                         'nairabet': 'https://nairabet.com/categories/18927',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/norway/nor-eliteserien/0/0'
                     },
                     9: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/118587-UEFA-Champions-League/',
+                        'xbet': 'https://1xbet.com/en/line/Football/118587-UEFA-Champions-League/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:7',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062457',
                         'nairabet': 'https://nairabet.com/categories/18727',
                         'betking': 'https://www.betking.com/sports/s/event/p/soccer/champions-l/uefa-champions-league/0/0'
                     },
                     11: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/118593-UEFA-Europa-League/',
+                        'xbet': 'https://1xbet.com/en/line/Football/118593-UEFA-Europa-League/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:679',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062916',
                         'nairabet': 'https://nairabet.com/categories/18749',
@@ -855,7 +855,7 @@ const puppeteer = require('puppeteer');
                     },
                 
                     12: {
-                        'xbet': 'https://1xbet.ng/en/line/Football/105759-England-Championship/',
+                        'xbet': 'https://1xbet.com/en/line/Football/105759-England-Championship/',
                         'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:18',
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170881',
                         'nairabet': 'https://www.nairabet.com/categories/18935',
