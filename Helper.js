@@ -1102,8 +1102,6 @@ const puppeteer = require('puppeteer');
             await page.waitFor('.zoom-wrap');
 
             const t = await page.evaluate(() => {
-                document.getElementsByClassName('info')[0].click();
-                
                 const teams = [];
 
                 const homeElem = document.querySelectorAll('tbody tr .txt-r');
