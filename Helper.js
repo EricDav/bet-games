@@ -573,10 +573,10 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor(4000);
-            const image = await page.screenshot({fullPage : true});
+            await page.waitForSelector('#maincontent');
+            // const image = await page.screenshot({fullPage : true});
 
-            return image;
+            // return image;
 
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -870,9 +870,9 @@ const puppeteer = require('puppeteer');
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
 
-                const s = await Helper.get1xbetData(xbetUrl);
-                res.set('Content-Type', 'image/png');
-                return res.send(s);
+               // const s = await Helper.get1xbetData(xbetUrl);
+                // res.set('Content-Type', 'image/png');
+                // return res.send(s);
             
             
                 try {
@@ -1102,6 +1102,8 @@ const puppeteer = require('puppeteer');
             await page.waitFor('.zoom-wrap');
 
             const t = await page.evaluate(() => {
+                document.getElementsByClassName('info')[0].click();
+                
                 const teams = [];
 
                 const homeElem = document.querySelectorAll('tbody tr .txt-r');
@@ -1114,7 +1116,7 @@ const puppeteer = require('puppeteer');
                         score: scoreElem[index].textContent, 
                         htScore: scoreElem[index+ 1].textContent.replace('ht', '')});
                     }
-                })
+                });
             
                 return teams
             });
