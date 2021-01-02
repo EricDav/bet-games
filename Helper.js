@@ -583,6 +583,16 @@ const puppeteer = require('puppeteer');
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
+
+                data = {
+                    matches: matches,
+                    winOdds: winOdds,
+                    drawOdds: drawOdds,
+                    lostOdds: lostOdds
+                }
+        
+                return data;
+                
                 let odds;
                 let count;
             
