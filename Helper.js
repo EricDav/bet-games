@@ -590,8 +590,6 @@ const puppeteer = require('puppeteer');
                     drawOdds: drawOdds,
                     lostOdds: lostOdds
                 }
-        
-                return data;
                 
                 let odds;
                 let count;
@@ -1007,7 +1005,7 @@ const puppeteer = require('puppeteer');
         })();
     }
 
-    static getZoomFixtures(res) {
+    static getZoomFixtures(res, country) {
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1016,12 +1014,22 @@ const puppeteer = require('puppeteer');
                     '--disable-setuid-sandbox',
                   ],
             });
+
+            const urls = {
+                spain: 'https://web.bet9ja.com/Sport/Odds?EventID=567119',
+                england: 'https://web.bet9ja.com/Sport/Odds?EventID=567161',
+                germany: 'https://web.bet9ja.com/Sport/Odds?EventID=567120',
+                italy: 'https://web.bet9ja.com/Sport/Odds?EventID=567136',
+                france: 'https://web.bet9ja.com/Sport/Odds?EventID=567138'
+            };
+
+            const url = urls[country];
         
             const page = await browser.newPage();
          
             await page.setDefaultNavigationTimeout(0);
          
-            await page.goto('https://web.bet9ja.com/Sport/Odds?EventID=567161', {waitUntil: 'networkidle2'});
+            await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitFor('#MainContent');
 
             const t = await page.evaluate(() => {
@@ -1094,7 +1102,7 @@ const puppeteer = require('puppeteer');
         })();
     }
 
-    static getZoomScores(res) {
+    static getZoomScores(res, country) {
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1103,12 +1111,22 @@ const puppeteer = require('puppeteer');
                     '--disable-setuid-sandbox',
                   ],
             });
+
+            const urls = {
+                spain: 'https://zoomapi.bet9ja.com/zoom/results/liga-zoom?clientId=202&notMobile=1&offset=3600000',
+                england: 'https://zoomapi.bet9ja.com/zoom/results/premier-zoom?clientId=202&notMobile=1&offset=3600000',
+                germany: 'https://zoomapi.bet9ja.com/zoom/results/bundes-zoom?clientId=202&notMobile=1&offset=3600000',
+                italy: 'https://zoomapi.bet9ja.com/zoom/results/seriea-zoom?clientId=202&notMobile=1&offset=3600000',
+                france: 'https://zoomapi.bet9ja.com/zoom/results/ligue1-zoom?clientId=202&notMobile=1&offset=3600000'
+            };
+
+            const url = urls[country];
         
             const page = await browser.newPage();
          
             await page.setDefaultNavigationTimeout(0);
          
-            await page.goto('https://zoomapi.bet9ja.com/zoom/results/premier-zoom?clientId=202&notMobile=1&offset=3600000', {waitUntil: 'networkidle2'});
+            await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitFor('.zoom-wrap');
 
             const t = await page.evaluate(() => {

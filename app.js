@@ -62,7 +62,7 @@ app.get('/riskless', (req, res) => {
 
 app.get('/zoom-fixtures', (req, res) => {
     try {
-        helper.getZoomFixtures(res);
+        helper.getZoomFixtures(res, req.query.country);
     } catch (e) {
         console.log(e);
         res.send({success: false, data: {}});
@@ -71,7 +71,7 @@ app.get('/zoom-fixtures', (req, res) => {
 
 app.get('/zoom-scores', (req, res) => {
     try {
-        helper.getZoomScores(res);
+        helper.getZoomScores(res, req.query.country);
     } catch (e) {
         console.log(e);
         res.send({success: false, data: {}});
