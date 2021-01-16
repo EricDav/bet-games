@@ -445,6 +445,7 @@ const puppeteer = require('puppeteer');
     }
 
     static async  getBetkingData(url) {
+        console.log(url);
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -544,8 +545,6 @@ const puppeteer = require('puppeteer');
                     drawOdds: drawOdds,
                     lostOdds: lostOdds
                 }
-
-                console.log(data);
         
                 return data;
             });
@@ -1094,6 +1093,29 @@ const puppeteer = require('puppeteer');
                 })
         
                 return fixtures;
+            });
+            
+            await page.click('.CQ > li:nth-child(2)');
+            await page.waitFor(3000);
+        
+            const g = await page.evaluate(() => {
+                const odds = []
+    
+                oddsElem = document.querySelectorAll('.odd');
+                oddsElem.forEach(function(item, index) {
+                    if (index%2 == 1) {
+                        odds.push({GG: oddsElem[index-1].textContent.substring(2), NG: item.textContent.substring(2)});
+                    }
+                });
+    
+        
+                return odds;
+        
+            });
+
+            t.forEach(function(item, index) {
+                item.odds.GG = g[index].GG;
+                item.odds.NG = g[index].NG;
             });
 
             await browser.close();
