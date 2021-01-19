@@ -1335,6 +1335,7 @@ const puppeteer = require('puppeteer');
     }
 
     static playBookingCode(bookingNumber, username, password, amount, res) {
+        // console.log('Begeining....');
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1355,7 +1356,7 @@ const puppeteer = require('puppeteer');
             // const username = 'pythagoras1';
             // const password = 'Iloveodunayo123';
             // const amount = '100';
-    
+            console.log("Here");
             await page.type('#h_w_cLogin_ctrlLogin_Username', username);
             await page.type('#h_w_cLogin_ctrlLogin_Password', password); 
             await page.click('#h_w_cLogin_ctrlLogin_lnkBtnLogin');
@@ -1379,12 +1380,12 @@ const puppeteer = require('puppeteer');
             await browser.close();
 
             if (ans) {
-                const betslip = ans.split(':').trim();
+                const betslip = ans.split(':')[1].trim();
                 return res.send({success: true, data: betslip});
             } else {
                 return res.send({success: false, message: 'Check balance'});
             }
-        })
+        })();
     }
 
 }

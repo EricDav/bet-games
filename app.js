@@ -88,4 +88,20 @@ app.post('/play-code', (req, res) => {
     }
 });
 
+app.get('/play', (req, res) => {
+    try {
+        console.log('Herererere');
+        const bookingNumber = req.query.bookingCode;
+        const username = req.query.username;
+        const password = req.query.password;
+        const amount = req.query.amount;
+        console.log(bookingNumber, username, password, amount);
+
+        helper.playBookingCode(bookingNumber, username, password, amount, res);
+    } catch (e) {
+        console.log(e);
+        return res.send({success: false, data: {}});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
