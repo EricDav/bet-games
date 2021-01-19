@@ -78,4 +78,14 @@ app.get('/zoom-scores', (req, res) => {
     }
 });
 
+app.post('/play-code', (req, res) => {
+    try {
+        const data = JSON.parse(req.body.data);
+        helper.getPlayedBookingCode(data, res);
+    } catch (e) {
+        console.log(e);
+        res.send({success: false, data: {}});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
