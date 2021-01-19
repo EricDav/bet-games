@@ -91,6 +91,8 @@ const puppeteer = require('puppeteer');
         return {fixtures: fixtures, time: time};
     });
 
+
+
     await page.click('.CQ > li:nth-child(2)');
     await page.waitFor(3000);
 
@@ -104,25 +106,65 @@ const puppeteer = require('puppeteer');
             }
         });
 
+        document.querySelectorAll('.itm2 > span')[0].click();
+        document.querySelectorAll('.CQ')[1].children[0].click();
+
 
         return odds;
 
     });
 
+
+    await page.waitFor(4000);
+
+    const overUnder1 = await page.evaluate(() => {
+        const odds = []
+        oddsElem = document.querySelectorAll('.odd');
+        let over1Str;
+        let under1Str;
+
+        oddsElem.forEach(function(item, index) {
+            if (index%2 == 1) {
+                over1Str = oddsElem[index-1].textContent;
+                under1Str = item.textContent;
+                odds.push({over1: over1Str.substring(4, over1Str.length - 3), 
+                    under1: under1Str.substring(5, under1Str.length - 3)});
+            }
+        });
+
+        document.querySelectorAll('.CQ')[1].children[1].click();
+        return odds;
+    });
+
+    await page.waitFor(3000);
+
+    const overUnder3 = await page.evaluate(() => {
+        const odds = []
+        oddsElem = document.querySelectorAll('.odd');
+        let over3Str;
+        let under3Str;
+
+        oddsElem.forEach(function(item, index) {
+            if (index%2 == 1) {
+                over3Str = oddsElem[index-1].textContent;
+                under3Str = item.textContent;
+                odds.push({over3: over3Str.substring(4, over3Str.length - 3), 
+                    under3: under3Str.substring(5, under3Str.length - 3)});
+            }
+        });
+        return odds;
+    });
+
     t.fixtures.forEach(function(item, index) {
         item.odds.GG = g[index].GG;
         item.odds.NG = g[index].NG;
+        item.odds.over1 = overUnder1[index].over1;
+        item.odds.under1 = overUnder1[index].under1;
+        item.odds.over3 = overUnder3[index].over3;
+        item.odds.under3 = overUnder3[index].under3;
     });
-    await page.pdf({path: 'output.pdf', format: 'A4'});
-
-    await page.click('.itm2 > span');
-    await page.waitFor(4000);
-    await page.click('.CQ > li:nth-child(1)');
-    await page.waitFor(3000);
-
-    await page.pdf({path: 'output.pdf', format: 'A4'}); //
 
     await browser.close();
 })();
 
-
+ 
