@@ -80,7 +80,11 @@ app.get('/zoom-scores', (req, res) => {
 
 app.post('/play-code', (req, res) => {
     try {
+        console.log(req.body.data);
+
         const data = JSON.parse(req.body.data);
+        console.log(data);
+        
         helper.getPlayedBookingCode(data, res);
     } catch (e) {
         console.log(e);

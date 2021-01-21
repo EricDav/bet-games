@@ -1260,14 +1260,18 @@ const puppeteer = require('puppeteer');
     
             const main = [];
             const gg = [];
+            const over1 = [];
     
             data.forEach(function(item) {
                 if (item.outcome == 'GG' || item.outcome == 'NG') {
                     gg.push(item);
+                } else if (item.outcome == 'Over 1.5') {
+                    over1.push(item);
                 } else {
                     main.push(item)
                 }
             });
+
     
             const dataStr = JSON.stringify(data);
     
@@ -1277,6 +1281,10 @@ const puppeteer = require('puppeteer');
     
             await page.exposeFunction('playG', (e) => {
                 return gg;
+            });
+
+            await page.exposeFunction('playOver1', (e) => {
+                return over1;
             });
     
             if (main.length > 0) {
@@ -1307,6 +1315,9 @@ const puppeteer = require('puppeteer');
                // console.log(r);
             }
     
+            /**
+             * Section for playing Goal Goal
+             */
             if (gg.length > 0) {
                 await page.click('.CQ > li:nth-child(2)');
                 await page.waitFor(3000);
@@ -1325,6 +1336,29 @@ const puppeteer = require('puppeteer');
                     }
                 });
             }
+
+            if (over1.length > 0) {
+                await page.evaluate(() => {
+                    document.querySelectorAll('.itm2 > span')[0].click();
+                    document.querySelectorAll('.CQ')[1].children[0].click();
+                });
+        
+                await page.waitFor(3000);
+        
+                await page.evaluate(async () => {
+                    const elements = document.querySelectorAll('.odd');
+                    const over1 = {
+                        'Over 1.5': 0,
+                    };
+                    let obj;
+                    const gg = await window.playOver1();
+                    for (let i = 0; i < gg.length; i++) {
+                        obj = gg[i];
+                        elements[(obj.index*2) + over1[obj.outcome]].click();
+                    }
+                });
+            }
+
     
            await page.waitFor(3000);
     
