@@ -321,12 +321,14 @@ const puppeteer = require('puppeteer');
          
             await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitForSelector('#importMatch');
-            //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
+                const dates = [];
+                const datesArr = []
+                
                 let items;
             
                 awayTeam = document.querySelectorAll('.away-team')
@@ -349,6 +351,15 @@ const puppeteer = require('puppeteer');
                     // console.log(items);
             
                 })
+
+                let latestDate = '';
+                document.querySelectorAll('.match-table .m-table-row').forEach((item) => {
+                    if (item.children.length == 4) {
+                        latestDate = item.textContent.split(' ')[0];
+                    } else {
+                        datesArr.push(latestDate);
+                    }
+                });
             
                 function retrieveLostOdds(mixOdds) {
                     let odd = '';
@@ -369,12 +380,18 @@ const puppeteer = require('puppeteer');
             
                     return odd;
                 }
+
+
+                document.querySelectorAll('.clock-time').forEach((item, index) => {
+                    dates.push(dateArr[index].replace('/', ' ') + ' ' + item.textContent.trim());
+                });
             
                 data = {
                     matches: matches,
                     winOdds: winOdds,
                     drawOdds: drawOdds,
-                    lostOdds: lostOdds
+                    lostOdds: lostOdds,
+                    dates: dates,
                 }
         
                 return data;
@@ -410,6 +427,8 @@ const puppeteer = require('puppeteer');
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
+                const dates = [];
+
                 let items;
             
                 document.querySelectorAll('.event-name').forEach(function(item) {
@@ -425,11 +444,17 @@ const puppeteer = require('puppeteer');
                     }
                 });
 
+                const time = document.querySelectorAll('.date-time .time');
+                document.querySelectorAll('.date-time .date').forEach(function(item, index) {
+                    dates.push(item.textContent.replace('.', ' ') + time[index].textContent)
+                });
+
                 data = {
                     matches: matches,
                     winOdds: winOdds,
                     drawOdds: drawOdds,
-                    lostOdds: lostOdds
+                    lostOdds: lostOdds,
+                    dates: dates
                 }
         
                 return data;
@@ -524,9 +549,27 @@ const puppeteer = require('puppeteer');
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
-            
-                document.querySelectorAll('.Event').forEach(function(item) {
+                const dates = [];
+                const datesToNum = {
+                    'jan': 1,
+                    'feb': 2,
+                    'mar': 3,
+                    'apr': 4,
+                    'may': 5,
+                    'jun': 6,
+                    'jul': 7,
+                    'aug': 8,
+                    'sep': 9,
+                    'oct': 10,
+                    'nov': 11,
+                    'dec': 12,
+                };
+                const datesArr = document.querySelectorAll('.Time');
+                let dateObj;
+                document.querySelectorAll('.Event').forEach(function(item, index) {
                     matches.push(item.textContent.trim());
+                    dateObj = datesArr[index].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm,"").split(' ');
+                    dates.push(dateObj[1] + ' ' + datesToNum[2].toLocaleLowerCase() + ' ' + dateObj[0])
                 })
             
                 document.querySelectorAll('.odd').forEach(function(item, index) {
@@ -582,6 +625,7 @@ const puppeteer = require('puppeteer');
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
+                const dates = []
 
                 data = {
                     matches: matches,
@@ -600,31 +644,39 @@ const puppeteer = require('puppeteer');
                 document.querySelectorAll('.c-bets').forEach(function(item, index) {
                     if (index != 0) {
                     
-                    count = 0
-                    odds = item.textContent.trim().split("\n");
+                    // count = 0
+                    winOdds.push(item.children[0].textContent);
+                    drawOdds.push(item.children[1].textContent);
+                    lostOdds.push(item.children[2].textContent);
             
-                    for(i = 0; i < odds.length; i++) {
-                        if (odds[i].trim()) {
-                            if (count == 0) {
-                                winOdds.push(odds[i].trim());
-                            }
-                            if (count == 1) {
-                                drawOdds.push(odds[i].trim());
-                            }
-                            if (count == 2) {
-                                lostOdds.push(odds[i].trim());
-                            }
-                            count+=1;
-                        }
-                    }
+                    // for(i = 0; i < odds.length; i++) {
+                    //     if (odds[i].trim()) {
+                    //         if (count == 0) {
+                    //             winOdds.push(odds[i].trim());
+                    //         }
+                    //         if (count == 1) {
+                    //             drawOdds.push(odds[i].trim());
+                    //         }
+                    //         if (count == 2) {
+                    //             lostOdds.push(odds[i].trim());
+                    //         }
+                    //         count+=1;
+                    //     }
+                    // }
                  }
+                });
+
+                document.querySelectorAll('.c-events__time-info').forEach((item) => {
+                    const date = item.textContent.trim().split(' ');
+                    dates.push(date[0].replace('.', ' ') + date[1]);
                 });
 
                 data = {
                     matches: matches,
                     winOdds: winOdds,
                     drawOdds: drawOdds,
-                    lostOdds: lostOdds
+                    lostOdds: lostOdds,
+                    dates: dates,
                 }
         
                 return data;
@@ -712,6 +764,8 @@ const puppeteer = require('puppeteer');
     static isMatch(matchA, matchB) {
         matchA = matchA.toLowerCase().replace('.', '').trim().replace('—', '-');
         matchB = matchB.toLowerCase().replace('.', '').trim().replace('—', '-');
+        matchA = matchA.replace('Man', 'Manchester');
+        matchB = matchB.replace('Man', 'Manchester');
 
         if (matchA == matchB)
             return true;
@@ -781,7 +835,7 @@ const puppeteer = require('puppeteer');
             const EUROPE_LEAGUE = 11
             const CHAMPIONSHIP = 12;
                 
-                const URLS = {
+            const URLS = {
                     1: {
                         'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170880',
                         'xbet': 'https://1xbet.com/en/line/Football/88637-England-Premier-League',
@@ -1030,133 +1084,155 @@ const puppeteer = require('puppeteer');
          
             await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitFor('#MainContent');
+            await page.waitFor(4000);
 
-            const t = await page.evaluate(() => {
-                const fixtures = [];
-                const odds = [];
-                let odd = {};
-
-                const time = document.querySelectorAll('.Time')[0].textContent.trim().substring(0, 5)
-        
-                document.querySelectorAll('.Event').forEach(function(item) {
-                    const homeAway = item.textContent.split('-');
-                    fixtures.push({home: homeAway[0].trim(), away: homeAway[1].trim()});
-                });
-        
-                document.querySelectorAll('.odd').forEach(function(item, index) {
-                    if (index == 0 || (index != 0 && index%8 == 0)) {
-                        if (index != 0 && index%8 == 0) {
-                            odds.push(odd);
-                            odd = {};
+            try {
+                const t = await page.evaluate(() => {
+                    const fixtures = [];
+                    const odds = [];
+                    let odd = {};
+    
+                    const time = document.querySelectorAll('.Time')[0].textContent.trim().substring(0, 5)
+                    const dateTime = document.querySelectorAll('.Time')[0].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm,"").split(' ');
+                    dateTimeObj= {
+                        time: dateTime[0],
+                        day: dateTime[1],
+                        month: dateTime[2]
+                    };
+            
+                    document.querySelectorAll('.Event').forEach(function(item) {
+                        const homeAway = item.textContent.split('-');
+                        fixtures.push({home: homeAway[0].trim(), away: homeAway[1].trim()});
+                    });
+            
+                    document.querySelectorAll('.odd').forEach(function(item, index) {
+                        if (index == 0 || (index != 0 && index%8 == 0)) {
+                            if (index != 0 && index%8 == 0) {
+                                odds.push(odd);
+                                odd = {};
+                            }
+            
+                            odd['1'] = item.textContent.replace('1', '');
                         }
-        
-                        odd['1'] = item.textContent.replace('1', '');
-                    }
-        
-                    if (index%8 == 1) {
-                        odd['X'] = item.textContent.replace('X', '')
-                    }
-        
-                    if (index%8 == 2) {
-                        odd['2'] = item.textContent.replace('2', '');
-                    }
-        
-                    if (index%8 == 3) {
-                        odd['1X'] = item.textContent.replace('1X', '');
-                    }
-        
-                    if (index%8 == 4) {
-                        odd['12'] = item.textContent.replace('12', '');
-                    }
-        
-                    if (index%8 == 5) {
-                        odd['X2'] = item.textContent.replace('X2', '')
-                    }
-        
-                    if (index%8 == 6) {
-                        let val = item.textContent.replace('Over', '');
-                        val = val.replace('2.5', '');
-                        odd['Over 2.5'] = val;
-                    }
-        
-                    if (index%8 == 7) {
-                        let val = item.textContent.replace('Under', '');
-                        val = val.replace('2.5', '');
-                        odd['Under 2.5'] = val;
-                    }
-        
-                    if (index == 79) {
-                        odds.push(odd);
-                    }
+            
+                        if (index%8 == 1) {
+                            odd['X'] = item.textContent.replace('X', '')
+                        }
+            
+                        if (index%8 == 2) {
+                            odd['2'] = item.textContent.replace('2', '');
+                        }
+            
+                        if (index%8 == 3) {
+                            odd['1X'] = item.textContent.replace('1X', '');
+                        }
+            
+                        if (index%8 == 4) {
+                            odd['12'] = item.textContent.replace('12', '');
+                        }
+            
+                        if (index%8 == 5) {
+                            odd['X2'] = item.textContent.replace('X2', '')
+                        }
+            
+                        if (index%8 == 6) {
+                            let val = item.textContent.replace('Over', '');
+                            val = val.replace('2.5', '');
+                            odd['Over 2.5'] = val;
+                        }
+            
+                        if (index%8 == 7) {
+                            let val = item.textContent.replace('Under', '');
+                            val = val.replace('2.5', '');
+                            odd['Under 2.5'] = val;
+                        }
+            
+                        if (index == 79) {
+                            odds.push(odd);
+                        }
+                    });
+            
+                    fixtures.forEach(function(item, index) {
+                        item.odds = odds[index]
+                    })
+                    return {fixtures: fixtures, time: time, timeObj: dateTimeObj};
                 });
-        
-                fixtures.forEach(function(item, index) {
-                    item.odds = odds[index]
-                })
-                return {fixtures: fixtures, time: time};
-            });
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating main fixtures'});
+            }
 
             await page.click('.CQ > li:nth-child(2)');
             await page.waitFor(3000);
         
-            const g = await page.evaluate(() => {
-                const odds = []
-        
-                oddsElem = document.querySelectorAll('.odd');
-                oddsElem.forEach(function(item, index) {
-                    if (index%2 == 1) {
-                        odds.push({GG: oddsElem[index-1].textContent.substring(2), NG: item.textContent.substring(2)});
-                    }
+            try {
+                const g = await page.evaluate(() => {
+                    const odds = []
+            
+                    oddsElem = document.querySelectorAll('.odd');
+                    oddsElem.forEach(function(item, index) {
+                        if (index%2 == 1) {
+                            odds.push({GG: oddsElem[index-1].textContent.substring(2), NG: item.textContent.substring(2)});
+                        }
+                    });
+            
+                    document.querySelectorAll('.itm2 > span')[0].click();
+                    document.querySelectorAll('.CQ')[1].children[0].click();
+            
+                    return odds;
+            
                 });
-        
-                document.querySelectorAll('.itm2 > span')[0].click();
-                document.querySelectorAll('.CQ')[1].children[0].click();
-        
-        
-                return odds;
-        
-            });
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating fixtures for GG and NG'});
+            }
         
         
             await page.waitFor(4000);
         
-            const overUnder1 = await page.evaluate(() => {
-                const odds = []
-                oddsElem = document.querySelectorAll('.odd');
-                let over1Str;
-                let under1Str;
-        
-                oddsElem.forEach(function(item, index) {
-                    if (index%2 == 1) {
-                        over1Str = oddsElem[index-1].textContent;
-                        under1Str = item.textContent;
-                        odds.push({over1: over1Str.substring(4, over1Str.length - 3), 
-                            under1: under1Str.substring(5, under1Str.length - 3)});
-                    }
+            try {
+                const overUnder1 = await page.evaluate(() => {
+                    const odds = []
+                    oddsElem = document.querySelectorAll('.odd');
+                    let over1Str;
+                    let under1Str;
+            
+                    oddsElem.forEach(function(item, index) {
+                        if (index%2 == 1) {
+                            over1Str = oddsElem[index-1].textContent;
+                            under1Str = item.textContent;
+                            odds.push({over1: over1Str.substring(4, over1Str.length - 3), 
+                                under1: under1Str.substring(5, under1Str.length - 3)});
+                        }
+                    });
+            
+                    document.querySelectorAll('.CQ')[1].children[1].click();
+                    return odds;
                 });
-        
-                document.querySelectorAll('.CQ')[1].children[1].click();
-                return odds;
-            });
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating fixtures for over1 and under1'});
+            }
         
             await page.waitFor(3000);
         
-            const overUnder3 = await page.evaluate(() => {
-                const odds = []
-                oddsElem = document.querySelectorAll('.odd');
-                let over3Str;
-                let under3Str;
-        
-                oddsElem.forEach(function(item, index) {
-                    if (index%2 == 1) {
-                        over3Str = oddsElem[index-1].textContent;
-                        under3Str = item.textContent;
-                        odds.push({over3: over3Str.substring(4, over3Str.length - 3), 
-                            under3: under3Str.substring(5, under3Str.length - 3)});
-                    }
+            try {
+                const overUnder3 = await page.evaluate(() => {
+                    const odds = []
+                    oddsElem = document.querySelectorAll('.odd');
+                    let over3Str;
+                    let under3Str;
+            
+                    oddsElem.forEach(function(item, index) {
+                        if (index%2 == 1) {
+                            over3Str = oddsElem[index-1].textContent;
+                            under3Str = item.textContent;
+                            odds.push({over3: over3Str.substring(4, over3Str.length - 3), 
+                                under3: under3Str.substring(5, under3Str.length - 3)});
+                        }
+                    });
+                    return odds;
                 });
-                return odds;
-            });
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating fixtures for over3 and under3'});
+            }
         
             t.fixtures.forEach(function(item, index) {
                 item.odds.GG = g[index].GG;
@@ -1169,7 +1245,7 @@ const puppeteer = require('puppeteer');
 
             await browser.close();
         
-            return res.send({success: true, data: t.fixtures, time: t.time});
+            return res.send({success: true, data: t.fixtures, time: t.time, dateTimeObj: t.timeObj});
         })();
     }
 
@@ -1191,35 +1267,71 @@ const puppeteer = require('puppeteer');
                 france: 'https://zoomapi.bet9ja.com/zoom/results/ligue1-zoom?clientId=202&notMobile=1&offset=3600000'
             };
 
+            // document.querySelectorAll('.form')[19].textContent
+            // document.querySelectorAll('.l-table__team-name')[0].textContent
+
             const url = urls[country];
-        
             const page = await browser.newPage();
          
             await page.setDefaultNavigationTimeout(0);
-         
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitFor('.zoom-wrap');
+            await page.waitForSelector('.content-wrap');
+            await page.waitFor(3000);
 
-            const t = await page.evaluate(() => {
-                const teams = [];
-
-                const homeElem = document.querySelectorAll('tbody tr .txt-r');
-                const awayElem = document.querySelectorAll('tbody tr .txt-l');
-                const scoreElem = document.querySelectorAll('tbody tr .txt-primary');
-            
-                homeElem.forEach(function(item, index) {
-                    if (index%2 == 0) {
-                        teams.push({home: item.textContent, away: awayElem[index].textContent, 
-                        score: scoreElem[index].textContent, 
-                        htScore: scoreElem[index+ 1].textContent.replace('ht', '')});
-                    }
+            try {
+                const t = await page.evaluate(() => {
+                    const teams = [];
+    
+                    const homeElem = document.querySelectorAll('tbody tr .text-right');
+                    const awayElem = document.querySelectorAll('tbody tr .text-left');
+                    const scoreElem = document.querySelectorAll('tbody tr .txt-y');
+                    
+                    homeElem.forEach(function(item, index) {
+                        if (index%2 == 0) {
+                            teams.push({home: item.textContent, away: awayElem[index].textContent, 
+                            score: scoreElem[index].textContent, 
+                            htScore: scoreElem[index+ 1].textContent.replace('HT', '')});
+                        }
+                    });
+                
+                    return teams
                 });
-            
-                return teams
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating scores'});
+            }
+
+            console.log(t);
+
+            await page.waitFor(3000);
+
+            await page.evaluate(() => {
+                document.querySelector('.top-nav__list-item').click();
             });
+
+            await page.waitFor(5000);
+
+            try {
+                const tableInfo = await page.evaluate(() => {
+                    const forms = document.querySelectorAll('.form');
+                    const positions = document.querySelectorAll('.l-table__team-name');
+                    f = [];
+                    p = [];
+    
+                    forms.forEach((item, index) => {
+                        f.push(item.textContent);
+                        p.push(positions[index].textContent);
+                    });
+    
+                    return {forms: f, positions: p};
+    
+                });
+            } catch(e) {
+                return res.send({success: false, message: 'There is an error while generating forms'});
+            }
+
             await browser.close();
 
-            return res.send({success: true, data: t});
+            return res.send({success: true, data: t, forms: tableInfo.forms, positions: tableInfo.positions});
         })();
     }
 
@@ -1304,15 +1416,11 @@ const puppeteer = require('puppeteer');
                     const main = await window.play();
                     for (let i = 0; i < main.length; i++) {
                         obj = main[i];
-                      //  setTimeout(function() {
                         elements[(obj.index*8) + f[obj.outcome]].click();
-                      //  }, 3000);
                     }
     
                     return main.length;
                 });
-    
-               // console.log(r);
             }
     
             /**
