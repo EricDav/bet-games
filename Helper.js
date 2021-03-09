@@ -383,7 +383,7 @@ const puppeteer = require('puppeteer');
 
 
                 document.querySelectorAll('.clock-time').forEach((item, index) => {
-                    dates.push(dateArr[index].replace('/', ' ') + ' ' + item.textContent.trim());
+                    dates.push(datesArr[index].replace('/', ' ') + ' ' + item.textContent.trim());
                 });
             
                 data = {
@@ -420,7 +420,7 @@ const puppeteer = require('puppeteer');
             await page.setDefaultNavigationTimeout(0);
          
             await page.goto(url, {waitUntil: 'networkidle2'});
-            await page.waitForSelector('#eventListHeaderMarketList1');
+            // await page.waitForSelector('#eventListHeaderMarketList1');
             //const teams = [];
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -446,7 +446,7 @@ const puppeteer = require('puppeteer');
 
                 const time = document.querySelectorAll('.date-time .time');
                 document.querySelectorAll('.date-time .date').forEach(function(item, index) {
-                    dates.push(item.textContent.replace('.', ' ') + time[index].textContent)
+                    dates.push(item.textContent.replace('.', ' ') + ' ' + time[index].textContent)
                 });
 
                 data = {
@@ -486,12 +486,26 @@ const puppeteer = require('puppeteer');
          
             await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitForSelector('#eventsWrapper');
-            //const teams = [];
+            const datesToNum = {
+                'jan': 1,
+                'feb': 2,
+                'mar': 3,
+                'apr': 4,
+                'may': 5,
+                'jun': 6,
+                'jul': 7,
+                'aug': 8,
+                'sep': 9,
+                'oct': 10,
+                'nov': 11,
+                'dec': 12,
+            };
             const t = await page.evaluate(() => {
                 const matches = [];
                 const winOdds = [];
                 const lostOdds = [];
                 const drawOdds = [];
+                const dates = [];
             
                 document.querySelectorAll('.matchName').forEach(function(item) {
                     matches.push(item.textContent.trim());
@@ -501,19 +515,33 @@ const puppeteer = require('puppeteer');
                     winOdds.push(item.textContent.trim());
                 })
             
-            
                 document.querySelectorAll('.eventOdd-1').forEach(function(item) {
                     drawOdds.push(item.textContent.trim());
                 })
+
                 document.querySelectorAll('.eventOdd-2').forEach(function(item) {
                     lostOdds.push(item.textContent.trim());
+                });
+
+                const monthDayArr = document.querySelectorAll('.dateRow');
+                let d;
+                document.querySelectorAll('tbody').forEach(function(item, i) {
+                    d = monthDayArr[i].textContent.split(' ');
+                    item.querySelectorAll('.matchName').forEach(function(dt) {
+                        dates.push(d[1] + ' ' + datesToNum[d[2].substring(0, 3).toLowerCase()]);
+                    });
+                });
+
+                document.querySelectorAll('.eventDate').forEach((item, index) => {
+                    dates[index] = dates[index] + ' ' + item.textContent;
                 });
 
                 data = {
                     matches: matches,
                     winOdds: winOdds,
                     drawOdds: drawOdds,
-                    lostOdds: lostOdds
+                    lostOdds: lostOdds,
+                    dates: dates
                 }
         
                 return data;
@@ -569,7 +597,7 @@ const puppeteer = require('puppeteer');
                 document.querySelectorAll('.Event').forEach(function(item, index) {
                     matches.push(item.textContent.trim());
                     dateObj = datesArr[index].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm,"").split(' ');
-                    dates.push(dateObj[1] + ' ' + datesToNum[2].toLocaleLowerCase() + ' ' + dateObj[0])
+                    dates.push(dateObj[1] + ' ' + datesToNum[dateObj[2].toLowerCase()] + ' ' + dateObj[0]);
                 })
             
                 document.querySelectorAll('.odd').forEach(function(item, index) {
@@ -586,7 +614,8 @@ const puppeteer = require('puppeteer');
                     matches: matches,
                     winOdds: winOdds,
                     drawOdds: drawOdds,
-                    lostOdds: lostOdds
+                    lostOdds: lostOdds,
+                    dates: dates
                 }
         
                 return data;
@@ -649,20 +678,20 @@ const puppeteer = require('puppeteer');
                     drawOdds.push(item.children[1].textContent);
                     lostOdds.push(item.children[2].textContent);
             
-                    // for(i = 0; i < odds.length; i++) {
-                    //     if (odds[i].trim()) {
-                    //         if (count == 0) {
-                    //             winOdds.push(odds[i].trim());
-                    //         }
-                    //         if (count == 1) {
-                    //             drawOdds.push(odds[i].trim());
-                    //         }
-                    //         if (count == 2) {
-                    //             lostOdds.push(odds[i].trim());
-                    //         }
-                    //         count+=1;
-                    //     }
-                    // }
+                    for(i = 0; i < odds.length; i++) {
+                        if (odds[i].trim()) {
+                            if (count == 0) {
+                                winOdds.push(odds[i].trim());
+                            }
+                            if (count == 1) {
+                                drawOdds.push(odds[i].trim());
+                            }
+                            if (count == 2) {
+                                lostOdds.push(odds[i].trim());
+                            }
+                            count+=1;
+                        }
+                    }
                  }
                 });
 
@@ -820,7 +849,7 @@ const puppeteer = require('puppeteer');
     }
     
 
-    static getRiskless(competitionId, amount, res) {
+    static getRiskless(competitionId, amount, res, platforms=null) {
         (async () => {
             const PREMIER_LEAGUE = 1
             const LALIGA = 2
@@ -924,12 +953,39 @@ const puppeteer = require('puppeteer');
                     }
                 }
 
+                function getAllGames(allGames, platform) {
+                    allGames = {};
+                    let game;
+                    let key;
+                    for (let i = 0; i < 0; i++) {
+                        game = allGames[i];
+                        key = Object.keys(game)[0];
+                        allGames[key] = game[key];
+                    }
+
+                    return allGames;
+                }
+
                 const urls = URLS[competitionId];
                 const xbetUrl = urls['xbet']
                 const sportybetUrl = urls['sportybet']
                 const bet9jaUrl = urls['bet9ja']
                 const nairabetUrl = urls['nairabet'];
                 const betKingUrl = urls['betking'];
+                const allSupportedPlatforms = ['xbet', 'sportybet', 'bet9ja', 'nairabet'];
+                const platformsObj = []; // the platforms we want to fetch or scrape their data
+
+                if (!platforms) {
+                    platformsObj = allSupportedPlatforms;
+                } else {
+                    platforms.forEach((platform, index) => {
+                        if (allSupportedPlatforms.includes(platform.toLowerCase()) && !platformsObj.includes(platform.toLowerCase())) {
+                            platformsObj.push(platform.toLowerCase());
+                        }
+                    });
+                }
+
+
 
                // const s = await Helper.get1xbetData(xbetUrl);
                 // res.set('Content-Type', 'image/png');
@@ -937,25 +993,19 @@ const puppeteer = require('puppeteer');
             
             
                 try {
-                    let allGames = await Promise.all(
+                    let platformsData = await Promise.all(
                         [
-                            Helper.getBet9jaData(bet9jaUrl),
-                            Helper.get1xbetData(xbetUrl),
-                            Helper.getSportybetData(sportybetUrl),
-                            Helper.getNairabetData(nairabetUrl),
-                            Helper.getBetkingData(betKingUrl)
+                            ... (platformsObj.includes('bet9ja') ? [{bet9ja: Helper.getBet9jaData(bet9jaUrl)}] : []),
+                            ... (platformsObj.includes('xbet') ? [{xbet: Helper.get1xbetData(xbetUrl)}] : []),
+                            ... (platformsObj.includes('sportybet') ? [{sportybet: Helper.getSportybetData(sportybetUrl)}] : []),
+                            ... (platformsObj.includes('nairabet') ? [{nairabet: Helper.getNairabetData(nairabetUrl)}] : []),
+                            ... (platformsObj.includes('betking') ? [{betking: Helper.getBetkingData(betKingUrl)}] : []),
                         ]
                     );
 
-                    allGames = {
-                        bet9ja: allGames[0],
-                        xbet: allGames[1],
-                        sportybet: allGames[2],
-                        nairabet: allGames[3],
-                        betking: allGames[4]
-                    };
+                    allGames = getAllGames(platformsData);
 
-                    // console.log(allGames)
+                    console.log(allGames); return;
 
                     const results = [];
                     const stats = {
