@@ -1135,9 +1135,13 @@ const puppeteer = require('puppeteer');
             await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitFor('#MainContent');
             await page.waitFor(4000);
+            let t;
+            let g;
+            let overUnder1;
+            let overUnder3;
 
             try {
-                const t = await page.evaluate(() => {
+                t = await page.evaluate(() => {
                     const fixtures = [];
                     const odds = [];
                     let odd = {};
@@ -1204,21 +1208,22 @@ const puppeteer = require('puppeteer');
             
                     fixtures.forEach(function(item, index) {
                         item.odds = odds[index]
-                    })
+                    });
+                    document.querySelectorAll('.CQ')[0].children[3].click();
                     return {fixtures: fixtures, time: time, timeObj: dateTimeObj};
                 });
             } catch(e) {
                 return res.send({success: false, message: 'There is an error while generating main fixtures'});
             }
-
-            await page.click('.CQ > li:nth-child(2)');
+         
             await page.waitFor(3000);
         
             try {
-                const g = await page.evaluate(() => {
+                g = await page.evaluate(() => {
                     const odds = []
             
                     oddsElem = document.querySelectorAll('.odd');
+                    
                     oddsElem.forEach(function(item, index) {
                         if (index%2 == 1) {
                             odds.push({GG: oddsElem[index-1].textContent.substring(2), NG: item.textContent.substring(2)});
@@ -1234,12 +1239,10 @@ const puppeteer = require('puppeteer');
             } catch(e) {
                 return res.send({success: false, message: 'There is an error while generating fixtures for GG and NG'});
             }
-        
-        
             await page.waitFor(4000);
         
             try {
-                const overUnder1 = await page.evaluate(() => {
+                overUnder1 = await page.evaluate(() => {
                     const odds = []
                     oddsElem = document.querySelectorAll('.odd');
                     let over1Str;
@@ -1264,7 +1267,7 @@ const puppeteer = require('puppeteer');
             await page.waitFor(3000);
         
             try {
-                const overUnder3 = await page.evaluate(() => {
+                overUnder3 = await page.evaluate(() => {
                     const odds = []
                     oddsElem = document.querySelectorAll('.odd');
                     let over3Str;
@@ -1327,9 +1330,11 @@ const puppeteer = require('puppeteer');
             await page.goto(url, {waitUntil: 'networkidle2'});
             await page.waitForSelector('.content-wrap');
             await page.waitFor(3000);
+            let t;
+            let tableInfo;
 
             try {
-                const t = await page.evaluate(() => {
+                t = await page.evaluate(() => {
                     const teams = [];
     
                     const homeElem = document.querySelectorAll('tbody tr .text-right');
@@ -1350,8 +1355,6 @@ const puppeteer = require('puppeteer');
                 return res.send({success: false, message: 'There is an error while generating scores'});
             }
 
-            console.log(t);
-
             await page.waitFor(3000);
 
             await page.evaluate(() => {
@@ -1361,7 +1364,7 @@ const puppeteer = require('puppeteer');
             await page.waitFor(5000);
 
             try {
-                const tableInfo = await page.evaluate(() => {
+                tableInfo = await page.evaluate(() => {
                     const forms = document.querySelectorAll('.form');
                     const positions = document.querySelectorAll('.l-table__team-name');
                     f = [];
