@@ -52,10 +52,8 @@ app.get('/gen-booking-code/:betslip', (req, res) => {
 
 app.get('/riskless', (req, res) => {
     try {
-        console.log(req.query);
         helper.getRiskless(req.query.competition_id,req.query.amount, res);
     } catch (e) {
-        console.log(e);
         res.send({});
     }
 });
@@ -64,7 +62,6 @@ app.get('/zoom-fixtures', (req, res) => {
     try {
         helper.getZoomFixtures(res, req.query.country);
     } catch (e) {
-        console.log(e);
         res.send({success: false, data: {}});
     }
 });
@@ -73,19 +70,14 @@ app.get('/zoom-scores', (req, res) => {
     try {
         helper.getZoomScores(res, req.query.country);
     } catch (e) {
-        console.log(e);
         res.send({success: false, data: {}});
     }
 });
 
-app.post('/play-code', (req, res) => {
+app.post('/play-code/:country', (req, res) => {
     try {
-        console.log(req.body.data);
-
         const data = JSON.parse(req.body.data);
-        console.log(data);
-        
-        helper.getPlayedBookingCode(data, res);
+        helper.getPlayedBookingCode(data, res, req.params.country);
     } catch (e) {
         console.log(e);
         res.send({success: false, data: {}});
@@ -94,16 +86,13 @@ app.post('/play-code', (req, res) => {
 
 app.get('/play', (req, res) => {
     try {
-        console.log('Herererere');
         const bookingNumber = req.query.bookingCode;
         const username = req.query.username;
         const password = req.query.password;
         const amount = req.query.amount;
-        console.log(bookingNumber, username, password, amount);
 
         helper.playBookingCode(bookingNumber, username, password, amount, res);
     } catch (e) {
-        console.log(e);
         return res.send({success: false, data: {}});
     }
 });

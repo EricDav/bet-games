@@ -470,7 +470,6 @@ const puppeteer = require('puppeteer');
     }
 
     static async  getBetkingData(url) {
-        console.log(url);
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1005,7 +1004,6 @@ const puppeteer = require('puppeteer');
 
                     allGames = getAllGames(platformsData);
 
-                    console.log(allGames); return;
 
                     const results = [];
                     const stats = {
@@ -1123,10 +1121,14 @@ const puppeteer = require('puppeteer');
                 england: 'https://web.bet9ja.com/Sport/Odds?EventID=567161',
                 germany: 'https://web.bet9ja.com/Sport/Odds?EventID=567120',
                 italy: 'https://web.bet9ja.com/Sport/Odds?EventID=567136',
-                france: 'https://web.bet9ja.com/Sport/Odds?EventID=567138'
+                france: 'https://web.bet9ja.com/Sport/Odds?EventID=567138',
+                portugal: 'https://web.bet9ja.com/Sport/Odds?EventID=567145',
+                netherlands: 'https://web.bet9ja.com/Sport/Odds?EventID=607994'
             };
 
             const url = urls[country];
+
+            console.log(url);
         
             const page = await browser.newPage();
          
@@ -1158,8 +1160,10 @@ const puppeteer = require('puppeteer');
                         const homeAway = item.textContent.split('-');
                         fixtures.push({home: homeAway[0].trim(), away: homeAway[1].trim()});
                     });
+
+                    const oddsDoc = document.querySelectorAll('.odd');
             
-                    document.querySelectorAll('.odd').forEach(function(item, index) {
+                    oddsDoc.forEach(function(item, index) {
                         if (index == 0 || (index != 0 && index%8 == 0)) {
                             if (index != 0 && index%8 == 0) {
                                 odds.push(odd);
@@ -1201,7 +1205,7 @@ const puppeteer = require('puppeteer');
                             odd['Under 2.5'] = val;
                         }
             
-                        if (index == 79) {
+                        if (index == oddsDoc.length - 1) {
                             odds.push(odd);
                         }
                     });
@@ -1286,6 +1290,9 @@ const puppeteer = require('puppeteer');
             } catch(e) {
                 return res.send({success: false, message: 'There is an error while generating fixtures for over3 and under3'});
             }
+
+            console.log(g, 'GGGG')
+            console.log(t.fixtures, 'Fixtures==>>')
         
             t.fixtures.forEach(function(item, index) {
                 item.odds.GG = g[index].GG;
@@ -1317,7 +1324,9 @@ const puppeteer = require('puppeteer');
                 england: 'https://zoomapi.bet9ja.com/zoom/results/premier-zoom?clientId=202&notMobile=1&offset=3600000',
                 germany: 'https://zoomapi.bet9ja.com/zoom/results/bundes-zoom?clientId=202&notMobile=1&offset=3600000',
                 italy: 'https://zoomapi.bet9ja.com/zoom/results/seriea-zoom?clientId=202&notMobile=1&offset=3600000',
-                france: 'https://zoomapi.bet9ja.com/zoom/results/ligue1-zoom?clientId=202&notMobile=1&offset=3600000'
+                france: 'https://zoomapi.bet9ja.com/zoom/results/ligue1-zoom?clientId=202&notMobile=1&offset=3600000',
+                portugal: 'https://zoomapi.bet9ja.com/zoom/results/primeira-zoom?clientId=202&notMobile=1&offset=3600000',
+                netherlands: 'https://zoomapi.bet9ja.com/zoom/results/eredivisie-zoom?clientId=202&notMobile=1&offset=3600000',
             };
 
             // document.querySelectorAll('.form')[19].textContent
@@ -1405,7 +1414,7 @@ const puppeteer = require('puppeteer');
         return {'all': maxGames, 'won': risklessGames}
     }
 
-    static getPlayedBookingCode(data, res) {
+    static getPlayedBookingCode(data, res, country) {
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1416,7 +1425,20 @@ const puppeteer = require('puppeteer');
             });
     
             const page = await browser.newPage();
-            const url = 'https://web.bet9ja.com/Sport/Odds?EventID=567161';
+            const urls = {
+                spain: 'https://web.bet9ja.com/Sport/Odds?EventID=567119',
+                england: 'https://web.bet9ja.com/Sport/Odds?EventID=567161',
+                germany: 'https://web.bet9ja.com/Sport/Odds?EventID=567120',
+                italy: 'https://web.bet9ja.com/Sport/Odds?EventID=567136',
+                france: 'https://web.bet9ja.com/Sport/Odds?EventID=567138',
+                portugal: 'https://web.bet9ja.com/Sport/Odds?EventID=567145',
+                netherlands: 'https://web.bet9ja.com/Sport/Odds?EventID=607994'
+            };
+
+            console.log(country);
+            
+            const url = urls[country];
+            console.log(url, 'URL....');
              
             await page.setDefaultNavigationTimeout(0);
             await page.goto(url, {waitUntil: 'networkidle2'});
@@ -1523,7 +1545,7 @@ const puppeteer = require('puppeteer');
     
            await page.waitFor(3000);
     
-           await page.click('#s_w_PC_cCoupon_lnkAvanti');
+           await page.click('#s_w_PC_cCouponISBets_lnkAvanti');
            // await page.waitFor(4000);
     
            const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
@@ -1578,7 +1600,6 @@ const puppeteer = require('puppeteer');
     }
 
     static playBookingCode(bookingNumber, username, password, amount, res) {
-        // console.log('Begeining....');
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
@@ -1599,25 +1620,24 @@ const puppeteer = require('puppeteer');
             // const username = 'pythagoras1';
             // const password = 'Iloveodunayo123';
             // const amount = '100';
-            console.log("Here");
             await page.type('#h_w_cLogin_ctrlLogin_Username', username);
             await page.type('#h_w_cLogin_ctrlLogin_Password', password); 
             await page.click('#h_w_cLogin_ctrlLogin_lnkBtnLogin');
-            await page.waitForSelector('#hl_w_PC_cCoupon_txtPrenotatore');
-            await page.type('#hl_w_PC_cCoupon_txtPrenotatore', bookingNumber);
-            await page.click('#hl_w_PC_cCoupon_lnkLoadPrenotazione');
+            await page.waitForSelector('#hl_w_PC_cCouponISBets_txtPrenotatore');
+            await page.type('#hl_w_PC_cCouponISBets_txtPrenotatore', bookingNumber);
+            await page.click('#hl_w_PC_cCouponISBets_lnkLoadPrenotazione');
             await page.waitFor(3000);
     
-            await page.type('#hl_w_PC_cCoupon_txtImporto', amount);
-            await page.click('#hl_w_PC_cCoupon_lnkAvanti');
+            await page.type('#hl_w_PC_cCouponISBets_txtImporto', amount);
+            await page.click('#hl_w_PC_cCouponISBets_lnkAvanti');
             await page.pdf({path: 'output.pdf', format: 'A4'}); //
     
-            await page.waitForSelector('#hl_w_PC_cCoupon_lnkConferma');
-            await page.click('#hl_w_PC_cCoupon_lnkConferma');
+            await page.waitForSelector('#hl_w_PC_cCouponISBets_lnkConferma');
+            await page.click('#hl_w_PC_cCouponISBets_lnkConferma');
     
-            await page.waitForSelector('#hl_w_PC_cCoupon_lblMsgScoAccettata');
+            await page.waitForSelector('#hl_w_PC_cCouponISBets_lblMsgScoAccettata');
             const ans = await page.evaluate(() => {
-                return document.querySelector('#hl_w_PC_cCoupon_lblMsgScoAccettata').textContent;
+                return document.querySelector('#hl_w_PC_cCouponISBets_lblMsgScoAccettata').textContent;
             });
     
             await browser.close();
