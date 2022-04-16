@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 app.use(cors())
 
-cron.schedule('*/6 * * * *', () => {
+cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', () => {
     try {
         console.log('Cron started......');
         helper.fetchBabyFixtures(null);

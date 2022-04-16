@@ -170,7 +170,6 @@ const axios = require('axios');
             });
         
             // const bookingNumber = 'PZM66B';
-        
             const page = await browser.newPage();
             const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
              
@@ -184,6 +183,7 @@ const axios = require('axios');
             await page.type('#inputPass', password); 
         
             await page.click('.btn-danger');
+            await page.waitFor(20000);
         
             
             let ans;
