@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 app.use(cors())
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('*/6 * * * *', () => {
     try {
         console.log('Cron started......');
         helper.fetchBabyFixtures(null);
@@ -27,6 +27,14 @@ cron.schedule('*/5 * * * *', () => {
         console.log('Cron ended......');
     } catch(e) {
         console.log(e, 'Error occured')
+    }
+});
+
+app.get('/health', (req, res) => {
+    try {
+        res.send({message: 'Server is healthy hurray!', success: true});
+    } catch (e) {
+        res.send({message: 'Server not healthy sad!', success: false});
     }
 });
 
