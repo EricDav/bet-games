@@ -1,7 +1,8 @@
 const express = require('express');
 const helper = require('./Helper');
 const bodyParser = require('body-parser');
-var cors = require('cors')
+const cors = require('cors')
+const cron = require('node-cron');
 
 const app = express();
 
@@ -17,6 +18,17 @@ app.use(bodyParser.json());
 // });
 
 app.use(cors())
+
+cron.schedule('*/5 * * * *', () => {
+    try {
+        console.log('Cron started......');
+        helper.fetchBabyFixtures(res);
+        helper.fetchBabyResult(res);
+        console.log('Cron ended......');
+    } catch(e) {
+        console.log(e, 'Error occured')
+    }
+});
 
 app.get('/bet9ja/:bookingCode', (req, res) => {
     try {

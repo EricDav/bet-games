@@ -70,10 +70,8 @@ const axios = require('axios');
                       let tableData;
               
                       let rs = resultRow[i].textContent.replace(/\n/g, '').replace(/ /g, '');
-                      console.log(rs, 'Rs......')
                       datum.home = rs.substring(0, 3);
                       tableData = table.find(element => element.team == datum.home);
-                      console.log(tableData, 'Table datat....');
           
                       datum.homeForm = tableData.form;
                       datum.homePos = tableData.pos;
@@ -144,7 +142,6 @@ const axios = require('axios');
               })
             }
           
-            console.log(data, 'Data===>>>>>>>>')
             const result = await axios({
                 method: 'post',
                 url: 'https://baby.correctionweb.com/results',
@@ -152,7 +149,9 @@ const axios = require('axios');
             });
           
             await browser.close();
-            return res.send({data, success: true});
+            if (res) {
+                return res.send({data, success: true});
+            }
           })();          
     }
 
@@ -250,7 +249,9 @@ const axios = require('axios');
           });
 
           await browser.close();
-          res.send({data: ans, success: true});
+          if (res) {
+            res.send({data: ans, success: true});
+          }
         })();
         
     }
