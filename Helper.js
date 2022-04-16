@@ -45,7 +45,7 @@ const axios = require('axios');
                       if (document.querySelectorAll('.pijamaElement-league-table').length > 0) {
                           setTable();
                       }
-                      if (localStorage.getItem('__weekNum') === numWeeksDoc.children[1]?.textContent) {
+                      if (localStorage.getItem('__weekNum') === numWeeksDoc.children[1].textContent) {
                           return 'Week number not available';
                       }
               
@@ -90,7 +90,7 @@ const axios = require('axios');
                   }
                   bigResult.results = results;
               
-                  bigResult.weekNum = document.querySelector('.event-countdown')?.textContent.trim().split(' ')[2];
+                  bigResult.weekNum = document.querySelector('.event-countdown').textContent.trim().split(' ')[2];
                 //   $.ajax({
                 //       type: "POST",
                 //       url: 'https://baby.correctionweb.com/results',
@@ -105,8 +105,8 @@ const axios = require('axios');
               }
               
               function setTable() {
-                  const leagueNum = document.querySelector('#header-right-area-left-hour-league').children[1]?.textContent;
-                  const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week').children[1]?.textContent;
+                  const leagueNum = document.querySelector('#header-right-area-left-hour-league').children[1].textContent;
+                  const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week').children[1].textContent;
                   const table = [];
                   const tableRow = document.querySelectorAll('.pijamaElement-league-table');
                   for (let j = 0; j < 20; j++) {
