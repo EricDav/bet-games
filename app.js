@@ -108,4 +108,23 @@ app.get('/play', (req, res) => {
     }
 });
 
+app.get('/baby/fixtures', (req, res) => {
+    try {
+        helper.fetchBabyFixtures(res);
+    } catch (e) {
+        console.log(e);
+        res.send({success: false, data: {}});
+    }
+});
+
+
+app.get('/baby/results', (req, res) => {
+    try {
+        helper.fetchBabyResult(res);
+    } catch (e) {
+        console.log(e);
+        res.send({success: false, data: {}});
+    }
+});
+
 app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`));
