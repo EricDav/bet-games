@@ -9,7 +9,7 @@ const app = express();
 const port = 4000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
