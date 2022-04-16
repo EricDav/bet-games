@@ -10,7 +10,6 @@ const axios = require('axios');
     static fetchBabyResult(res) {
         (async () => {
             const browser = await puppeteer.launch({
-                headless: false,
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
@@ -157,10 +156,9 @@ const axios = require('axios');
           })();          
     }
 
-    static fetchBabyFixtures(res) {
+    static fetchBabyFixtures(res) { 
         (async () => {
             const browser = await puppeteer.launch({
-                headless: false,
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
