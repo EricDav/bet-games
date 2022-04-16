@@ -147,6 +147,10 @@ const axios = require('axios');
                 url: 'https://baby.correctionweb.com/results',
                 data
             });
+
+            console.log('Cron details log start ==>>>>>>>>>>');
+            console.log(result.data);
+            console.log('Cron details log end ==>>>>>>>>>>');
           
             await browser.close();
             if (res) {
@@ -247,6 +251,10 @@ const axios = require('axios');
             url: 'https://baby.correctionweb.com/fixtures',
             data: ans
           });
+
+          console.log('Cron details log start ==>>>>>>>>>>');
+          console.log(result.data);
+          console.log('Cron details log end ==>>>>>>>>>>');
 
           await browser.close();
           if (res) {

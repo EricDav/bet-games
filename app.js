@@ -22,8 +22,8 @@ app.use(cors())
 cron.schedule('*/5 * * * *', () => {
     try {
         console.log('Cron started......');
-        helper.fetchBabyFixtures(res);
-        helper.fetchBabyResult(res);
+        helper.fetchBabyFixtures(null);
+        helper.fetchBabyResult(null);
         console.log('Cron ended......');
     } catch(e) {
         console.log(e, 'Error occured')
