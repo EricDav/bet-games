@@ -148,9 +148,10 @@ const axios = require('axios');
                 data
             });
 
-            console.log('Cron details log start ==>>>>>>>>>>');
+            delete result.fixtures
+            console.log('Cron details log start for results ==>>>>>>>>>>');
             console.log(result.data);
-            console.log('Cron details log end ==>>>>>>>>>>');
+            console.log('Cron details log end for results ==>>>>>>>>>>');
           
             await browser.close();
             if (res) {
@@ -252,9 +253,9 @@ const axios = require('axios');
             data: ans
           });
 
-          console.log('Cron details log start ==>>>>>>>>>>');
+          console.log('Cron details log start for fixtures ==>>>>>>>>>>');
           console.log(result.data);
-          console.log('Cron details log end ==>>>>>>>>>>');
+          console.log('Cron details log end for fixtures ==>>>>>>>>>>');
 
           await browser.close();
           if (res) {
