@@ -177,14 +177,14 @@ const axios = require('axios');
             await page.setDefaultNavigationTimeout(0);
             await page.goto(url, {waitUntil: 'networkidle2'});
         
-            const username = 'pythagoras1';
+            const username = 'pythagoras1'; 
             const password = 'Iloveodunayo123';
         
             await page.type('#inputUser', username);
             await page.type('#inputPass', password); 
         
             await page.click('.btn-danger');
-            await page.waitFor(20000);
+            await page.waitFor(20000); 
         
             
             let ans;
