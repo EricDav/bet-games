@@ -257,7 +257,7 @@ const axios = require('axios');
           console.log(result.data);
           console.log('Cron details log end for fixtures ==>>>>>>>>>>');
 
-          await browser.close();
+          await browser.close(); 
           if (res) {
             res.send({data: ans, success: true});
           }
