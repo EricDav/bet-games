@@ -272,7 +272,7 @@ const axios = require('axios');
                         '--no-sandbox',
                         '--disable-setuid-sandbox', 
                       ],
-                });
+                }); 
                 const page = await browser.newPage();
                 await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
               
