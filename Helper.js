@@ -262,7 +262,7 @@ const axios = require('axios');
             res.send({data: ans, success: true});
           }
         })();
-    }
+    } 
 
     static getGameFromBet9jaBookingCode(bookingCode, res) {
             (async () => {
