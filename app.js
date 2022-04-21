@@ -129,7 +129,7 @@ app.get('/baby/fixtures', (req, res) => {
 
 app.get('/baby/results', (req, res) => { 
     try {
-        helper.fetchBabyResult(res);
+        helper.fetchBabyResult(res); 
     } catch (e) {
         console.log(e);
         res.send({success: false, data: {}});
