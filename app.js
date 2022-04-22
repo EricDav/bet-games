@@ -127,7 +127,7 @@ app.get('/baby/fixtures', (req, res) => {
 });
 
 
-app.get('/baby/results', (req, res) => { 
+app.get('/baby/results', (req, res) => {    
     try {
         helper.fetchBabyResult(res); 
     } catch (e) {
