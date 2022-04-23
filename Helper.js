@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-require('dotenv');
+require('dotenv').config()
 
  class Helper {
     static format(d) {
@@ -8,7 +8,7 @@ require('dotenv');
         return d.length == 2 ? d : '0' + d;
     }
 
-    static playBaby() {
+    static playBaby(fixtures) {
         const puppeteer = require('puppeteer');
         (async () => {
             const browser = await puppeteer.launch({
@@ -19,9 +19,15 @@ require('dotenv');
                     '--disable-setuid-sandbox',
                 ],
             });
+
+            // Inputs ----
+
             const prediction = 'over2';
             const team1 = 'MNC';
             const team2 = 'LIV';
+            const price = 200;
+
+            // Inputs end ---
 
 
 
@@ -35,13 +41,19 @@ require('dotenv');
             const password = process.env.PASSWORD;
             console.log(username, password);
 
-            await page.type('#inputUser', username);
-            await page.type('#inputPass', password);
-
-            await page.click('.btn-danger');
-
-            let fixtures = await getFixtures();
-            fixtures = fixtures.fixtures;
+            try {
+                await page.type('#inputUser', username);
+                await page.type('#inputPass', password);
+    
+                await page.click('.btn-danger');
+                await page.waitForSelector('#gamebets-wrapper');
+            } catch (e) {
+                console.log(e);
+                return {
+                    success: false,
+                    message: 'An error occured logging in'
+                }
+            }
 
             const predictions = [];
             fixtures.forEach((fix) => {
@@ -57,118 +69,162 @@ require('dotenv');
                     predictions.push({
                         homeTeam: fix.homeTeam,
                         awayTeam: fix.awayTeam,
-                            prediction
-                        });
-                    }
-                })
-                
-                let ans;
-                const ruleToPlay = [];
-                const rules = {
-                    1: {
-                        section: 0,
-                        item: 0
-                    },
-                    'X': {
-                        section: 0,
-                        item: 1,
-                    },
-                    2: {
-                        section: 0,
-                        item: 2,
-                    },
-                            '1X': {
-                                section: 1,
-                                item: 0,
-                            },
-                            '12': {
-                                section: 1,
-                                item: 1,
-                            },
-                            'X2': {
-                                section: 1,
-                                item: 2,
-                            },
-                            'GG': {
-                                section: 2,
-                                item: 0,
-                            },
-                            'NG': {
-                                section: 2,
-                                item: 1,
-                            },
-                            'over2': {
-                                section: 3,
-                                item: 0,
-                            },
-                            'under2': {
-                                section: 3,
-                                item: 1,
-                            }
-                        }
-
-                        const price = 200;
-                
-                        predictions.forEach((pred) => {
-                            for(let i = 0; i < fixtures.length; i++) {
-                                let fix = fixtures[i];
-                                if (pred.homeTeam == fix.homeTeam && pred.awayTeam == fix.awayTeam) {
-                                    const r = rules[pred.prediction];
-                                    ruleToPlay.push({
-                                        row: i,
-                                        section: r.section,
-                                        item: r.item
-                                    })
-                                }
-                            }
-                        });
-                
-                    await page.exposeFunction('play', (e) => {
-                            return ruleToPlay;
+                        prediction
                     });
+                }
+            })
                 
-                        await page.exposeFunction('getPrice', (e) => {
-                            return price;
-                        });
-                
-                        ans = await page.evaluate(async () => {
-                            // console
-                            const main = await window.play();
-                            const price = await window.getPrice();
-                            for (let i = 0; i < main.length; i++) {
-                                obj = main[i];
-                                document.querySelectorAll('.row-matches-bets')[obj.row].querySelectorAll('.mainMarketsOdds')[obj.section].querySelectorAll('.col-xs')[obj.item].querySelector('.btn-odd').click();
-                            }
-                
-                            if (price == 200) {
-                                document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
-                            } else if (price == 500) {
-                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
-                            } else if (price == 1000) {
-                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
-                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
-                            } else {
-                                // default to 200
-                                document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
-                            }
-                
-                            return document.querySelectorAll('.event-countdown-text')[0].textContent;
-                        });
-                
+            let ans;
+            const ruleToPlay = [];
+            const rules = {
+                1: {
+                    section: 0,
+                    item: 0
+                },
+                'X': {
+                    section: 0,
+                    item: 1,
+                },
+                2: {
+                    section: 0,
+                    item: 2,
+                },
+                '1X': {
+                    section: 1,
+                    item: 0,
+                },
+                '12': {
+                    section: 1,
+                    item: 1,
+                },
+                'X2': {
+                    section: 1,
+                    item: 2,
+                },
+                'GG': {
+                    section: 2,
+                    item: 0,
+                },
+                'NG': {
+                    section: 2,
+                    item: 1,
+                },
+                'over2': {
+                    section: 3,
+                    item: 0,
+                },
+                'under2': {
+                    section: 3,
+                    item: 1,
+                }
+            }
+
+            predictions.forEach((pred) => {
+                for(let i = 0; i < fixtures.length; i++) {
+                    let fix = fixtures[i];
+                    if (pred.homeTeam == fix.homeTeam && pred.awayTeam == fix.awayTeam) {
+                        const r = rules[pred.prediction];
+                        ruleToPlay.push({
+                            row: i,
+                            section: r.section,
+                            item: r.item
+                        })
+                    }
+                }
+            });
+            
+            
+            try {
+                await page.exposeFunction('play', (e) => {
+                    return ruleToPlay;
+                });
                     
-                    await page.waitFor(3000);
-                    await page.click('#button-placebet');
+                await page.exposeFunction('getPrice', (e) => {
+                    return price;
+                });
 
-                    // await page.waitFor(3000);
-                    const element = await page.waitForSelector('.code-assigned');
-                    const value = await element.evaluate(el => el.textContent);
-
-                    console.log(value, 'Value')
-                    console.log(ans, 'Ans...')
-
-                    await browser.close();
+                ans = await page.evaluate(async () => {
+                    const main = await window.play();
+                    const price = await window.getPrice();
+                    
+                    console.log(price, main)
+                    for (let i = 0; i < main.length; i++) {
+                        obj = main[i];
+                        document.querySelectorAll('.row-matches-bets')[obj.row].querySelectorAll('.mainMarketsOdds')[obj.section].querySelectorAll('.col-xs')[obj.item].querySelector('.btn-odd').click();
+                    }
+                    
+                    if (price == 200) {
+                        document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                    } else if (price == 500) {
+                        document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                    } else if (price == 1000) {
+                        document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                        document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                    } else {
+                        // default to 200
+                        document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                    }
+                    
+                    return document.querySelectorAll('.event-countdown-text')[0].textContent;
+                });
+            } catch (e) {
+                console.log(e);
+                return {
+                    success: false,
+                    message: 'Error occured in evaluation function'
+                }
+            }
+                
+            try {
+                await page.waitFor(3000);
+                await page.click('#button-placebet');
     
-})();
+                await page.waitFor(5000);
+            } catch (e) {
+                console.log(e);
+                return {
+                    success: false,
+                    message: 'Could not click on the play button'
+                }
+            }
+
+            const data = {
+                predictions: JSON.stringify(predictions)
+            }
+
+            let result;
+            try {
+                result = await axios({
+                    method: 'post',
+                    url: 'http://baby.correctionweb.com/games',
+                    data
+                });
+            } catch (e) {
+                console.log(e)
+                await browser.close();
+                return {
+                    success: false,
+                    message: 'Server error from axios'
+                }
+            }
+
+            console.log(result.data, 'Result');
+
+            await browser.close();
+
+            if (result.success) {
+                return {
+                    success: true,
+                    message: 'Game played and data inserted'
+                }
+            }
+
+            return {
+                success: true,
+                message: 'Game played, but data not inserted'
+            }
+    
+        })();
     }
 
     static fetchBabyResult(res) {
@@ -308,7 +364,7 @@ require('dotenv');
           
             const result = await axios({
                 method: 'post',
-                url: 'https://baby.correctionweb.com/results',
+                url: 'http://baby.correctionweb.com/results',
                 data
             });
 
@@ -411,11 +467,15 @@ require('dotenv');
         
                 return ans;
           }
-        const result = await axios({
+          const result = await axios({
             method: 'post',
-            url: 'https://baby.correctionweb.com/fixtures',
+            url: 'http://baby.correctionweb.com/fixtures',
             data: ans
           });
+
+        // const game = await this.playBaby(ans.fixtures);
+
+        // console.log(game, '==>>>>');
 
           console.log('Cron details log start for fixtures ==>>>>>>>>>>');
           console.log(result.data);
