@@ -1,10 +1,174 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+require('dotenv');
 
  class Helper {
     static format(d) {
         d = d.toString();
         return d.length == 2 ? d : '0' + d;
+    }
+
+    static playBaby() {
+        const puppeteer = require('puppeteer');
+        (async () => {
+            const browser = await puppeteer.launch({
+                headless: false,
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                ],
+            });
+            const prediction = 'over2';
+            const team1 = 'MNC';
+            const team2 = 'LIV';
+
+
+
+            const page = await browser.newPage();
+            const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
+            
+            await page.setDefaultNavigationTimeout(0);
+            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            const username = process.env.USERNAME;
+            const password = process.env.PASSWORD;
+            console.log(username, password);
+
+            await page.type('#inputUser', username);
+            await page.type('#inputPass', password);
+
+            await page.click('.btn-danger');
+
+            let fixtures = await getFixtures();
+            fixtures = fixtures.fixtures;
+
+            const predictions = [];
+            fixtures.forEach((fix) => {
+                if (fix.homeTeam == team1 || fix.awayTeam == team1) {
+                    predictions.push({
+                        homeTeam: fix.homeTeam,
+                        awayTeam: fix.awayTeam,
+                        prediction
+                    });
+                }
+
+                if (fix.homeTeam == team2 || fix.awayTeam == team2) {
+                    predictions.push({
+                        homeTeam: fix.homeTeam,
+                        awayTeam: fix.awayTeam,
+                            prediction
+                        });
+                    }
+                })
+                
+                let ans;
+                const ruleToPlay = [];
+                const rules = {
+                    1: {
+                        section: 0,
+                        item: 0
+                    },
+                    'X': {
+                        section: 0,
+                        item: 1,
+                    },
+                    2: {
+                        section: 0,
+                        item: 2,
+                    },
+                            '1X': {
+                                section: 1,
+                                item: 0,
+                            },
+                            '12': {
+                                section: 1,
+                                item: 1,
+                            },
+                            'X2': {
+                                section: 1,
+                                item: 2,
+                            },
+                            'GG': {
+                                section: 2,
+                                item: 0,
+                            },
+                            'NG': {
+                                section: 2,
+                                item: 1,
+                            },
+                            'over2': {
+                                section: 3,
+                                item: 0,
+                            },
+                            'under2': {
+                                section: 3,
+                                item: 1,
+                            }
+                        }
+
+                        const price = 200;
+                
+                        predictions.forEach((pred) => {
+                            for(let i = 0; i < fixtures.length; i++) {
+                                let fix = fixtures[i];
+                                if (pred.homeTeam == fix.homeTeam && pred.awayTeam == fix.awayTeam) {
+                                    const r = rules[pred.prediction];
+                                    ruleToPlay.push({
+                                        row: i,
+                                        section: r.section,
+                                        item: r.item
+                                    })
+                                }
+                            }
+                        });
+                
+                    await page.exposeFunction('play', (e) => {
+                            return ruleToPlay;
+                    });
+                
+                        await page.exposeFunction('getPrice', (e) => {
+                            return price;
+                        });
+                
+                        ans = await page.evaluate(async () => {
+                            // console
+                            const main = await window.play();
+                            const price = await window.getPrice();
+                            for (let i = 0; i < main.length; i++) {
+                                obj = main[i];
+                                document.querySelectorAll('.row-matches-bets')[obj.row].querySelectorAll('.mainMarketsOdds')[obj.section].querySelectorAll('.col-xs')[obj.item].querySelector('.btn-odd').click();
+                            }
+                
+                            if (price == 200) {
+                                document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                            } else if (price == 500) {
+                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                            } else if (price == 1000) {
+                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                                document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                            } else {
+                                // default to 200
+                                document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                            }
+                
+                            return document.querySelectorAll('.event-countdown-text')[0].textContent;
+                        });
+                
+                    
+                    await page.waitFor(3000);
+                    await page.click('#button-placebet');
+
+                    // await page.waitFor(3000);
+                    const element = await page.waitForSelector('.code-assigned');
+                    const value = await element.evaluate(el => el.textContent);
+
+                    console.log(value, 'Value')
+                    console.log(ans, 'Ans...')
+
+                    await browser.close();
+    
+})();
     }
 
     static fetchBabyResult(res) {
