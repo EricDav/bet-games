@@ -19,7 +19,7 @@ require('dotenv').config()
 
         let prob;
         let fix;
-        for(i = 0; i < fixtures.length; i++) {
+        for(let i = 0; i < fixtures.length; i++) {
             fix = fixtures[i];
             if (fix.homeTeam == team1 || fix.awayTeam == team1) {
                 const otherTeam = fix.homeTeam == team1 ? fix.awayTeam : fix.homeTeam;
