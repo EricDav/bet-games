@@ -43,7 +43,6 @@ require('dotenv').config()
         const puppeteer = require('puppeteer');
         (async () => {
             const browser = await puppeteer.launch({
-                headless: false,
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
