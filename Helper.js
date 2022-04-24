@@ -517,18 +517,18 @@ require('dotenv').config()
         
                 return ans;
           }
-          const result = await axios({
-            method: 'post',
-            url: 'http://baby.correctionweb.com/fixtures',
-            data: ans
-          });
- 
           const currentPlayingTeam = 'LIV';
           if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
             this.playBaby(ans.fixtures);
           } else {
               console.log('Skipping this round ==>>>>>>>>>');
           }
+          
+          const result = await axios({
+            method: 'post',
+            url: 'http://baby.correctionweb.com/fixtures',
+            data: ans
+          });
 
           console.log('Cron details log start for fixtures ==>>>>>>>>>>');
           console.log(result.data);
