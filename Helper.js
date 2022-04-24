@@ -18,15 +18,18 @@ require('dotenv').config()
         "ASV":{"count":27,"total":16,"probability":"0.59","awayTotal":15,"awayProbability":"0.50","awayCount":30},"BRI":{"count":31,"total":22,"probability":"0.71","awayTotal":14,"awayProbability":"0.47","awayCount":30},"LEI":{"count":30,"total":17,"probability":"0.57","awayTotal":15,"awayProbability":"0.50","awayCount":30}};
 
         let prop;
-        fixtures.forEach((fix) => {
+        let fix;
+        for(i = 0; i < fixtures.length; i++) {
+            fix = fixtures[i];
             if (fix.homeTeam == team1 || fix.awayTeam == team1) {
                 const otherTeam = fix.homeTeam == team1 ? fix.awayTeam : fix.homeTeam;
                 const stat = trainData[otherTeam];
                 
                 const isHome = fix.homeTeam == team1;
                 prob = isHome ? stat['probability'] : stat['awayProbability'];
+                break;
             }
-        });
+        }
 
         if (prop > thresold) {
             return true;
