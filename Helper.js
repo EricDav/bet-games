@@ -9,7 +9,7 @@ require('dotenv').config()
     }
 
     static shouldPlay(team1, fixtures) {
-        const thresold = 6.1;
+        const thresold = 0.61;
         const trainData = {"LEE":{"count":30,"total":21,"probability":"0.70","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNU":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.52","awayCount":31},"BUR":{"count":30,"total":23,"probability":"0.77","awayTotal":17,"awayProbability":"0.55","awayCount":31},"WAT":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.53","awayCount":30},
         "SOU":{"count":30,"total":20,"probability":"0.67","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CRY":{"count":30,"total":23,"probability":"0.77","awayTotal":21,"awayProbability":"0.70","awayCount":30},"NWC":{"count":28,"total":11,"probability":"0.39","awayTotal":17,"awayProbability":"0.57","awayCount":30},"ARS":{"count":27,"total":11,"probability":"0.41","awayTotal":16,"awayProbability":"0.53","awayCount":30},
         "EVE":{"count":30,"total":20,"probability":"0.67","awayTotal":22,"awayProbability":"0.71","awayCount":31},"BRN":{"count":30,"total":18,"probability":"0.60","awayTotal":16,"awayProbability":"0.52","awayCount":31},"WHU":{"count":31,"total":20,"probability":"0.65","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CHE":{"count":30,"total":16,"probability":"0.53","awayTotal":16,"awayProbability":"0.52","awayCount":31},
@@ -39,9 +39,11 @@ require('dotenv').config()
     }
 
     static playBaby(fixtures) {
+        console.log('<<<=======Begining of Playing baby =======>>>')
         const puppeteer = require('puppeteer');
         (async () => {
             const browser = await puppeteer.launch({
+                headless: false,
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
@@ -101,6 +103,8 @@ require('dotenv').config()
                 //     });
                 // }
             })
+
+            console.log(predictions)
                 
             let ans;
             const ruleToPlay = [];
