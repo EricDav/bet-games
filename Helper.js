@@ -17,7 +17,7 @@ require('dotenv').config()
         "TOT":{"count":31,"total":18,"probability":"0.58","awayTotal":17,"awayProbability":"0.57","awayCount":30},"NOR":{"count":31,"total":18,"probability":"0.58","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNC":{"count":30,"total":18,"probability":"0.60","awayTotal":13,"awayProbability":"0.42","awayCount":31},
         "ASV":{"count":27,"total":16,"probability":"0.59","awayTotal":15,"awayProbability":"0.50","awayCount":30},"BRI":{"count":31,"total":22,"probability":"0.71","awayTotal":14,"awayProbability":"0.47","awayCount":30},"LEI":{"count":30,"total":17,"probability":"0.57","awayTotal":15,"awayProbability":"0.50","awayCount":30}};
 
-        let prop;
+        let prob;
         let fix;
         for(i = 0; i < fixtures.length; i++) {
             fix = fixtures[i];
@@ -31,7 +31,7 @@ require('dotenv').config()
             }
         }
 
-        if (prop > thresold) {
+        if (prob > thresold) {
             return true;
         }
 
