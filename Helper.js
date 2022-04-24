@@ -501,6 +501,8 @@ require('dotenv').config()
           const currentPlayingTeam = 'LIV';
           if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
             this.playBaby(ans.fixtures);
+          } else {
+              console.log('Skipping this round ==>>>>>>>>>');
           }
 
           console.log('Cron details log start for fixtures ==>>>>>>>>>>');
