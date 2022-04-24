@@ -28,14 +28,8 @@ require('dotenv').config()
     }
 
     static shouldPlay(team1, fixtures) {
-        const thresold = 0.61;
-        const trainData = {"LEE":{"count":30,"total":21,"probability":"0.70","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNU":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.52","awayCount":31},"BUR":{"count":30,"total":23,"probability":"0.77","awayTotal":17,"awayProbability":"0.55","awayCount":31},"WAT":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.53","awayCount":30},
-        "SOU":{"count":30,"total":20,"probability":"0.67","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CRY":{"count":30,"total":23,"probability":"0.77","awayTotal":21,"awayProbability":"0.70","awayCount":30},"NWC":{"count":28,"total":11,"probability":"0.39","awayTotal":17,"awayProbability":"0.57","awayCount":30},"ARS":{"count":27,"total":11,"probability":"0.41","awayTotal":16,"awayProbability":"0.53","awayCount":30},
-        "EVE":{"count":30,"total":20,"probability":"0.67","awayTotal":22,"awayProbability":"0.71","awayCount":31},"BRN":{"count":30,"total":18,"probability":"0.60","awayTotal":16,"awayProbability":"0.52","awayCount":31},"WHU":{"count":31,"total":20,"probability":"0.65","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CHE":{"count":30,"total":16,"probability":"0.53","awayTotal":16,"awayProbability":"0.52","awayCount":31},
-        "WOL":{"count":31,"total":13,"probability":"0.42","awayTotal":14,"awayProbability":"0.48","awayCount":29},
-        "TOT":{"count":31,"total":18,"probability":"0.58","awayTotal":17,"awayProbability":"0.57","awayCount":30},"NOR":{"count":31,"total":18,"probability":"0.58","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNC":{"count":30,"total":18,"probability":"0.60","awayTotal":13,"awayProbability":"0.42","awayCount":31},
-        "ASV":{"count":27,"total":16,"probability":"0.59","awayTotal":15,"awayProbability":"0.50","awayCount":30},"BRI":{"count":31,"total":22,"probability":"0.71","awayTotal":14,"awayProbability":"0.47","awayCount":30},"LEI":{"count":30,"total":17,"probability":"0.57","awayTotal":15,"awayProbability":"0.50","awayCount":30}};
-
+        const thresold = 0.55;
+        const trainData = {"LEE":{"count":30,"total":21,"probability":"0.70","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNU":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.52","awayCount":31},"BUR":{"count":30,"total":23,"probability":"0.77","awayTotal":17,"awayProbability":"0.55","awayCount":31},"WAT":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.53","awayCount":30},"SOU":{"count":30,"total":20,"probability":"0.67","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CRY":{"count":30,"total":23,"probability":"0.77","awayTotal":21,"awayProbability":"0.70","awayCount":30},"NWC":{"count":28,"total":11,"probability":"0.39","awayTotal":17,"awayProbability":"0.57","awayCount":30},"ARS":{"count":27,"total":11,"probability":"0.41","awayTotal":16,"awayProbability":"0.53","awayCount":30},"EVE":{"count":30,"total":20,"probability":"0.67","awayTotal":22,"awayProbability":"0.71","awayCount":31},"BRN":{"count":30,"total":18,"probability":"0.60","awayTotal":16,"awayProbability":"0.52","awayCount":31},"WHU":{"count":31,"total":20,"probability":"0.65","awayTotal":15,"awayProbability":"0.50","awayCount":30},"CHE":{"count":30,"total":16,"probability":"0.53","awayTotal":16,"awayProbability":"0.52","awayCount":31},"WOL":{"count":31,"total":13,"probability":"0.42","awayTotal":14,"awayProbability":"0.48","awayCount":29},"TOT":{"count":31,"total":18,"probability":"0.58","awayTotal":17,"awayProbability":"0.57","awayCount":30},"NOR":{"count":31,"total":18,"probability":"0.58","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNC":{"count":30,"total":18,"probability":"0.60","awayTotal":13,"awayProbability":"0.42","awayCount":31},"ASV":{"count":27,"total":16,"probability":"0.59","awayTotal":15,"awayProbability":"0.50","awayCount":30},"BRI":{"count":31,"total":22,"probability":"0.71","awayTotal":14,"awayProbability":"0.47","awayCount":30},"LEI":{"count":30,"total":17,"probability":"0.57","awayTotal":15,"awayProbability":"0.50","awayCount":30}};
         let prob;
         let fix;
         for(let i = 0; i < fixtures.length; i++) {
@@ -523,7 +517,7 @@ require('dotenv').config()
           } else {
               console.log('Skipping this round ==>>>>>>>>>');
           }
-          
+
           const result = await axios({
             method: 'post',
             url: 'http://baby.correctionweb.com/fixtures',
