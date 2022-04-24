@@ -8,6 +8,25 @@ require('dotenv').config()
         return d.length == 2 ? d : '0' + d;
     }
 
+    static health(res) {
+        const puppeteer = require('puppeteer');
+        (async () => {
+            try {
+                const browser = await puppeteer.launch({
+                    ignoreDefaultArgs: ['--disable-extensions'],
+                    args: [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                    ],
+                });
+                return res.send({message: 'Server is healthy hurray!', success: true});
+            } catch(e) {
+                return res.send({message: 'Server not healthy sad!', success: false});
+            }
+
+        });
+    }
+
     static shouldPlay(team1, fixtures) {
         const thresold = 0.61;
         const trainData = {"LEE":{"count":30,"total":21,"probability":"0.70","awayTotal":19,"awayProbability":"0.63","awayCount":30},"MNU":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.52","awayCount":31},"BUR":{"count":30,"total":23,"probability":"0.77","awayTotal":17,"awayProbability":"0.55","awayCount":31},"WAT":{"count":31,"total":20,"probability":"0.65","awayTotal":16,"awayProbability":"0.53","awayCount":30},

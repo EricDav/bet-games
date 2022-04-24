@@ -9,7 +9,7 @@ const app = express();
 const port = 4000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
 app.use(cors())
 cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', () => {
@@ -25,7 +25,7 @@ cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', () => {
 
 app.get('/health', (req, res) => {
     try {
-        res.send({message: 'Server is healthy hurray!', success: true});
+        helper.health(res);
     } catch (e) {
         res.send({message: 'Server not healthy sad!', success: false});
     }
