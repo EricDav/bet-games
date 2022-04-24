@@ -19,15 +19,17 @@ require('dotenv').config()
                         '--disable-setuid-sandbox',
                     ],
                 });
-                await browser.close();
+                const page = await browser.newPage();
                 
+                await browser.close();
+
                 return res.send({message: 'Server is healthy hurray!', success: true});
             } catch(e) {
                 console.log(e);
                 return res.send({message: 'Server not healthy sad!', success: false});
             }
 
-        });
+        })();
     }
 
     static shouldPlay(team1, fixtures) {
