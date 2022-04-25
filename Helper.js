@@ -20,7 +20,7 @@ require('dotenv').config()
                     ],
                 });
                 const page = await browser.newPage();
-                
+
                 await browser.close();
 
                 return res.send({message: 'Server is healthy hurray!', success: true});
@@ -519,9 +519,9 @@ require('dotenv').config()
           const currentPlayingTeam = 'LIV';
           if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
             this.playBaby(ans.fixtures);
-          } else {
+         } else {
               console.log('Skipping this round ==>>>>>>>>>');
-          }
+        }
 
           const result = await axios({
             method: 'post',
