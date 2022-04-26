@@ -52,7 +52,7 @@ app.get('/soccer24/live-score/:matchId', (req, res) => {
         helper.getMatchDetails(req.params.matchId, res);
     } catch (e) {
         res.send({});
-    }
+    } 
 });
 
 app.get('/gen-booking-code/:betslip', (req, res) => {
