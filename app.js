@@ -28,7 +28,7 @@ app.get('/health', (req, res) => {
         helper.health(res);
     } catch (e) {
         res.send({message: 'Server not healthy sad!', success: false});
-    }
+    } 
 });
 
 app.get('/bet9ja/:bookingCode', (req, res) => {
