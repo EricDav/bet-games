@@ -50,7 +50,7 @@ app.get('/soccer24/live-score', (req, res) => {
 app.get('/soccer24/live-score/:matchId', (req, res) => {
     try {
         helper.getMatchDetails(req.params.matchId, res);
-    } catch (e) {
+    } catch (e) { 
         res.send({});
     } 
 });
