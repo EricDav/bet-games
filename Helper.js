@@ -228,7 +228,7 @@ require('dotenv').config()
                 await page.waitFor(3000);
                 await page.click('#button-placebet');
     
-                await page.waitFor(5000);
+                await page.waitFor(8000);
             } catch (e) {
                 console.log(e);
                 return {
@@ -242,7 +242,7 @@ require('dotenv').config()
             }
 
             let result;
-            try {
+            try { 
                 result = await axios({
                     method: 'post',
                     url: 'http://baby.correctionweb.com/games',
