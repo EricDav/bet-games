@@ -126,8 +126,8 @@ require('dotenv').config()
             // const matches = this.getRandom(aboveThreshold, 2);
             // console.log(lowest, secondLowest, 'Lowest....');
             return [
-                {home: highest.homeTeam, away: highest.awayTeam, prediction: 'over2'},
-                {home: secondHighest.homeTeam, away: secondHighest.awayTeam, prediction: 'over2'}
+                {homeTeam: highest.homeTeam, awayTeam: highest.awayTeam, prediction: 'over2'},
+                {homeTeam: secondHighest.homeTeam, awayTeam: secondHighest.awayTeam, prediction: 'over2'}
             ];
 
         } catch (err) {
@@ -136,7 +136,7 @@ require('dotenv').config()
     }
 
     static playBaby(fixtures, predicts=null) {
-        console.log('<<<=======Begining of Playing baby =======>>>')
+        console.log('<<<=======Begining of Playing baby =======>>>');
         const puppeteer = require('puppeteer');
         (async () => {
             const browser = await puppeteer.launch({
