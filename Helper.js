@@ -81,6 +81,13 @@ require('dotenv').config()
             let secondHighestProb = 0;
             let tempFix;
             let tempProb;
+
+            let lowest = fixtures[0];
+            let secondLowest = fixtures[0];
+            let highestProbl = 1;
+            let secondHighestProbl = 1;
+            let tempFixl;
+            let tempProbl;
             let aboveThreshold = [];
             fixtures.forEach((fix) => {
                 console.log(fix.homeTeam, fix.awayTeam, '===>>>>>>>');
@@ -89,25 +96,38 @@ require('dotenv').config()
                     aboveThreshold.push(fix);
                 }
 
-                if (stat.probability < highestProb) {
+                if (stat.probability > highestProb) {
                     tempFix = highest;
                     highest = fix;
                     secondHighest = tempFix;
                     tempProb = highestProb;
                     highestProb = stat.probability;
                     secondHighestProb = tempProb;
-                } else if (stat.probability < secondHighestProb) {
+                } else if (stat.probability > secondHighestProb) {
                     secondHighest = fix;
                     secondHighestProb = stat.probability;
                 }
+
+                if (stat.probability < highestProbl) {
+                    tempFixl = lowest;
+                    lowest = fix;
+                    secondLowest = tempFixl;
+                    tempProbl = highestProbl;
+                    highestProbl = stat.probability;
+                    secondHighestProbl = tempProbl;
+                } else if (stat.probability < secondHighestProb) {
+                    secondLowest = fix;
+                    secondHighestProbl = stat.probability;
+                }
             });
 
-            console.log(highestProb, secondHighestProb, 'Probablity....');
-            console.log(aboveThreshold, 2);
-            const matches = this.getRandom(aboveThreshold, 2);
+            // console.log(highestProbl, secondHighestProbl, 'Probablity....');
+            // console.log(aboveThreshold, 2);
+            // const matches = this.getRandom(aboveThreshold, 2);
+            // console.log(lowest, secondLowest, 'Lowest....');
             return [
-                {home: highest.homeTeam, away: highest.awayTeam, prediction: 'under2'},
-                {home: secondHighest.homeTeam, away: secondHighest.awayTeam, prediction: 'under2'}
+                {home: highest.homeTeam, away: highest.awayTeam, prediction: 'over2'},
+                {home: secondHighest.homeTeam, away: secondHighest.awayTeam, prediction: 'over2'}
             ];
 
         } catch (err) {
@@ -578,14 +598,15 @@ require('dotenv').config()
                 return ans;
           }
           const currentPlayingTeam = 'LIV';
-        //  console.log(this.getTrainObj(ans.fixtures));
+        const predicts = this.getTrainObj(ans.fixtures);
+        console.log(predicts);
 
-        if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
-            this.playBaby(ans.fixtures);
-         } else {
-             console.log('Skipping this round ==>>>>>>>>>'); 
-       }
- 
+    //     if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
+    //         this.playBaby(ans.fixtures);
+    //      } else {
+    //          console.log('Skipping this round ==>>>>>>>>>'); 
+    //    }
+        this.playBaby(ans.fixtures, predicts);
           const result = await axios({ 
             method: 'post',
             url: 'http://baby.correctionweb.com/fixtures',
