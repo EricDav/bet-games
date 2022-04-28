@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-require('dotenv').config()
+require('dotenv').config();
 
  class Helper {
     static format(d) {
@@ -73,7 +73,6 @@ require('dotenv').config()
     static getTrainObj(fixtures) {
         const fs = require('fs');
         try {
-            // console.log(fixtures, 'Fixtures..')
             const data = JSON.parse(fs.readFileSync(__dirname + '/data/data.json', 'utf8'));
             let highest = fixtures[0];
             let secondHighest = fixtures[0];
@@ -90,7 +89,6 @@ require('dotenv').config()
             let tempProbl;
             let aboveThreshold = [];
             fixtures.forEach((fix) => {
-                console.log(fix.homeTeam, fix.awayTeam, '===>>>>>>>');
                 let stat = data[fix.homeTeam][fix.awayTeam]
                 if (stat.probability >= 0.53) {
                     aboveThreshold.push(fix);
@@ -617,7 +615,7 @@ require('dotenv').config()
           console.log(result.data);
           console.log('Cron details log end for fixtures ==>>>>>>>>>>');
 
-          await browser.close(); 
+          await browser.close();
           if (res) {
             res.send({data: ans, success: true});
           }
