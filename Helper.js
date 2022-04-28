@@ -56,7 +56,66 @@ require('dotenv').config()
         return false;
     }
 
-    static playBaby(fixtures) {
+    static getRandom(arr, n) {
+        var result = new Array(n),
+            len = arr.length,
+            taken = new Array(len);
+        if (n > len)
+           [];
+        while (n--) {
+            var x = Math.floor(Math.random() * len);
+            result[n] = arr[x in taken ? taken[x] : x];
+            taken[x] = --len in taken ? taken[len] : len;
+        }
+        return result;
+    }
+
+    static getTrainObj(fixtures) {
+        const fs = require('fs');
+        try {
+            // console.log(fixtures, 'Fixtures..')
+            const data = JSON.parse(fs.readFileSync(__dirname + '/data/data.json', 'utf8'));
+            let highest = fixtures[0];
+            let secondHighest = fixtures[0];
+            let highestProb = 0;
+            let secondHighestProb = 0;
+            let tempFix;
+            let tempProb;
+            let aboveThreshold = [];
+            fixtures.forEach((fix) => {
+                console.log(fix.homeTeam, fix.awayTeam, '===>>>>>>>');
+                let stat = data[fix.homeTeam][fix.awayTeam]
+                if (stat.probability >= 0.53) {
+                    aboveThreshold.push(fix);
+                }
+
+                if (stat.probability < highestProb) {
+                    tempFix = highest;
+                    highest = fix;
+                    secondHighest = tempFix;
+                    tempProb = highestProb;
+                    highestProb = stat.probability;
+                    secondHighestProb = tempProb;
+                } else if (stat.probability < secondHighestProb) {
+                    secondHighest = fix;
+                    secondHighestProb = stat.probability;
+                }
+            });
+
+            console.log(highestProb, secondHighestProb, 'Probablity....');
+            console.log(aboveThreshold, 2);
+            const matches = this.getRandom(aboveThreshold, 2);
+            return [
+                {home: highest.homeTeam, away: highest.awayTeam, prediction: 'under2'},
+                {home: secondHighest.homeTeam, away: secondHighest.awayTeam, prediction: 'under2'}
+            ];
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    static playBaby(fixtures, predicts=null) {
         console.log('<<<=======Begining of Playing baby =======>>>')
         const puppeteer = require('puppeteer');
         (async () => {
@@ -75,8 +134,6 @@ require('dotenv').config()
             const price = 200;
 
             // Inputs end ---
-
-
 
             const page = await browser.newPage();
             const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
@@ -102,24 +159,28 @@ require('dotenv').config()
                 }
             }
 
-            const predictions = [];
-            fixtures.forEach((fix) => {
-                if (fix.homeTeam == team1 || fix.awayTeam == team1) {
-                    predictions.push({
-                        homeTeam: fix.homeTeam,
-                        awayTeam: fix.awayTeam,
-                        prediction
-                    });
-                }
-
-                // if (fix.homeTeam == team2 || fix.awayTeam == team2) {
-                //     predictions.push({
-                //         homeTeam: fix.homeTeam,
-                //         awayTeam: fix.awayTeam,
-                //         prediction
-                //     });
-                // }
-            })
+            let predictions = [];
+            if (predicts) {
+                predictions = predicts;
+            } else {
+                fixtures.forEach((fix) => {
+                    if (fix.homeTeam == team1 || fix.awayTeam == team1) {
+                        predictions.push({
+                            homeTeam: fix.homeTeam,
+                            awayTeam: fix.awayTeam,
+                            prediction
+                        });
+                    }
+    
+                    // if (fix.homeTeam == team2 || fix.awayTeam == team2) {
+                    //     predictions.push({
+                    //         homeTeam: fix.homeTeam,
+                    //         awayTeam: fix.awayTeam,
+                    //         prediction
+                    //     });
+                    // }
+                })
+            }
 
             console.log(predictions)
                 
@@ -517,6 +578,8 @@ require('dotenv').config()
                 return ans;
           }
           const currentPlayingTeam = 'LIV';
+        //  console.log(this.getTrainObj(ans.fixtures));
+
         if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
             this.playBaby(ans.fixtures);
          } else {
