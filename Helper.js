@@ -70,10 +70,10 @@ require('dotenv').config();
         return result;
     }
 
-    static getTrainObj(fixtures) {
+    static getTrainObj(fixtures, option) {
         const fs = require('fs');
         try {
-            const data = JSON.parse(fs.readFileSync(__dirname + '/data/data.json', 'utf8'));
+            const data = JSON.parse(fs.readFileSync(__dirname + '/data/data-' + option + '.json', 'utf8'));
             let highest = fixtures[0];
             let secondHighest = fixtures[0];
             let highestProb = 0;
@@ -124,8 +124,8 @@ require('dotenv').config();
             // const matches = this.getRandom(aboveThreshold, 2);
             // console.log(lowest, secondLowest, 'Lowest....');
             return [
-                {homeTeam: highest.homeTeam, awayTeam: highest.awayTeam, prediction: 'over2'},
-                {homeTeam: secondHighest.homeTeam, awayTeam: secondHighest.awayTeam, prediction: 'over2'}
+                {homeTeam: highest.homeTeam, awayTeam: highest.awayTeam, prediction: option},
+                {homeTeam: secondHighest.homeTeam, awayTeam: secondHighest.awayTeam, prediction: option}
             ];
 
         } catch (err) {
@@ -596,8 +596,8 @@ require('dotenv').config();
                 return ans;
           }
           const currentPlayingTeam = 'LIV';
-        const predicts = this.getTrainObj(ans.fixtures);
-        console.log(predicts);
+        const predicts = this.getTrainObj(ans.fixtures, 'GG');
+        console.log(predicts, 'Fucking predicts.....');
 
     //     if (this.shouldPlay(currentPlayingTeam, ans.fixtures)) {
     //         this.playBaby(ans.fixtures);
