@@ -15,7 +15,7 @@ require('dotenv').config();
                 const browser = await puppeteer.launch({
                     ignoreDefaultArgs: ['--disable-extensions'],
                     args: [
-                        '--no-sandbox',
+                        '--no-sandbox', 
                         '--disable-setuid-sandbox',
                     ],
                 });
