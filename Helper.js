@@ -526,7 +526,7 @@ require('dotenv').config();
             await page.goto(url, {waitUntil: 'networkidle2'});
         
             const username = 'pythagoras1'; 
-            const password = 'Iloveodunayo123'; 
+            const password = 'Iloveodunayo123';
         
             await page.type('#inputUser', username);
             await page.type('#inputPass', password); 
