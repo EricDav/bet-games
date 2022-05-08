@@ -29,7 +29,7 @@ app.get('/health', (req, res) => {
         res.send({message: 'Server not healthy sad!', success: false});
     } 
 });
-
+ 
 app.get('/bet9ja/:bookingCode', (req, res) => {
     try {
         helper.getGameFromBet9jaBookingCode(req.params.bookingCode, res);
