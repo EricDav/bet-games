@@ -11,16 +11,12 @@ const port = 4000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-async function call() {
-    await Promise.all([helper.fetchBabyFixtures(null), helper.fetchBabyResult(null)]);
-}
-
 app.use(cors())
 cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', () => {
     try {
         console.log('Cron started......');
-        await call();
-        console.log('Cron ended.....'); 
+        helper.fetchBabyFixtures(null);
+        helper.fetchBabyResult(null);
     } catch(e) {
         console.log(e, 'Error occured');
     }
