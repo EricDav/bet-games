@@ -71,7 +71,7 @@ app.get('/riskless', (req, res) => {
 });
 
 app.get('/zoom-fixtures', (req, res) => {
-    try {
+    try { 
         helper.getZoomFixtures(res, req.query.country);
     } catch (e) {
         res.send({success: false, data: {}});
