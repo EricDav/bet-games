@@ -106,4 +106,14 @@ function setTable() {
     localStorage.setItem('leagueNum', leagueNum);
     localStorage.setItem('numWeeksDoc', numWeeksDoc);
 }
-Babyinit();
+
+const fs = require('fs');
+try {
+    const data = JSON.parse(fs.readFileSync(__dirname + '/data/data.json', 'utf8'));
+    console.log(data);
+} catch (err) {
+    console.error(err);
+}
+
+
+// Babyinit();

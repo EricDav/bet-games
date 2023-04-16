@@ -1,335 +1,797 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+require('dotenv').config();
+const db = require('./database');
 
- class Helper {
+class Helper {
     static format(d) {
         d = d.toString();
         return d.length == 2 ? d : '0' + d;
     }
 
-    static fetchBabyResult(res) {
+    static health(res) {
+        const puppeteer = require('puppeteer');
         (async () => {
-            const browser = await puppeteer.launch({
-                headless: false,
-                ignoreDefaultArgs: ['--disable-extensions'],
-                args: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                  ],
-            });
-            
-            const page = await browser.newPage();
-          
-            await page.setDefaultNavigationTimeout(0);
-          
-            await page.goto('https://vsagent-ab.bet9ja.com/viewer-1.94.99/themes/?t=bet9ja_league_sat&timeToShowWinnersLL=20&layout=_base&monitor=0&vMode=livescore&_tickerLastResults=true&serverHost=vsagent-proxy-viewer.bet9ja.com&display=0&liveViewerId=0&vMode=livescore', {waitUntil: 'networkidle2'});
-            await page.waitFor(20000);
-            let data = 'Fuck u';
-          
-            const defaults = ['Fuck u', 'Live scores running...', 'Week number not available', 'No table']; 
-            let count = 0;
-            while (defaults.includes(data) && count < 84) {
-              count +=1;
-              await page.waitFor(5000);
-              data = await page.evaluate(() => {
-                // return 'Data';
-                function isNumeric(str) {
-                  if (typeof str != "string") return false // we only process strings!  
-                  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-                         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-                }
-              function getResultData() {
-                  const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week');
-                  const resultRow = document.querySelectorAll('.match-cell');
-                  if (numWeeksDoc && numWeeksDoc.children[1]) {
-                      if (document.querySelectorAll('.pijamaElement-league-table').length > 0) {
-                          setTable();
-                      }
-                      if (localStorage.getItem('__weekNum') === numWeeksDoc.children[1]?.textContent) {
-                          return 'Week number not available';
-                      }
-              
-                  }
-              
-                  if (numWeeksDoc && !numWeeksDoc.children[1]) {
-                      return 'Live scores running...';
-                      // return defaultVal;
-                  }
-              
-                  const table = JSON.parse(localStorage.getItem('__table'))
-                  if (!resultRow || resultRow.length == 0) {
-                      return 'No table'
-                  }
-                  const bigResult = {
-                      weekNum: localStorage.getItem('numWeeksDoc'),
-                      leagueNum: localStorage.getItem('leagueNum'),
-                  }
-                  const results = [];
-              
-                  for (let i = 0; i < 10; i++) {
-                      let datum = {}
-                      let tableData;
-              
-                      let rs = resultRow[i].textContent.replace(/\n/g, '').replace(/ /g, '');
-                      console.log(rs, 'Rs......')
-                      datum.home = rs.substring(0, 3);
-                      tableData = table.find(element => element.team == datum.home);
-                      console.log(tableData, 'Table datat....');
-          
-                      datum.homeForm = tableData.form;
-                      datum.homePos = tableData.pos;
-                      datum.homePoint = tableData.point;
-                      datum.homeScore = rs[3];
-                      datum.awayScore = rs[5];
-                      datum.away = rs.substring(6, 9);
-                      tableData = table.find(element => element.team == datum.away);
-                      datum.awayForm = tableData.form;
-                      datum.awayPos = tableData.pos;
-                      datum.awayPoint = tableData.point;
-                      results.push(datum);
-                  }
-                  bigResult.results = results;
-              
-                  bigResult.weekNum = document.querySelector('.event-countdown')?.textContent.trim().split(' ')[2];
-                //   $.ajax({
-                //       type: "POST",
-                //       url: 'https://baby.correctionweb.com/results',
-                //       data: bigResult,
-                //       success: function(bigResult) {
-                //           localStorage.setItem('__weekNum', localStorage.getItem('numWeeksDoc'));
-                //           console.log(bigResult);
-                //       },
-                //     });
-                  
-                  return bigResult;
-              }
-              
-              function setTable() {
-                  const leagueNum = document.querySelector('#header-right-area-left-hour-league').children[1]?.textContent;
-                  const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week').children[1]?.textContent;
-                  const table = [];
-                  const tableRow = document.querySelectorAll('.pijamaElement-league-table');
-                  for (let j = 0; j < 20; j++) {
-                      let d = {};
-                      const strLen = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').length
-                      let str;
-                      if (j < 9) {
-                          str = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').substring(2, strLen);
-                      } else {
-                          str = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').substring(3, strLen);
-                      }
-              
-                      d.pos = j + 1;
-                      d.team = str.substring(0, 3);
-                      str = str.replace(d.team, '');
-              
-                      let point = '';
-                      let form = '';
-                      for (let counter = 0; counter < str.length; counter++) {
-                          if (isNumeric(str[counter])) {
-                              point +=str[counter];
-                          } else {
-                              form+=str[counter];
-                          }
-                      }
-                      d.point = point;
-                      d.form = form;
-              
-                      table.push(d);
-                  }
-                  localStorage.setItem('__table', JSON.stringify(table));
-                  localStorage.setItem('leagueNum', leagueNum);
-                  localStorage.setItem('numWeeksDoc', numWeeksDoc);
-              }
-              return getResultData();
-              })
-            }
-          
-            console.log(data, 'Data===>>>>>>>>')
-            const result = await axios({
-                method: 'post',
-                url: 'https://baby.correctionweb.com/results',
-                data
-            });
-          
-            await browser.close();
-            return res.send({data, success: true});
-          })();          
-    }
-
-    static fetchBabyFixtures(res) {
-        (async () => {
-            const browser = await puppeteer.launch({
-                headless: false,
-                ignoreDefaultArgs: ['--disable-extensions'],
-                args: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                  ],
-            });
-        
-            // const bookingNumber = 'PZM66B';
-        
-            const page = await browser.newPage();
-            const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
-             
-            await page.setDefaultNavigationTimeout(0);
-            await page.goto(url, {waitUntil: 'networkidle2'});
-        
-            const username = 'pythagoras1';
-            const password = 'Iloveodunayo123';
-        
-            await page.type('#inputUser', username);
-            await page.type('#inputPass', password); 
-        
-            await page.click('.btn-danger');
-        
-            
-            let ans;
-            let count = 0;
-        
-            while (!ans &&  count < 5) {
-                try {
-                    if (count > 0) {
-                        await page.goto(url, {waitUntil: 'networkidle2'});
-                        const username = 'pythagoras1';
-                        const password = 'Iloveodunayo123';
-                
-                        await page.type('#inputUser', username);
-                        await page.type('#inputPass', password); 
-                    
-                        await page.click('.btn-danger');
-                    }
-                    await page.waitForSelector('#gamebets-wrapper');
-                    ans = await saveFixtures();
-                } catch (err) {
-                    ans = undefined; // when there ia an error while loggin in
-                    count+=1;
-                }
-            }
-        
-            async function saveFixtures(res) {
-                ans = await page.evaluate(() => {
-                    async function getFixtures() {
-                        const data = {};
-                        const fixtures = [];
-                        const docRow = document.querySelectorAll('.row-matches-bets');
-                        for(let i = 0; i < 10; i++) {
-                            let datum = {};
-                            datum.homeTeam = docRow[i].querySelectorAll('.team-name')[0].textContent
-                            datum.awayTeam = docRow[i].querySelectorAll('.team-name')[1].textContent
-                        
-                            datum.home = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.draw = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.away = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[2].textContent.replace(/ /g, '').replace(/\n/g, '');
-                        
-                            datum.homeDraw = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.homeAway = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.awayDraw = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[2].textContent.replace(/ /g, '').replace(/\n/g, '');
-                        
-                            datum.GG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.NG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
-                        
-                            datum.over2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
-                            datum.under2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
-                        
-                            fixtures.push(datum);
-                        }
-                    
-                        data.fixtures = fixtures
-        
-                        return data;
-                    }
-                    return getFixtures();
-                });
-        
-                return ans;
-          }
-        const result = await axios({
-            method: 'post',
-            url: 'https://baby.correctionweb.com/fixtures',
-            data: ans
-          });
-
-          await browser.close();
-          res.send({data: ans, success: true});
-        })();
-        
-    }
-
-    static getGameFromBet9jaBookingCode(bookingCode, res) {
-            (async () => {
+            try {
                 const browser = await puppeteer.launch({
                     ignoreDefaultArgs: ['--disable-extensions'],
                     args: [
                         '--no-sandbox',
                         '--disable-setuid-sandbox',
-                      ],
+                    ],
                 });
                 const page = await browser.newPage();
-                await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', {waitUntil: 'networkidle2'});
-              
-                await page.type('#s_w_PC_cCoupon_txtPrenotatore', bookingCode);
-                await page.click('#s_w_PC_cCoupon_lnkLoadPrenotazione');
-                await page
-                .waitForSelector('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
-                
-                try {
-                    await page.click('#s_w_PC_cCoupon_lnkAvanti');
-                    // await page.waitFor(4000);
 
-                    const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
-                    await frame.waitForSelector('.rep');
+                await browser.close();
 
-                    const optionsResult = await frame.$$eval('.rep > .item', (options) => {
-                      const result = options.map(option => option.innerText);
-                  
-                      const f = [];
-                  
-                      for(let i = 0; i < result.length; i++) {
-                          if (i == 0)
-                              continue;
-                          
-                          f.push(result[i].replace(/(\r\n|\n|\r)/gm, "=="));
-                      }
-                  
-                      return f;
-                    });
-                  
-                    const dates = [];
-                    const fixtures = [];
-                    const outcomes = [];
-                    const originalDate = [];
-                  
-                    optionsResult.forEach(function(item) {
-                      const itemArr = item.split('==');
-                      const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
-                      dates.push(dt);
-                      originalDate.push(itemArr[1]);
-                      fixtures.push(itemArr[2]);
-                      outcomes.push(itemArr[4]);
-                    });
-                  
-                    const ans = {
-                        dates: dates,
-                        fixtures: fixtures,
-                        outcomes: outcomes
-                    }
-                  
-                   // await page.pdf({path: 'hn.pdf', format: 'A4'});
-                  
-                    await browser.close();
-                    res.send({data: ans, original: originalDate, success: true});
-                    
-                } catch(e) {
-                    const val = page.$('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
+                return res.send({ message: 'Server is healthy hurray!', success: true });
+            } catch (e) {
+                console.log(e);
+                return res.send({ message: 'Server not healthy sad!', success: false });
+            }
 
-                    if (val) {
-                        return res.send({success: false, message: 'game has ended'});
-                    }
+        })();
+    }
 
+    static shouldPlay(team1, fixtures) {
+        const thresold = 0.55;
+        const trainData = { "LEE": { "count": 30, "total": 21, "probability": "0.70", "awayTotal": 19, "awayProbability": "0.63", "awayCount": 30 }, "MNU": { "count": 31, "total": 20, "probability": "0.65", "awayTotal": 16, "awayProbability": "0.52", "awayCount": 31 }, "BUR": { "count": 30, "total": 23, "probability": "0.77", "awayTotal": 17, "awayProbability": "0.55", "awayCount": 31 }, "WAT": { "count": 31, "total": 20, "probability": "0.65", "awayTotal": 16, "awayProbability": "0.53", "awayCount": 30 }, "SOU": { "count": 30, "total": 20, "probability": "0.67", "awayTotal": 15, "awayProbability": "0.50", "awayCount": 30 }, "CRY": { "count": 30, "total": 23, "probability": "0.77", "awayTotal": 21, "awayProbability": "0.70", "awayCount": 30 }, "NWC": { "count": 28, "total": 11, "probability": "0.39", "awayTotal": 17, "awayProbability": "0.57", "awayCount": 30 }, "ARS": { "count": 27, "total": 11, "probability": "0.41", "awayTotal": 16, "awayProbability": "0.53", "awayCount": 30 }, "EVE": { "count": 30, "total": 20, "probability": "0.67", "awayTotal": 22, "awayProbability": "0.71", "awayCount": 31 }, "BRN": { "count": 30, "total": 18, "probability": "0.60", "awayTotal": 16, "awayProbability": "0.52", "awayCount": 31 }, "WHU": { "count": 31, "total": 20, "probability": "0.65", "awayTotal": 15, "awayProbability": "0.50", "awayCount": 30 }, "CHE": { "count": 30, "total": 16, "probability": "0.53", "awayTotal": 16, "awayProbability": "0.52", "awayCount": 31 }, "WOL": { "count": 31, "total": 13, "probability": "0.42", "awayTotal": 14, "awayProbability": "0.48", "awayCount": 29 }, "TOT": { "count": 31, "total": 18, "probability": "0.58", "awayTotal": 17, "awayProbability": "0.57", "awayCount": 30 }, "NOR": { "count": 31, "total": 18, "probability": "0.58", "awayTotal": 19, "awayProbability": "0.63", "awayCount": 30 }, "MNC": { "count": 30, "total": 18, "probability": "0.60", "awayTotal": 13, "awayProbability": "0.42", "awayCount": 31 }, "ASV": { "count": 27, "total": 16, "probability": "0.59", "awayTotal": 15, "awayProbability": "0.50", "awayCount": 30 }, "BRI": { "count": 31, "total": 22, "probability": "0.71", "awayTotal": 14, "awayProbability": "0.47", "awayCount": 30 }, "LEI": { "count": 30, "total": 17, "probability": "0.57", "awayTotal": 15, "awayProbability": "0.50", "awayCount": 30 } };
+        let prob;
+        let fix;
+        for (let i = 0; i < fixtures.length; i++) {
+            fix = fixtures[i];
+            if (fix.homeTeam == team1 || fix.awayTeam == team1) {
+                const otherTeam = fix.homeTeam == team1 ? fix.awayTeam : fix.homeTeam;
+                const stat = trainData[otherTeam];
+
+                const isHome = fix.homeTeam == team1;
+                prob = isHome ? stat['probability'] : stat['awayProbability'];
+                break;
+            }
+        }
+
+        if (prob > thresold) {
+            return true;
+        }
+
+        return false;
+    }
+
+    static getRandom(arr, n) {
+        var result = new Array(n),
+            len = arr.length,
+            taken = new Array(len);
+        if (n > len)
+            [];
+        while (n--) {
+            var x = Math.floor(Math.random() * len);
+            result[n] = arr[x in taken ? taken[x] : x];
+            taken[x] = --len in taken ? taken[len] : len;
+        }
+        return result;
+    }
+
+    static getTrainObj(fixtures, option) {
+        const fs = require('fs');
+        try {
+            const data = JSON.parse(fs.readFileSync(__dirname + '/data/data-' + option + '.json', 'utf8'));
+            let highest = fixtures[0];
+            let secondHighest = fixtures[0];
+            let highestProb = 0;
+            let secondHighestProb = 0;
+            let tempFix;
+            let tempProb;
+
+            let lowest = fixtures[0];
+            let secondLowest = fixtures[0];
+            let highestProbl = 1;
+            let secondHighestProbl = 1;
+            let tempFixl;
+            let tempProbl;
+            let aboveThreshold = [];
+            fixtures.forEach((fix) => {
+                let stat = data[fix.homeTeam][fix.awayTeam]
+                if (stat.probability >= 0.53) {
+                    aboveThreshold.push(fix);
                 }
-              })();
+
+                if (stat.probability > highestProb) {
+                    tempFix = highest;
+                    highest = fix;
+                    secondHighest = tempFix;
+                    tempProb = highestProb;
+                    highestProb = stat.probability;
+                    secondHighestProb = tempProb;
+                } else if (stat.probability > secondHighestProb) {
+                    secondHighest = fix;
+                    secondHighestProb = stat.probability;
+                }
+
+                if (stat.probability < highestProbl) {
+                    tempFixl = lowest;
+                    lowest = fix;
+                    secondLowest = tempFixl;
+                    tempProbl = highestProbl;
+                    highestProbl = stat.probability;
+                    secondHighestProbl = tempProbl;
+                } else if (stat.probability < secondHighestProb) {
+                    secondLowest = fix;
+                    secondHighestProbl = stat.probability;
+                }
+            });
+
+            // console.log(highestProbl, secondHighestProbl, 'Probablity....');
+            // console.log(aboveThreshold, 2);
+            // const matches = this.getRandom(aboveThreshold, 2);
+            // console.log(lowest, secondLowest, 'Lowest....');
+            // return [
+            //     { homeTeam: highest.homeTeam, awayTeam: highest.awayTeam, prediction: option },
+            //     // { homeTeam: secondHighest.homeTeam, awayTeam: secondHighest.awayTeam, prediction: option }
+            // ];
+
+            let team = {};
+
+            fixtures.forEach((f) => {
+                if (f.homeTeam == 'LIV' || f.awayTeam == 'LIV') {
+                    team = f;
+                }
+            });
+
+            return [
+                {homeTeam: team.homeTeam, awayTeam: team.awayTeam, prediction: 'over2'}
+            ]
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    static async getUser(userId) {
+        try {
+            const users = await db.query(
+                'SELECT * from users WHERE id = $1 LIMIT $2',
+                [userId, 1]
+            );
+
+            if (users.length > 0) return users[0];
+
+            return null;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
+    static async getBabyUsers() {
+        try {
+            const rows = await db.query(
+                'SELECT * from users',
+            );
+
+            return rows;
+        } catch (err) {
+            console.log(err);
+            return [];
+        }
+    }
+
+    static async updateBabyUser(userId, data) {
+        try {
+            const user = await this.getUser(userId);
+
+            if (user) {
+                const play = data.play ? data.play : user.play;
+                const balance = data.balance ? data.balance : user.balance;
+                const amount = data.amount ? data.amount : user.amount;
+
+                await db.query(
+                    'UPDATE users SET amount = $1, play = $2, balance = $3 WHERE id = $4',
+                    [amount, play, balance, userId]
+                );
+
+                return {
+                    success: true
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            return {
+                success: false,
+                message: err.message
+            }
+        }
+
+    }
+
+    static async playBaby(fixtures, user, predicts, count = 0) {
+        console.log(user, 'User.....')
+        if (!user.play) {
+            console.log('Skipping for this user ' + user.username + ' Playing turned off');
+            return;
+        }
+
+        console.log('<<<=======Begining of Playing baby  =======>>>', user.username);
+        const puppeteer = require('puppeteer');
+        const browser = await puppeteer.launch({
+            ignoreDefaultArgs: ['--disable-extensions'],
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
+        });
+
+        // Inputs ----
+        const price = user.amount;
+        // Inputs end ---
+
+        const page = await browser.newPage();
+        const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
+
+        await page.setDefaultNavigationTimeout(0);
+        await page.goto(url, { waitUntil: 'networkidle2' });
+
+        console.log(user.username, user.password);
+
+        try {
+            await page.type('#inputUser', user.username);
+            await page.type('#inputPass', user.password);
+
+            await page.click('.btn-danger');
+            await page.waitForSelector('#gamebets-wrapper');
+        } catch (e) {
+            console.log(e);
+            // retry 3 times 
+
+            if (count < 3) {
+                const val = await this.playBaby(fixtures, user, predicts, count + 1);
+                return alert;
+            }
+
+            return {
+                success: false,
+                message: 'An error occured logging in'
+            }
+        }
+
+        let ans;
+        const ruleToPlay = [];
+        const rules = {
+            1: {
+                section: 0,
+                item: 0
+            },
+            'X': {
+                section: 0,
+                item: 1,
+            },
+            2: {
+                section: 0,
+                item: 2,
+            },
+            '1X': {
+                section: 1,
+                item: 0,
+            },
+            '12': {
+                section: 1,
+                item: 1,
+            },
+            'X2': {
+                section: 1,
+                item: 2,
+            },
+            'GG': {
+                section: 2,
+                item: 0,
+            },
+            'NG': {
+                section: 2,
+                item: 1,
+            },
+            'over2': {
+                section: 3,
+                item: 0,
+            },
+            'under2': {
+                section: 3,
+                item: 1,
+            }
+        }
+
+        predicts.forEach((pred) => {
+            for (let i = 0; i < fixtures.length; i++) {
+                let fix = fixtures[i];
+                if (pred.homeTeam == fix.homeTeam && pred.awayTeam == fix.awayTeam) {
+                    const r = rules[pred.prediction];
+                    ruleToPlay.push({
+                        row: i,
+                        section: r.section,
+                        item: r.item
+                    })
+                }
+            }
+        });
+
+
+        try {
+            await page.exposeFunction('play', (e) => {
+                return ruleToPlay;
+            });
+
+            await page.exposeFunction('getPrice', (e) => {
+                return price;
+            });
+
+            ans = await page.evaluate(async () => {
+                const main = await window.play();
+                const price = await window.getPrice();
+
+                console.log(price, main)
+                for (let i = 0; i < main.length; i++) {
+                    obj = main[i];
+                    document.querySelectorAll('.row-matches-bets')[obj.row].querySelectorAll('.mainMarketsOdds')[obj.section].querySelectorAll('.col-xs')[obj.item].querySelector('.btn-odd').click();
+                }
+
+                if (price == 200) {
+                    document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                } else if (price == 500) {
+                    document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                } else if (price == 1000) {
+                    document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                    document.querySelectorAll('.chipStake-container')[3].querySelector('.chipStake').click();
+                } else {
+                    // default to 200
+                    document.querySelectorAll('.chipStake-container')[1].querySelector('.chipStake').click();
+                }
+
+                return document.querySelectorAll('.event-countdown-text')[0].textContent;
+            });
+        } catch (e) {
+            console.log(e);
+            return {
+                success: false,
+                message: 'Error occured in evaluation function'
+            }
+        }
+
+        try {
+            await page.waitFor(3000);
+            await page.click('#button-placebet');
+
+            await page.waitFor(8000);
+        } catch (e) {
+            console.log(e);
+            return {
+                success: false,
+                message: 'Could not click on the play button'
+            }
+        }
+
+        const balanceBefore = ans.replace(/\D/g, '');
+        const balance = await this.confirmPlay(user.username, user.password, user.amount, ans.replace(/\D/g, ''));
+
+        if (balance && (balanceBefore - balance) == user.amount) {
+            await this.updateBabyUser(user.id, {balance});
+
+            const data = {
+                predictions: JSON.stringify(predicts),
+                userId: user.id
+            }
+
+            let result;
+            const env = process.env;
+            try {
+                result = await axios({
+                    method: 'post',
+                    url: env.BASE_URL + '/games',
+                    data
+                });
+            } catch (e) {
+                console.log(e)
+                await browser.close();
+                return {
+                    success: false,
+                    message: 'Server error from axios'
+                }
+            }
+
+            console.log(result.data, 'Result');
+
+            await browser.close();
+            if (result.success) {
+                return {
+                    success: true,
+                    message: 'Game played and data inserted'
+                }
+            }
+
+            return {
+                success: true,
+                message: 'Game played, but data not inserted'
+            }
+        } else {
+            return {
+                success: false,
+                message: 'Game not played'
+            }
+
+            await browser.close();
+        }
+    }
+
+    static async confirmPlay(username, password, amountPlay, balanceBeforePlay, count=0) {
+        // confirm play
+        try {
+            const puppeteer = require('puppeteer');
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                ],
+            });
+            const page = await browser.newPage();
+            const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
+
+            await page.setDefaultNavigationTimeout(0);
+            await page.goto(url, { waitUntil: 'networkidle2' });
+
+            console.log(username, password);
+            await page.type('#inputUser', username);
+            await page.type('#inputPass', password);
+            await page.click('.btn-danger');
+            await page.waitForSelector('#gamebets-wrapper');
+            const element = await page.$('.event-countdown-text');
+            let value = await element.evaluate(el => el.textContent);
+            value = value.replace(/\D/g, '');
+
+            await browser.close();
+            return value;
+
+        } catch (e) {
+            if (count < 3) {
+                return await confirmPlay(username, password, amountPlay, balanceBeforePlay, count + 1)
+            }
+            await browser.close();
+
+            return false;
+        }
+    }
+
+    static async fetchBabyResult(res) {
+        const browser = await puppeteer.launch({
+            ignoreDefaultArgs: ['--disable-extensions'],
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
+        });
+
+        const page = await browser.newPage();
+
+        await page.setDefaultNavigationTimeout(0);
+
+        await page.goto('https://vsagent-ab.bet9ja.com/viewer-1.94.99/themes/?t=bet9ja_league_sat&timeToShowWinnersLL=20&layout=_base&monitor=0&vMode=livescore&_tickerLastResults=true&serverHost=vsagent-proxy-viewer.bet9ja.com&display=0&liveViewerId=0&vMode=livescore', { waitUntil: 'networkidle2' });
+        await page.waitFor(20000);
+        let data = 'Fuck u';
+
+        const defaults = ['Fuck u', 'Live scores running...', 'Week number not available', 'No table'];
+        let count = 0;
+        while (defaults.includes(data) && count < 84) {
+            count += 1;
+            await page.waitFor(5000);
+            data = await page.evaluate(() => {
+                // return 'Data';
+                function isNumeric(str) {
+                    if (typeof str != "string") return false // we only process strings!  
+                    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+                }
+
+                function getResultData() {
+                    const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week');
+                    const resultRow = document.querySelectorAll('.match-cell');
+                    if (numWeeksDoc && numWeeksDoc.children[1]) {
+                        if (document.querySelectorAll('.pijamaElement-league-table').length > 0) {
+                            setTable();
+                        }
+                        if (localStorage.getItem('__weekNum') === numWeeksDoc.children[1].textContent) {
+                            return 'Week number not available';
+                        }
+
+                    }
+
+                    if (numWeeksDoc && !numWeeksDoc.children[1]) {
+                        return 'Live scores running...';
+                        // return defaultVal;
+                    }
+
+                    const table = JSON.parse(localStorage.getItem('__table'))
+                    if (!resultRow || resultRow.length == 0) {
+                        return 'No table'
+                    }
+                    const bigResult = {
+                        weekNum: localStorage.getItem('numWeeksDoc'),
+                        leagueNum: localStorage.getItem('leagueNum'),
+                    }
+                    const results = [];
+
+                    for (let i = 0; i < 10; i++) {
+                        let datum = {}
+                        let tableData;
+
+                        let rs = resultRow[i].textContent.replace(/\n/g, '').replace(/ /g, '');
+                        datum.home = rs.substring(0, 3);
+                        tableData = table.find(element => element.team == datum.home);
+
+                        datum.homeForm = tableData.form;
+                        datum.homePos = tableData.pos;
+                        datum.homePoint = tableData.point;
+                        datum.homeScore = rs[3];
+                        datum.awayScore = rs[5];
+                        datum.away = rs.substring(6, 9);
+                        tableData = table.find(element => element.team == datum.away);
+                        datum.awayForm = tableData.form;
+                        datum.awayPos = tableData.pos;
+                        datum.awayPoint = tableData.point;
+                        results.push(datum);
+                    }
+                    bigResult.results = results;
+
+                    bigResult.weekNum = document.querySelector('.event-countdown').textContent.trim().split(' ')[2];
+                    //   $.ajax({
+                    //       type: "POST",
+                    //       url: 'https://baby.correctionweb.com/results',
+                    //       data: bigResult,
+                    //       success: function(bigResult) {
+                    //           localStorage.setItem('__weekNum', localStorage.getItem('numWeeksDoc'));
+                    //           console.log(bigResult);
+                    //       },
+                    //     });
+
+                    return bigResult;
+                }
+
+                function setTable() {
+                    const leagueNum = document.querySelector('#header-right-area-left-hour-league').children[1].textContent;
+                    const numWeeksDoc = document.querySelector('#header-right-area-left-hour-week').children[1].textContent;
+                    const table = [];
+                    const tableRow = document.querySelectorAll('.pijamaElement-league-table');
+                    for (let j = 0; j < 20; j++) {
+                        let d = {};
+                        const strLen = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').length
+                        let str;
+                        if (j < 9) {
+                            str = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').substring(2, strLen);
+                        } else {
+                            str = tableRow[j].textContent.replace(/\n/g, '').replace(/ /g, '').substring(3, strLen);
+                        }
+
+                        d.pos = j + 1;
+                        d.team = str.substring(0, 3);
+                        str = str.replace(d.team, '');
+
+                        let point = '';
+                        let form = '';
+                        for (let counter = 0; counter < str.length; counter++) {
+                            if (isNumeric(str[counter])) {
+                                point += str[counter];
+                            } else {
+                                form += str[counter];
+                            }
+                        }
+                        d.point = point;
+                        d.form = form;
+
+                        table.push(d);
+                    }
+                    localStorage.setItem('__table', JSON.stringify(table));
+                    localStorage.setItem('leagueNum', leagueNum);
+                    localStorage.setItem('numWeeksDoc', numWeeksDoc);
+                }
+                return getResultData();
+            })
+        }
+
+        const env = process.env;
+        const result = await axios({
+            method: 'post',
+            url: env.BASE_URL + '/results',
+            data
+        });
+
+        delete result.fixtures
+        console.log('Cron details log start for results ==>>>>>>>>>>');
+        console.log(result.data);
+        console.log('Cron details log end for results ==>>>>>>>>>>');
+
+        await browser.close();
+        if (res) {
+            return res.send({ data, success: true });
+        }
+    }
+
+    static async fetchBabyFixtures(res) {
+        const browser = await puppeteer.launch({
+            headless: true,
+            ignoreDefaultArgs: ['--disable-extensions'],
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
+        });
+
+        // const bookingNumber = 'PZM66B';
+        const page = await browser.newPage();
+        const url = 'https://vsagent.bet9ja.com/bet9ja-cashier-league/login/';
+
+        await page.setDefaultNavigationTimeout(0);
+        await page.goto(url, { waitUntil: 'networkidle2' });
+
+        const username = 'pythagoras1';
+        const password = 'Iloveodunayo123';
+
+        await page.type('#inputUser', username);
+        await page.type('#inputPass', password);
+
+        await page.click('.btn-danger');
+        await page.waitFor(20000);
+
+
+        let ans;
+        let count = 0;
+
+        while (!ans && count < 5) {
+            try {
+                if (count > 0) {
+                    await page.goto(url, { waitUntil: 'networkidle2' });
+                    const username = 'pythagoras1';
+                    const password = 'Iloveodunayo123';
+
+                    await page.type('#inputUser', username);
+                    await page.type('#inputPass', password);
+
+                    await page.click('.btn-danger');
+                }
+                await page.waitForSelector('#gamebets-wrapper');
+                ans = await saveFixtures(); 
+            } catch (err) {
+                ans = undefined; // when there ia an error while loggin in
+                count += 1;
+            }
+        }
+
+        async function saveFixtures(res) {
+            ans = await page.evaluate(() => {
+                async function getFixtures() {
+                    const data = {};
+                    const fixtures = [];
+                    const docRow = document.querySelectorAll('.row-matches-bets');
+                    for (let i = 0; i < 10; i++) {
+                        let datum = {};
+                        datum.homeTeam = docRow[i].querySelectorAll('.team-name')[0].textContent
+                        datum.awayTeam = docRow[i].querySelectorAll('.team-name')[1].textContent
+
+                        datum.home = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.draw = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.away = docRow[i].querySelectorAll('.mainMarketsOdds')[0].querySelectorAll('.col-xs')[2].textContent.replace(/ /g, '').replace(/\n/g, '');
+
+                        datum.homeDraw = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.homeAway = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.awayDraw = docRow[i].querySelectorAll('.mainMarketsOdds')[1].querySelectorAll('.col-xs')[2].textContent.replace(/ /g, '').replace(/\n/g, '');
+
+                        datum.GG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.NG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
+
+                        datum.over2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.under2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
+
+                        fixtures.push(datum);
+                    }
+
+                    data.fixtures = fixtures
+
+                    return data;
+                }
+                return getFixtures();
+            });
+
+            return ans;
+        }
+
+        const env = process.env;
+        console.log(env.BASE_URL, 'Base url..');
+        // const users = await this.getBabyUsers();
+        // await Promise.all(users.map((user) => this.playBaby(ans.fixtures, user, predicts)))
+        const result = await axios({
+            method: 'post',
+            url: env.BASE_URL + '/fixtures',
+            data: ans
+        });
+
+        console.log('Cron details log start for fixtures ==>>>>>>>>>>');
+        console.log(result.data);
+        console.log('Cron details log end for fixtures ==>>>>>>>>>>');
+
+        await browser.close();
+        if (res) {
+            res.send({ data: ans, success: true });
+        }
+    }
+
+    static getGameFromBet9jaBookingCode(bookingCode, res) {
+        (async () => {
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                ],
+            });
+            const page = await browser.newPage();
+            await page.goto('https://shop.bet9ja.com/Sport/OddsAsync.aspx?IDLingua=2', { waitUntil: 'networkidle2' });
+
+            await page.type('#s_w_PC_cCoupon_txtPrenotatore', bookingCode);
+            await page.click('#s_w_PC_cCoupon_lnkLoadPrenotazione');
+            await page
+                .waitForSelector('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
+
+            try {
+                await page.click('#s_w_PC_cCoupon_lnkAvanti');
+                // await page.waitFor(4000);
+
+                const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
+                await frame.waitForSelector('.rep');
+
+                const optionsResult = await frame.$$eval('.rep > .item', (options) => {
+                    const result = options.map(option => option.innerText);
+
+                    const f = [];
+
+                    for (let i = 0; i < result.length; i++) {
+                        if (i == 0)
+                            continue;
+
+                        f.push(result[i].replace(/(\r\n|\n|\r)/gm, "=="));
+                    }
+
+                    return f;
+                });
+
+                const dates = [];
+                const fixtures = [];
+                const outcomes = [];
+                const originalDate = [];
+
+                optionsResult.forEach(function (item) {
+                    const itemArr = item.split('==');
+                    const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
+                    dates.push(dt);
+                    originalDate.push(itemArr[1]);
+                    fixtures.push(itemArr[2]);
+                    outcomes.push(itemArr[4]);
+                });
+
+                const ans = {
+                    dates: dates,
+                    fixtures: fixtures,
+                    outcomes: outcomes
+                }
+
+                // await page.pdf({path: 'hn.pdf', format: 'A4'});
+
+                await browser.close();
+                res.send({ data: ans, original: originalDate, success: true });
+
+            } catch (e) {
+                const val = page.$('#s_w_PC_cCoupon_pnlMexLoadPrenotazione');
+
+                if (val) {
+                    return res.send({ success: false, message: 'game has ended' });
+                }
+
+            }
+        })();
     }
     static getDateTimeStrInUTC(date) {
         let dateTimeArr = date.split(' ');
@@ -341,13 +803,13 @@ const axios = require('axios');
 
         const newDate = new Date(dateArr[2], dateArr[1], dateArr[0], timeArr[0], timeArr[1]);
 
-       // console.log(newDate);
+        // console.log(newDate);
         var utcDate = (newDate.getUTCFullYear()).toString() +
             '-' + Helper.format(newDate.getUTCMonth()) +
             '-' + Helper.format(newDate.getUTCDate()) +
             ' ' + Helper.format(newDate.getHours() - 1) +
             ':' + Helper.format(newDate.getUTCMinutes());
-        
+
         // console.log(utcDate);
         return utcDate;
     }
@@ -359,218 +821,218 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-            
-          const page = await browser.newPage();
-         
-          await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto('https://www.soccer24.com/', {waitUntil: 'networkidle2'});
-        
+
+            const page = await browser.newPage();
+
+            await page.setDefaultNavigationTimeout(0);
+
+            await page.goto('https://www.soccer24.com/', { waitUntil: 'networkidle2' });
+
             const text = await page.$$eval('.event__match', (options) => {
                 const result = options.map(option => option.innerText.split("\n"));
                 return result;
             });
-        
+
             const text2 = await page.$$eval('.event__match', (options) => {
                 const f = options.map(option => option.getAttribute('id'));
                 return f;
-              });
-            
-              var data = [];
-              let match;
-              var index = 0;
-              text.forEach(function(item, index) {
-                  match = {}
-                  if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
-                      match.time = item[0];
-                      match.home_name = item[1];
-                      match.away_name = item[2];
-                      match.score  = item[3] + item[4] + item[5];
-                      match.match_id = text2[index].split('_')[2];
-                      data.push(match);
-                  } else if (item[0] == 'Cancelled' || item[0] == 'Postponed') {
-                      match.time = item[0];
-                      match.home_name = item[1];
-                      match.away_name = item[2];
-                      match.match_id = text2[index].split('_')[2];
-                      data.push(match);
-                  }
-                  index +=1;
-              });
-        
+            });
+
+            var data = [];
+            let match;
+            var index = 0;
+            text.forEach(function (item, index) {
+                match = {}
+                if (item[0] == 'Finished' || !isNaN(item[0].trim()) || item[0] == 'Half Time') {
+                    match.time = item[0];
+                    match.home_name = item[1];
+                    match.away_name = item[2];
+                    match.score = item[3] + item[4] + item[5];
+                    match.match_id = text2[index].split('_')[2];
+                    data.push(match);
+                } else if (item[0] == 'Cancelled' || item[0] == 'Postponed') {
+                    match.time = item[0];
+                    match.home_name = item[1];
+                    match.away_name = item[2];
+                    match.match_id = text2[index].split('_')[2];
+                    data.push(match);
+                }
+                index += 1;
+            });
+
             await browser.close();
-        
-          
-              return res.send({data: data, success: true});
-          })();          
+
+
+            return res.send({ data: data, success: true });
+        })();
     }
 
     static getMatchDetails(matchId, res) {
         const puppeteer = require('puppeteer');
 
         (async () => {
-        const browser = await puppeteer.launch({
-            ignoreDefaultArgs: ['--disable-extensions'],
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
+            const browser = await puppeteer.launch({
+                ignoreDefaultArgs: ['--disable-extensions'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
                 ],
-        });
-        
-        const page = await browser.newPage();
+            });
 
-        await page.setDefaultNavigationTimeout(0);
+            const page = await browser.newPage();
 
-        await page.goto('https://www.soccer24.com/match/' + matchId + '/#match-summary', {waitUntil: 'networkidle2'});
+            await page.setDefaultNavigationTimeout(0);
 
-        const htFt = await page.$$eval('.detailMS__headerScore', (options) => {
-            const result = options.map(option => option.innerText.split("\n"));
-            return result;
-        });
+            await page.goto('https://www.soccer24.com/match/' + matchId + '/#match-summary', { waitUntil: 'networkidle2' });
 
-        const text = await page.$$eval('.detailMS__incidentRow', (options) => {
-            const result = options.map(option => option.innerText.split("\n"));
-            return result;
-        });
+            const htFt = await page.$$eval('.detailMS__headerScore', (options) => {
+                const result = options.map(option => option.innerText.split("\n"));
+                return result;
+            });
 
-        const text2 = await page.$$eval('.detailMS__incidentRow', (options) => {
-            const result = options.map(option => option.getAttribute("class"));
-            return result;
-        });
+            const text = await page.$$eval('.detailMS__incidentRow', (options) => {
+                const result = options.map(option => option.innerText.split("\n"));
+                return result;
+            });
 
-        const icons = await page.$$eval('.icon-box ', (options) => {
-            const result = options.map(option => option.getAttribute("class"));
-            return result;
-        });
+            const text2 = await page.$$eval('.detailMS__incidentRow', (options) => {
+                const result = options.map(option => option.getAttribute("class"));
+                return result;
+            });
+
+            const icons = await page.$$eval('.icon-box ', (options) => {
+                const result = options.map(option => option.getAttribute("class"));
+                return result;
+            });
 
 
-        var data = [];
-        let event;
-        var index = 0;
-        text.forEach(function(item, index) {
-            event = {}
-            event.time = item[0];
-            event.player = item[2].includes('(') ? item[3] : item[2];
-            event.type = text2[index].includes('away') ? 'away' : 'home';
-            event.action = Helper.getAction(icons[index]);
-            data.push(event);
-        });
+            var data = [];
+            let event;
+            var index = 0;
+            text.forEach(function (item, index) {
+                event = {}
+                event.time = item[0];
+                event.player = item[2].includes('(') ? item[3] : item[2];
+                event.type = text2[index].includes('away') ? 'away' : 'home';
+                event.action = Helper.getAction(icons[index]);
+                data.push(event);
+            });
 
-        var statistics = [];
-        await page.click('#a-match-statistics');
-        await page.waitForSelector('#tab-statistics-0-statistic');
+            var statistics = [];
+            await page.click('#a-match-statistics');
+            await page.waitForSelector('#tab-statistics-0-statistic');
 
-        const stats = await page.$$eval('#tab-statistics-0-statistic > .statRow', (options) => {
-            const result = options.map(option => option.innerText.split("\n"));
-            return result;
-        });
+            const stats = await page.$$eval('#tab-statistics-0-statistic > .statRow', (options) => {
+                const result = options.map(option => option.innerText.split("\n"));
+                return result;
+            });
 
-        var stat = {}
+            var stat = {}
 
-        stats.forEach(function(item, index) {
-            stat = {};
-            stat.home_val = item[0];
-            stat.name = item[1];
-            stat.away_val = item[2];
-            statistics.push(stat);
-        });
+            stats.forEach(function (item, index) {
+                stat = {};
+                stat.home_val = item[0];
+                stat.name = item[1];
+                stat.away_val = item[2];
+                statistics.push(stat);
+            });
 
-        var result = {
-            statistics : statistics,
-            events: data,
-            firstHalfScore: htFt[0],
-            secondHalfScore: htFt[1]
-        };
+            var result = {
+                statistics: statistics,
+                events: data,
+                firstHalfScore: htFt[0],
+                secondHalfScore: htFt[1]
+            };
 
-        await browser.close();
-        return res.send({data: result, success: true});
+            await browser.close();
+            return res.send({ data: result, success: true });
 
         })();
     }
 
     static getAction(iconStr) {
         if (iconStr.includes('soccer-ball')) {
-          return 'goal';
+            return 'goal';
         }
-      
+
         if (iconStr.includes('y-card')) {
-          return 'yellow card';
+            return 'yellow card';
         }
-      
+
         if (iconStr.includes('r-card')) {
-          return 'yellow card';
+            return 'yellow card';
         }
-      
+
         if (iconStr.includes('yr-card')) {
-          return 'yellow red card';
+            return 'yellow red card';
         }
     }
 
-    static  getBookingCodeFromBetslip(betslip, res) {
+    static getBookingCodeFromBetslip(betslip, res) {
         (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
 
             const page = await browser.newPage();
-          
+
             await page.goto('https://shop.bet9ja.com/sport/default.aspx');
-          
+
             await page.type('#h_w_PC_ctl05_txtCodiceCoupon', betslip);
 
             try {
                 await page.click('#h_w_PC_ctl05_lnkCheckCoupon');
-            } catch(e) {
-                return res.send({success: false, message: 'It seems betslip is not valid'});
+            } catch (e) {
+                return res.send({ success: false, message: 'It seems betslip is not valid' });
             }
-            
-          
+
+
             const frame = await page.frames().find(frame => frame.name() === 'iframeCC');
             await frame.waitForSelector('#popUp_PC_btnRebet');
-          
+
             await frame.click('#popUp_PC_btnRebet');
-          
+
             await page.waitForSelector('#s_w_PC_cCoupon_lnkAvanti');
             await page.click('#s_w_PC_cCoupon_lnkAvanti');
-          
-             
+
+
             await frame2.waitForSelector('.rep');
-          
+
             const bookingCode = await frame2.$$eval('#bookHead > .number', (options) => {
-              const result = options.map(option => option.innerText);
-              return result;
+                const result = options.map(option => option.innerText);
+                return result;
             });
-          
-            await page.pdf({path: 'hn.pdf', format: 'A4'});
-          
+
+            await page.pdf({ path: 'hn.pdf', format: 'A4' });
+
             // close brower when we are done
             await browser.close();
 
-            return res.send({success: true, bookingCode: bookingCode[0].split(':')[1]});
-          })();
+            return res.send({ success: true, bookingCode: bookingCode[0].split(':')[1] });
+        })();
     }
 
-    static async  getSportybetData(url) {
+    static async getSportybetData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitForSelector('#importMatch');
             const t = await page.evaluate(() => {
                 const matches = [];
@@ -579,17 +1041,17 @@ const axios = require('axios');
                 const drawOdds = [];
                 const dates = [];
                 const datesArr = []
-                
+
                 let items;
-            
+
                 awayTeam = document.querySelectorAll('.away-team')
-                document.querySelectorAll('.home-team').forEach(function(item, index) {
+                document.querySelectorAll('.home-team').forEach(function (item, index) {
                     matches.push(item.textContent.trim() + ' - ' + awayTeam[index].textContent.trim());
                 });
 
-                document.querySelectorAll('.market-cell').forEach(function(item) {
+                document.querySelectorAll('.market-cell').forEach(function (item) {
                     items = item.textContent.trim().split(' ');
-            
+
                     if (items.length < 3) {
                         winOdds.push('-');
                         drawOdds.push('-');
@@ -600,7 +1062,7 @@ const axios = require('axios');
                         lostOdds.push(retrieveLostOdds(items[2]));
                     }
                     // console.log(items);
-            
+
                 })
 
                 let latestDate = '';
@@ -611,24 +1073,24 @@ const axios = require('axios');
                         datesArr.push(latestDate);
                     }
                 });
-            
+
                 function retrieveLostOdds(mixOdds) {
                     let odd = '';
                     let startCount = false;
                     let countAfterDot = 0;
-                    for(i = 0; i < mixOdds.length; i++) {
+                    for (i = 0; i < mixOdds.length; i++) {
                         if (countAfterDot == 2)
                             break;
-                        
-                        odd+=mixOdds[i];
+
+                        odd += mixOdds[i];
                         if (startCount) {
-                            countAfterDot+=1;
+                            countAfterDot += 1;
                         }
                         if (mixOdds[i] == '.') {
                             startCount = true;
                         }
                     }
-            
+
                     return odd;
                 }
 
@@ -636,7 +1098,7 @@ const axios = require('axios');
                 document.querySelectorAll('.clock-time').forEach((item, index) => {
                     dates.push(datesArr[index].replace('/', ' ') + ' ' + item.textContent.trim());
                 });
-            
+
                 data = {
                     matches: matches,
                     winOdds: winOdds,
@@ -644,10 +1106,10 @@ const axios = require('axios');
                     lostOdds: lostOdds,
                     dates: dates,
                 }
-        
+
                 return data;
             });
-        
+
             await browser.close();
 
             return t;
@@ -656,21 +1118,21 @@ const axios = require('axios');
         return promise;
     }
 
-    static async  getNairabetData(url) {
+    static async getNairabetData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             // await page.waitForSelector('#eventListHeaderMarketList1');
             //const teams = [];
             const t = await page.evaluate(() => {
@@ -681,13 +1143,13 @@ const axios = require('axios');
                 const dates = [];
 
                 let items;
-            
-                document.querySelectorAll('.event-name').forEach(function(item) {
+
+                document.querySelectorAll('.event-name').forEach(function (item) {
                     matches.push(item.textContent.trim());
                 });
-            
-                document.querySelectorAll('.game').forEach(function(item,index) {
-                    if (index%2 == 0) {
+
+                document.querySelectorAll('.game').forEach(function (item, index) {
+                    if (index % 2 == 0) {
                         items = item.textContent.trim().replace(/  +/g, ' ').split(' ');
                         winOdds.push(items[0]);
                         drawOdds.push(items[1]);
@@ -696,7 +1158,7 @@ const axios = require('axios');
                 });
 
                 const time = document.querySelectorAll('.date-time .time');
-                document.querySelectorAll('.date-time .date').forEach(function(item, index) {
+                document.querySelectorAll('.date-time .date').forEach(function (item, index) {
                     dates.push(item.textContent.replace('.', ' ') + ' ' + time[index].textContent)
                 });
 
@@ -707,34 +1169,34 @@ const axios = require('axios');
                     lostOdds: lostOdds,
                     dates: dates
                 }
-        
+
                 return data;
             });
-        
+
             await browser.close();
 
             return t;
         })();
 
         return promise;
-        
+
     }
 
-    static async  getBetkingData(url) {
+    static async getBetkingData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitForSelector('#eventsWrapper');
             const datesToNum = {
                 'jan': 1,
@@ -756,28 +1218,28 @@ const axios = require('axios');
                 const lostOdds = [];
                 const drawOdds = [];
                 const dates = [];
-            
-                document.querySelectorAll('.matchName').forEach(function(item) {
+
+                document.querySelectorAll('.matchName').forEach(function (item) {
                     matches.push(item.textContent.trim());
                 })
-            
-                document.querySelectorAll('.eventOdd-0').forEach(function(item) {
+
+                document.querySelectorAll('.eventOdd-0').forEach(function (item) {
                     winOdds.push(item.textContent.trim());
                 })
-            
-                document.querySelectorAll('.eventOdd-1').forEach(function(item) {
+
+                document.querySelectorAll('.eventOdd-1').forEach(function (item) {
                     drawOdds.push(item.textContent.trim());
                 })
 
-                document.querySelectorAll('.eventOdd-2').forEach(function(item) {
+                document.querySelectorAll('.eventOdd-2').forEach(function (item) {
                     lostOdds.push(item.textContent.trim());
                 });
 
                 const monthDayArr = document.querySelectorAll('.dateRow');
                 let d;
-                document.querySelectorAll('tbody').forEach(function(item, i) {
+                document.querySelectorAll('tbody').forEach(function (item, i) {
                     d = monthDayArr[i].textContent.split(' ');
-                    item.querySelectorAll('.matchName').forEach(function(dt) {
+                    item.querySelectorAll('.matchName').forEach(function (dt) {
                         dates.push(d[1] + ' ' + datesToNum[d[2].substring(0, 3).toLowerCase()]);
                     });
                 });
@@ -793,10 +1255,10 @@ const axios = require('axios');
                     lostOdds: lostOdds,
                     dates: dates
                 }
-        
+
                 return data;
             });
-        
+
             await browser.close();
 
             return t;
@@ -812,14 +1274,14 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitForSelector('#MainContent');
             //const teams = [];
             const t = await page.evaluate(() => {
@@ -844,18 +1306,18 @@ const axios = require('axios');
                 };
                 const datesArr = document.querySelectorAll('.Time');
                 let dateObj;
-                document.querySelectorAll('.Event').forEach(function(item, index) {
+                document.querySelectorAll('.Event').forEach(function (item, index) {
                     matches.push(item.textContent.trim());
-                    dateObj = datesArr[index].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm,"").split(' ');
+                    dateObj = datesArr[index].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm, "").split(' ');
                     dates.push(dateObj[1] + ' ' + datesToNum[dateObj[2].toLowerCase()] + ' ' + dateObj[0]);
                 })
-            
-                document.querySelectorAll('.odd').forEach(function(item, index) {
-                    if (index%8 == 0) {
+
+                document.querySelectorAll('.odd').forEach(function (item, index) {
+                    if (index % 8 == 0) {
                         winOdds.push(item.textContent.trim().substring(1))
-                    } else if (index%8 == 1) {
+                    } else if (index % 8 == 1) {
                         drawOdds.push(item.textContent.trim().substring(1))
-                    } else if (index%8 == 2) {
+                    } else if (index % 8 == 2) {
                         lostOdds.push(item.textContent.trim().substring(1))
                     }
                 });
@@ -867,10 +1329,10 @@ const axios = require('axios');
                     lostOdds: lostOdds,
                     dates: dates
                 }
-        
+
                 return data;
             });
-        
+
             await browser.close();
 
             return t;
@@ -879,21 +1341,21 @@ const axios = require('axios');
         return promise;
     }
 
-    static async  get1xbetData(url) {
+    static async get1xbetData(url) {
         const promise = (async () => {
             const browser = await puppeteer.launch({
                 ignoreDefaultArgs: ['--disable-extensions'],
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitForSelector('#maincontent');
             // const image = await page.screenshot({fullPage : true});
 
@@ -912,37 +1374,37 @@ const axios = require('axios');
                     drawOdds: drawOdds,
                     lostOdds: lostOdds
                 }
-                
+
                 let odds;
                 let count;
-            
-                document.querySelectorAll('.c-events__teams').forEach(function(item) {
+
+                document.querySelectorAll('.c-events__teams').forEach(function (item) {
                     matches.push(item.title);
                 });
-            
-                document.querySelectorAll('.c-bets').forEach(function(item, index) {
+
+                document.querySelectorAll('.c-bets').forEach(function (item, index) {
                     if (index != 0) {
-                    
-                    // count = 0
-                    winOdds.push(item.children[0].textContent);
-                    drawOdds.push(item.children[1].textContent);
-                    lostOdds.push(item.children[2].textContent);
-            
-                    for(i = 0; i < odds.length; i++) {
-                        if (odds[i].trim()) {
-                            if (count == 0) {
-                                winOdds.push(odds[i].trim());
+
+                        // count = 0
+                        winOdds.push(item.children[0].textContent);
+                        drawOdds.push(item.children[1].textContent);
+                        lostOdds.push(item.children[2].textContent);
+
+                        for (i = 0; i < odds.length; i++) {
+                            if (odds[i].trim()) {
+                                if (count == 0) {
+                                    winOdds.push(odds[i].trim());
+                                }
+                                if (count == 1) {
+                                    drawOdds.push(odds[i].trim());
+                                }
+                                if (count == 2) {
+                                    lostOdds.push(odds[i].trim());
+                                }
+                                count += 1;
                             }
-                            if (count == 1) {
-                                drawOdds.push(odds[i].trim());
-                            }
-                            if (count == 2) {
-                                lostOdds.push(odds[i].trim());
-                            }
-                            count+=1;
                         }
                     }
-                 }
                 });
 
                 document.querySelectorAll('.c-events__time-info').forEach((item) => {
@@ -957,10 +1419,10 @@ const axios = require('axios');
                     lostOdds: lostOdds,
                     dates: dates,
                 }
-        
+
                 return data;
             });
-        
+
             await browser.close();
 
             return t
@@ -969,11 +1431,11 @@ const axios = require('axios');
         return promise;
     }
 
-    static splitOddMoney(w,d,l,amount) {
-        const fractionOfD = w/d;
-        const fractionOfL = w/l;
-        
-        let wAmount = amount/(fractionOfD + fractionOfL + 1);
+    static splitOddMoney(w, d, l, amount) {
+        const fractionOfD = w / d;
+        const fractionOfL = w / l;
+
+        let wAmount = amount / (fractionOfD + fractionOfL + 1);
         let dAmount = wAmount * fractionOfD;
         let lAmount = wAmount * fractionOfL;
 
@@ -981,60 +1443,62 @@ const axios = require('axios');
         dAmount = Math.round(dAmount);
         lAmount = Math.round(lAmount);
 
-        if ((wAmount + dAmount + lAmount ) > amount) {
-            if ((wAmount*w) > (dAmount*d) && (wAmount*w) > (lAmount*l))  {
-                wAmount-=1;
-            } else if ((dAmount*d) > (wAmount*w) && (dAmount*d) > (lAmount*l)) {
-                dAmount-=1;
-            } else if ((lAmount*l) > (wAmount*w) && (lAmount*l) > (dAmount*d)) {
-                lAmount-=1;
+        if ((wAmount + dAmount + lAmount) > amount) {
+            if ((wAmount * w) > (dAmount * d) && (wAmount * w) > (lAmount * l)) {
+                wAmount -= 1;
+            } else if ((dAmount * d) > (wAmount * w) && (dAmount * d) > (lAmount * l)) {
+                dAmount -= 1;
+            } else if ((lAmount * l) > (wAmount * w) && (lAmount * l) > (dAmount * d)) {
+                lAmount -= 1;
             }
         }
 
-        if ((wAmount + dAmount + lAmount ) < amount) {
-            if ((wAmount*w) < (dAmount*d) && (wAmount*w) < (lAmount*l))  {
-                wAmount+=1;
-            } else if ((dAmount*d) < (wAmount*w) && (dAmount*d) < (lAmount*l)) {
-                dAmount+=1;
-            } else if ((lAmount*l) < (wAmount*w) && (lAmount*l) < (dAmount*d)) {
-                lAmount+=1;
+        if ((wAmount + dAmount + lAmount) < amount) {
+            if ((wAmount * w) < (dAmount * d) && (wAmount * w) < (lAmount * l)) {
+                wAmount += 1;
+            } else if ((dAmount * d) < (wAmount * w) && (dAmount * d) < (lAmount * l)) {
+                dAmount += 1;
+            } else if ((lAmount * l) < (wAmount * w) && (lAmount * l) < (dAmount * d)) {
+                lAmount += 1;
             }
         }
 
-        let awAmount = wAmount*w;
-        let adAmount = dAmount*d;
-        let alAmount = lAmount*l;
+        let awAmount = wAmount * w;
+        let adAmount = dAmount * d;
+        let alAmount = lAmount * l;
 
-        
-        return {'amount_to_play': [wAmount, dAmount, lAmount], 
-                'amount_to_win' : [Number.parseFloat(awAmount.toFixed(2)), Number.parseFloat(adAmount.toFixed(2)), Number.parseFloat(alAmount.toFixed(2))]};
+
+        return {
+            'amount_to_play': [wAmount, dAmount, lAmount],
+            'amount_to_win': [Number.parseFloat(awAmount.toFixed(2)), Number.parseFloat(adAmount.toFixed(2)), Number.parseFloat(alAmount.toFixed(2))]
+        };
     }
 
     static determineHighestOdds(platformObj) {
-        const maxWinOdd = {oddValue: 0};
-        const maxDrawOdd = {oddValue: 0};
-        const maxLostOdd = {oddValue: 0};
-    
-        platformObj.platformOdds.forEach(function(platformOdd) {
+        const maxWinOdd = { oddValue: 0 };
+        const maxDrawOdd = { oddValue: 0 };
+        const maxLostOdd = { oddValue: 0 };
+
+        platformObj.platformOdds.forEach(function (platformOdd) {
             if (platformOdd['odds'][0] != '-' && parseFloat(platformOdd['odds'][0]) > maxWinOdd.oddValue) {
                 maxWinOdd.oddValue = parseFloat(platformOdd['odds'][0]);
                 maxWinOdd['platform'] = platformOdd['platform'];
             }
-    
-            if (platformOdd['odds'][1] != '-' &&  parseFloat(platformOdd['odds'][1]) > maxDrawOdd['oddValue']) {
+
+            if (platformOdd['odds'][1] != '-' && parseFloat(platformOdd['odds'][1]) > maxDrawOdd['oddValue']) {
                 maxDrawOdd['oddValue'] = parseFloat(platformOdd['odds'][1])
                 maxDrawOdd['platform'] = platformOdd['platform']
             }
-            
-            if (platformOdd['odds'][2] != '-' &&  parseFloat(platformOdd['odds'][2]) > maxLostOdd['oddValue']) {
+
+            if (platformOdd['odds'][2] != '-' && parseFloat(platformOdd['odds'][2]) > maxLostOdd['oddValue']) {
                 maxLostOdd['oddValue'] = parseFloat(platformOdd['odds'][2])
-                maxLostOdd['platform']= platformOdd['platform']
+                maxLostOdd['platform'] = platformOdd['platform']
             }
         });
-    
+
         return {
-            'match':   platformObj.match,
-            'win':  maxWinOdd,
+            'match': platformObj.match,
+            'win': maxWinOdd,
             'draw': maxDrawOdd,
             'lost': maxLostOdd,
         }
@@ -1083,23 +1547,23 @@ const axios = require('axios');
             return teamB.includes(teamA) || teamA.includes(teamB);
         }
 
-        for(let i = 0; i < teamAr.length; i++) {
+        for (let i = 0; i < teamAr.length; i++) {
             let a = teamAr[i];
-            for(let j = 0; j < teamBr.length; j++) {
+            for (let j = 0; j < teamBr.length; j++) {
                 let b = teamBr[j];
-                if ( (a.length > 2 && b.length > 2) && (!['city', 'united', 'fc', 'cd', 'cf'].includes(a.toLowerCase()) && !['city', 'united', 'fc', 'cd', 'cf'].includes(b.toLowerCase())) && 
-                    (a.includes(b) || b.includes(a)) ) {
-                        return true;
+                if ((a.length > 2 && b.length > 2) && (!['city', 'united', 'fc', 'cd', 'cf'].includes(a.toLowerCase()) && !['city', 'united', 'fc', 'cd', 'cf'].includes(b.toLowerCase())) &&
+                    (a.includes(b) || b.includes(a))) {
+                    return true;
                 }
             }
         }
 
         return false;
-        
-    }
-    
 
-    static getRiskless(competitionId, amount, res, platforms=null) {
+    }
+
+
+    static getRiskless(competitionId, amount, res, platforms = null) {
         (async () => {
             const PREMIER_LEAGUE = 1
             const LALIGA = 2
@@ -1113,247 +1577,247 @@ const axios = require('axios');
             const NORWAY_ELITESERIEN = 10
             const EUROPE_LEAGUE = 11
             const CHAMPIONSHIP = 12;
-                
+
             const URLS = {
-                    1: {
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170880',
-                        'xbet': 'https://1xbet.com/en/line/Football/88637-England-Premier-League',
-                        'nairabet': 'https://nairabet.com/categories/18871',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-premier-league/0/0',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:17'
-                    },
-                    6: {
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=167856',
-                        'xbet': 'https://1xbet.com/en/line/Football/110163-Italy-Serie-A/',
-                        'nairabet': 'https://nairabet.com/categories/18767',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/italy/ita-serie-a/0/0',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:31/sr:tournament:23'   
-                    },
-                    2: {
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180928',
-                        'xbet': 'https://1xbet.com/en/line/Football/127733-Spain-La-Liga/',
-                        'nairabet': 'https://nairabet.com/categories/18726',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/spain/esp-laliga/0/0',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:32/sr:tournament:8'  
-                    },
-                    4: {
-                        'xbet': 'https://1xbet.com/en/line/Football/12821-France-Ligue-1/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:7/sr:tournament:34' ,
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=950503',
-                        'nairabet': 'https://nairabet.com/categories/18883',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/france/fra-ligue-1/0/0',
-                    },
-                    3: {
-                        'xbet': 'https://1xbet.com/en/line/Football/96463-Germany-Bundesliga/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:30/sr:tournament:35',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180923',
-                        'nairabet': 'https://nairabet.com/categories/18767',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/germany/ger-bundesliga/0/0',
-                    },
-                    5: {
-                        'xbet': 'https://1xbet.com/en/line/Football/118663-Portugal-Primeira-Liga/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:44/sr:tournament:238',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180967',
-                        'nairabet': 'https://nairabet.com/categories/18955',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/portugal/por-primeira-liga/0/0',
-                    },
-                    7: {
-                        'xbet': 'https://1xbet.com/en/line/Football/212425-Sweden-Allsvenskan/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:9/sr:tournament:40',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817651',
-                        'nairabet': 'https://nairabet.com/categories/18875',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/sweden/swe-allsvenskan/0/0',
-                    },
+                1: {
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170880',
+                    'xbet': 'https://1xbet.com/en/line/Football/88637-England-Premier-League',
+                    'nairabet': 'https://nairabet.com/categories/18871',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-premier-league/0/0',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:17'
+                },
+                6: {
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=167856',
+                    'xbet': 'https://1xbet.com/en/line/Football/110163-Italy-Serie-A/',
+                    'nairabet': 'https://nairabet.com/categories/18767',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/italy/ita-serie-a/0/0',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:31/sr:tournament:23'
+                },
+                2: {
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180928',
+                    'xbet': 'https://1xbet.com/en/line/Football/127733-Spain-La-Liga/',
+                    'nairabet': 'https://nairabet.com/categories/18726',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/spain/esp-laliga/0/0',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:32/sr:tournament:8'
+                },
+                4: {
+                    'xbet': 'https://1xbet.com/en/line/Football/12821-France-Ligue-1/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:7/sr:tournament:34',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=950503',
+                    'nairabet': 'https://nairabet.com/categories/18883',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/france/fra-ligue-1/0/0',
+                },
+                3: {
+                    'xbet': 'https://1xbet.com/en/line/Football/96463-Germany-Bundesliga/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:30/sr:tournament:35',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180923',
+                    'nairabet': 'https://nairabet.com/categories/18767',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/germany/ger-bundesliga/0/0',
+                },
+                5: {
+                    'xbet': 'https://1xbet.com/en/line/Football/118663-Portugal-Primeira-Liga/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:44/sr:tournament:238',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=180967',
+                    'nairabet': 'https://nairabet.com/categories/18955',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/portugal/por-primeira-liga/0/0',
+                },
+                7: {
+                    'xbet': 'https://1xbet.com/en/line/Football/212425-Sweden-Allsvenskan/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:9/sr:tournament:40',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817651',
+                    'nairabet': 'https://nairabet.com/categories/18875',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/sweden/swe-allsvenskan/0/0',
+                },
 
-                    8: {
-                        'xbet': 'https://1xbet.com/en/line/Football/2018750-Netherlands-Eredivisie/',
-                        'sportybet': 'https://www.sportybet.comcom/sport/football/sr:category:35/sr:tournament:370', 
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1016657',
-                        'nairabet': 'https://nairabet.com/categories/18732',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/netherlands/ned-eredivisie/0/0',
-                    },
+                8: {
+                    'xbet': 'https://1xbet.com/en/line/Football/2018750-Netherlands-Eredivisie/',
+                    'sportybet': 'https://www.sportybet.comcom/sport/football/sr:category:35/sr:tournament:370',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1016657',
+                    'nairabet': 'https://nairabet.com/categories/18732',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/netherlands/ned-eredivisie/0/0',
+                },
                 10: {
-                        'xbet': 'https://1xbet.com/en/line/Football/1793471-Norway-Eliteserien/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:5/sr:tournament:20',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817648',
-                        'nairabet': 'https://nairabet.com/categories/18927',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/norway/nor-eliteserien/0/0'
-                    },
-                    9: {
-                        'xbet': 'https://1xbet.com/en/line/Football/118587-UEFA-Champions-League/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:7',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062457',
-                        'nairabet': 'https://nairabet.com/categories/18727',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/champions-l/uefa-champions-league/0/0'
-                    },
-                    11: {
-                        'xbet': 'https://1xbet.com/en/line/Football/118593-UEFA-Europa-League/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:679',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062916',
-                        'nairabet': 'https://nairabet.com/categories/18749',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/europa-l/uefa-europa-league/0/0'
-                    },
-                
-                    12: {
-                        'xbet': 'https://1xbet.com/en/line/Football/105759-England-Championship/',
-                        'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:18',
-                        'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170881',
-                        'nairabet': 'https://www.nairabet.com/categories/18935',
-                        'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-championship/0/0'
-                    }
+                    'xbet': 'https://1xbet.com/en/line/Football/1793471-Norway-Eliteserien/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:5/sr:tournament:20',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=817648',
+                    'nairabet': 'https://nairabet.com/categories/18927',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/norway/nor-eliteserien/0/0'
+                },
+                9: {
+                    'xbet': 'https://1xbet.com/en/line/Football/118587-UEFA-Champions-League/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:7',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062457',
+                    'nairabet': 'https://nairabet.com/categories/18727',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/champions-l/uefa-champions-league/0/0'
+                },
+                11: {
+                    'xbet': 'https://1xbet.com/en/line/Football/118593-UEFA-Europa-League/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:top/sr:tournament:679',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=1062916',
+                    'nairabet': 'https://nairabet.com/categories/18749',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/europa-l/uefa-europa-league/0/0'
+                },
+
+                12: {
+                    'xbet': 'https://1xbet.com/en/line/Football/105759-England-Championship/',
+                    'sportybet': 'https://www.sportybet.com/ng/sport/football/sr:category:1/sr:tournament:18',
+                    'bet9ja': 'https://web.bet9ja.com/Sport/Odds?EventID=170881',
+                    'nairabet': 'https://www.nairabet.com/categories/18935',
+                    'betking': 'https://www.betking.com/sports/s/event/p/soccer/england/eng-championship/0/0'
+                }
+            }
+
+            function getAllGames(allGames, platform) {
+                allGames = {};
+                let game;
+                let key;
+                for (let i = 0; i < 0; i++) {
+                    game = allGames[i];
+                    key = Object.keys(game)[0];
+                    allGames[key] = game[key];
                 }
 
-                function getAllGames(allGames, platform) {
-                    allGames = {};
-                    let game;
-                    let key;
-                    for (let i = 0; i < 0; i++) {
-                        game = allGames[i];
-                        key = Object.keys(game)[0];
-                        allGames[key] = game[key];
+                return allGames;
+            }
+
+            const urls = URLS[competitionId];
+            const xbetUrl = urls['xbet']
+            const sportybetUrl = urls['sportybet']
+            const bet9jaUrl = urls['bet9ja']
+            const nairabetUrl = urls['nairabet'];
+            const betKingUrl = urls['betking'];
+            const allSupportedPlatforms = ['xbet', 'sportybet', 'bet9ja', 'nairabet'];
+            const platformsObj = []; // the platforms we want to fetch or scrape their data
+
+            if (!platforms) {
+                platformsObj = allSupportedPlatforms;
+            } else {
+                platforms.forEach((platform, index) => {
+                    if (allSupportedPlatforms.includes(platform.toLowerCase()) && !platformsObj.includes(platform.toLowerCase())) {
+                        platformsObj.push(platform.toLowerCase());
+                    }
+                });
+            }
+
+
+
+            // const s = await Helper.get1xbetData(xbetUrl);
+            // res.set('Content-Type', 'image/png');
+            // return res.send(s);
+
+
+            try {
+                let platformsData = await Promise.all(
+                    [
+                        ... (platformsObj.includes('bet9ja') ? [{ bet9ja: Helper.getBet9jaData(bet9jaUrl) }] : []),
+                        ... (platformsObj.includes('xbet') ? [{ xbet: Helper.get1xbetData(xbetUrl) }] : []),
+                        ... (platformsObj.includes('sportybet') ? [{ sportybet: Helper.getSportybetData(sportybetUrl) }] : []),
+                        ... (platformsObj.includes('nairabet') ? [{ nairabet: Helper.getNairabetData(nairabetUrl) }] : []),
+                        ... (platformsObj.includes('betking') ? [{ betking: Helper.getBetkingData(betKingUrl) }] : []),
+                    ]
+                );
+
+                allGames = getAllGames(platformsData);
+
+
+                const results = [];
+                const stats = {
+                    'bet9ja': { 'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': [] },
+                    'betking': { 'num_games_retrieved': allGames['betking'].length, 'unmatched_matches': [] },
+                    'sportybet': { 'num_games_retrieved': allGames['sportybet'].length, 'unmatched_matches': [] },
+                    'nairabet': { 'num_games_retrieved': allGames['nairabet'].length, 'unmatched_matches': [] },
+                    'xbet': { 'num_games_retrieved': allGames['xbet'].length, 'unmatched_matches': [] }
+                }
+                let isxbetMatch = false
+                let isbet9jaMatch = false;
+                let isNairabetMatch = false;
+                let isSportybetMatch = false;
+
+                for (let i = 0; i < allGames.betking.matches.length; i++) {
+                    let match = allGames['betking']['matches'][i];
+                    let winOdd = allGames['betking']['winOdds'][i];
+                    let drawOdd = allGames['betking']['drawOdds'][i];
+                    let lostOdd = allGames['betking']['lostOdds'][i];
+                    let obj = {
+                        'match': match,
+                        'platformOdds': [{ 'platform': 'betking', 'odds': [winOdd, drawOdd, lostOdd] }]
+                    };
+
+                    for (let j = 0; j < allGames.bet9ja.matches.length; j++) {
+                        let bet9jaMatch = allGames['bet9ja']['matches'][j]
+                        isbet9jaMatch = false
+                        if (Helper.isMatch(match, bet9jaMatch)) {
+                            let bet9jaWinOdd = allGames['bet9ja']['winOdds'][j];
+                            let bet9jaDrawOdd = allGames['bet9ja']['drawOdds'][j];
+                            let bet9jaLostOdd = allGames['bet9ja']['lostOdds'][j];
+                            obj['platformOdds'].push({ 'platform': 'bet9ja', 'odds': [bet9jaWinOdd, bet9jaDrawOdd, bet9jaLostOdd] });
+                            isbet9jaMatch = true;
+                            break;
+                        }
                     }
 
-                    return allGames;
-                }
-
-                const urls = URLS[competitionId];
-                const xbetUrl = urls['xbet']
-                const sportybetUrl = urls['sportybet']
-                const bet9jaUrl = urls['bet9ja']
-                const nairabetUrl = urls['nairabet'];
-                const betKingUrl = urls['betking'];
-                const allSupportedPlatforms = ['xbet', 'sportybet', 'bet9ja', 'nairabet'];
-                const platformsObj = []; // the platforms we want to fetch or scrape their data
-
-                if (!platforms) {
-                    platformsObj = allSupportedPlatforms;
-                } else {
-                    platforms.forEach((platform, index) => {
-                        if (allSupportedPlatforms.includes(platform.toLowerCase()) && !platformsObj.includes(platform.toLowerCase())) {
-                            platformsObj.push(platform.toLowerCase());
+                    for (let k = 0; k < allGames.sportybet.matches.length; k++) {
+                        let sportybetMatch = allGames['sportybet']['matches'][k]
+                        isSportybetMatch = false
+                        if (Helper.isMatch(match, sportybetMatch)) {
+                            let sportybetWinOdd = allGames['sportybet']['winOdds'][k];
+                            let sportybetDrawOdd = allGames['sportybet']['drawOdds'][k];
+                            let sportybetLostOdd = allGames['sportybet']['lostOdds'][k];
+                            obj['platformOdds'].push({ 'platform': 'sportybet', 'odds': [sportybetWinOdd, sportybetDrawOdd, sportybetLostOdd] });
+                            isSportybetMatch = true;
+                            break;
                         }
-                    });
-                }
-
-
-
-               // const s = await Helper.get1xbetData(xbetUrl);
-                // res.set('Content-Type', 'image/png');
-                // return res.send(s);
-            
-            
-                try {
-                    let platformsData = await Promise.all(
-                        [
-                            ... (platformsObj.includes('bet9ja') ? [{bet9ja: Helper.getBet9jaData(bet9jaUrl)}] : []),
-                            ... (platformsObj.includes('xbet') ? [{xbet: Helper.get1xbetData(xbetUrl)}] : []),
-                            ... (platformsObj.includes('sportybet') ? [{sportybet: Helper.getSportybetData(sportybetUrl)}] : []),
-                            ... (platformsObj.includes('nairabet') ? [{nairabet: Helper.getNairabetData(nairabetUrl)}] : []),
-                            ... (platformsObj.includes('betking') ? [{betking: Helper.getBetkingData(betKingUrl)}] : []),
-                        ]
-                    );
-
-                    allGames = getAllGames(platformsData);
-
-
-                    const results = [];
-                    const stats = {
-                        'bet9ja': {'num_games_retrieved': allGames['bet9ja']['matches'].length, 'unmatched_matches': []},
-                        'betking': {'num_games_retrieved': allGames['betking'].length, 'unmatched_matches': []},
-                        'sportybet': {'num_games_retrieved': allGames['sportybet'].length, 'unmatched_matches': []},
-                        'nairabet': {'num_games_retrieved': allGames['nairabet'].length, 'unmatched_matches': []},
-                        'xbet': {'num_games_retrieved': allGames['xbet'].length, 'unmatched_matches': []}
                     }
-                    let isxbetMatch = false
-                    let isbet9jaMatch = false;
-                    let isNairabetMatch = false;
-                    let isSportybetMatch = false;
-    
-                    for(let i = 0; i < allGames.betking.matches.length; i++) {
-                        let match = allGames['betking']['matches'][i];
-                        let winOdd = allGames['betking']['winOdds'][i];
-                        let drawOdd = allGames['betking']['drawOdds'][i];
-                        let lostOdd = allGames['betking']['lostOdds'][i];
-                        let obj = {
-                            'match': match,
-                            'platformOdds': [{'platform': 'betking', 'odds': [winOdd, drawOdd, lostOdd]}]
-                        };
-    
-                        for(let j = 0; j < allGames.bet9ja.matches.length; j++) {
-                            let bet9jaMatch = allGames['bet9ja']['matches'][j]
-                            isbet9jaMatch = false
-                            if (Helper.isMatch(match, bet9jaMatch)) {
-                                let bet9jaWinOdd = allGames['bet9ja']['winOdds'][j];
-                                let bet9jaDrawOdd = allGames['bet9ja']['drawOdds'][j];
-                                let bet9jaLostOdd = allGames['bet9ja']['lostOdds'][j];
-                                obj['platformOdds'].push({'platform': 'bet9ja', 'odds': [bet9jaWinOdd, bet9jaDrawOdd, bet9jaLostOdd]});
-                                isbet9jaMatch = true;
-                                break;
-                            }
+
+                    for (let m = 0; m < allGames.nairabet.matches.length; m++) {
+                        let nairabetMatch = allGames['nairabet']['matches'][m]
+                        isNairabetMatch = false
+                        if (Helper.isMatch(match, nairabetMatch)) {
+                            let nairabetWinOdd = allGames['nairabet']['winOdds'][m];
+                            let nairabetDrawOdd = allGames['nairabet']['drawOdds'][m];
+                            let nairabetLostOdd = allGames['nairabet']['lostOdds'][m];
+                            obj['platformOdds'].push({ 'platform': 'nairabet', 'odds': [nairabetWinOdd, nairabetDrawOdd, nairabetLostOdd] });
+                            isNairabetMatch = true;
+                            break;
                         }
-    
-                        for(let k = 0; k < allGames.sportybet.matches.length; k++) {
-                            let sportybetMatch = allGames['sportybet']['matches'][k]
-                            isSportybetMatch = false
-                            if (Helper.isMatch(match, sportybetMatch)) {
-                                let sportybetWinOdd = allGames['sportybet']['winOdds'][k];
-                                let sportybetDrawOdd = allGames['sportybet']['drawOdds'][k];
-                                let sportybetLostOdd = allGames['sportybet']['lostOdds'][k];
-                                obj['platformOdds'].push({'platform': 'sportybet', 'odds': [sportybetWinOdd, sportybetDrawOdd, sportybetLostOdd]});
-                                isSportybetMatch = true;
-                                break;
-                            }
-                        }
-    
-                        for(let m = 0; m < allGames.nairabet.matches.length; m++) {
-                            let nairabetMatch = allGames['nairabet']['matches'][m]
-                            isNairabetMatch = false
-                            if (Helper.isMatch(match, nairabetMatch)) {
-                                let nairabetWinOdd = allGames['nairabet']['winOdds'][m];
-                                let nairabetDrawOdd = allGames['nairabet']['drawOdds'][m];
-                                let nairabetLostOdd = allGames['nairabet']['lostOdds'][m];
-                                obj['platformOdds'].push({'platform': 'nairabet', 'odds': [nairabetWinOdd, nairabetDrawOdd, nairabetLostOdd]});
-                                isNairabetMatch = true;
-                                break;
-                            }
-                        }
-    
-                        for(let n = 0; n < allGames.xbet.matches.length; n++) {
-                            let xbetMatch = allGames['xbet']['matches'][n]
-                            isxbetMatch = false
-                            if (Helper.isMatch(match, xbetMatch)) {
-                                let xbetWinOdd = allGames['xbet']['winOdds'][n];
-                                let xbetDrawOdd = allGames['xbet']['drawOdds'][n];
-                                let xbetLostOdd = allGames['xbet']['lostOdds'][n];
-                                obj['platformOdds'].push({'platform': 'xbet', 'odds': [xbetWinOdd, xbetDrawOdd, xbetLostOdd]});
-                                isxbetMatch = true;
-                                break;
-                            }
-                        }
-    
-                        if (!isbet9jaMatch)
-                            stats['bet9ja']['unmatched_matches'].push(match)
-    
-                        if (!isSportybetMatch)
-                            stats['sportybet']['unmatched_matches'].push(match)
-    
-                        if (!isNairabetMatch)
-                            stats['nairabet']['unmatched_matches'].push(match)
-    
-                        if (!isxbetMatch)
-                            stats['xbet']['unmatched_matches'].push(match)
-                        results.push(obj)
                     }
-    
-                    const resultData = Helper.determineRsiklessGames(results, amount);
-    
-                    return res.send({success: true, data: {result: resultData, stat: stats, urls: urls }});
-                } catch(e) {
-                    console.log(e);
-                    return res.send({success: false, data: []});
+
+                    for (let n = 0; n < allGames.xbet.matches.length; n++) {
+                        let xbetMatch = allGames['xbet']['matches'][n]
+                        isxbetMatch = false
+                        if (Helper.isMatch(match, xbetMatch)) {
+                            let xbetWinOdd = allGames['xbet']['winOdds'][n];
+                            let xbetDrawOdd = allGames['xbet']['drawOdds'][n];
+                            let xbetLostOdd = allGames['xbet']['lostOdds'][n];
+                            obj['platformOdds'].push({ 'platform': 'xbet', 'odds': [xbetWinOdd, xbetDrawOdd, xbetLostOdd] });
+                            isxbetMatch = true;
+                            break;
+                        }
+                    }
+
+                    if (!isbet9jaMatch)
+                        stats['bet9ja']['unmatched_matches'].push(match)
+
+                    if (!isSportybetMatch)
+                        stats['sportybet']['unmatched_matches'].push(match)
+
+                    if (!isNairabetMatch)
+                        stats['nairabet']['unmatched_matches'].push(match)
+
+                    if (!isxbetMatch)
+                        stats['xbet']['unmatched_matches'].push(match)
+                    results.push(obj)
                 }
 
-               // console.log(allGames);
+                const resultData = Helper.determineRsiklessGames(results, amount);
+
+                return res.send({ success: true, data: { result: resultData, stat: stats, urls: urls } });
+            } catch (e) {
+                console.log(e);
+                return res.send({ success: false, data: [] });
+            }
+
+            // console.log(allGames);
         })();
     }
 
@@ -1364,7 +1828,7 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
 
             const urls = {
@@ -1380,12 +1844,12 @@ const axios = require('axios');
             const url = urls[country];
 
             console.log(url);
-        
+
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-         
-            await page.goto(url, {waitUntil: 'networkidle2'});
+
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitFor('#MainContent');
             await page.waitFor(4000);
             let t;
@@ -1398,154 +1862,158 @@ const axios = require('axios');
                     const fixtures = [];
                     const odds = [];
                     let odd = {};
-    
+
                     const time = document.querySelectorAll('.Time')[0].textContent.trim().substring(0, 5)
-                    const dateTime = document.querySelectorAll('.Time')[0].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm,"").split(' ');
-                    dateTimeObj= {
+                    const dateTime = document.querySelectorAll('.Time')[0].textContent.trim().replace(/  +/g, ' ').replace(/(\r\n|\n|\r)/gm, "").split(' ');
+                    dateTimeObj = {
                         time: dateTime[0],
                         day: dateTime[1],
                         month: dateTime[2]
                     };
-            
-                    document.querySelectorAll('.Event').forEach(function(item) {
+
+                    document.querySelectorAll('.Event').forEach(function (item) {
                         const homeAway = item.textContent.split('-');
-                        fixtures.push({home: homeAway[0].trim(), away: homeAway[1].trim()});
+                        fixtures.push({ home: homeAway[0].trim(), away: homeAway[1].trim() });
                     });
 
                     const oddsDoc = document.querySelectorAll('.odd');
-            
-                    oddsDoc.forEach(function(item, index) {
-                        if (index == 0 || (index != 0 && index%8 == 0)) {
-                            if (index != 0 && index%8 == 0) {
+
+                    oddsDoc.forEach(function (item, index) {
+                        if (index == 0 || (index != 0 && index % 8 == 0)) {
+                            if (index != 0 && index % 8 == 0) {
                                 odds.push(odd);
                                 odd = {};
                             }
-            
+
                             odd['1'] = item.textContent.replace('1', '');
                         }
-            
-                        if (index%8 == 1) {
+
+                        if (index % 8 == 1) {
                             odd['X'] = item.textContent.replace('X', '')
                         }
-            
-                        if (index%8 == 2) {
+
+                        if (index % 8 == 2) {
                             odd['2'] = item.textContent.replace('2', '');
                         }
-            
-                        if (index%8 == 3) {
+
+                        if (index % 8 == 3) {
                             odd['1X'] = item.textContent.replace('1X', '');
                         }
-            
-                        if (index%8 == 4) {
+
+                        if (index % 8 == 4) {
                             odd['12'] = item.textContent.replace('12', '');
                         }
-            
-                        if (index%8 == 5) {
+
+                        if (index % 8 == 5) {
                             odd['X2'] = item.textContent.replace('X2', '')
                         }
-            
-                        if (index%8 == 6) {
+
+                        if (index % 8 == 6) {
                             let val = item.textContent.replace('Over', '');
                             val = val.replace('2.5', '');
                             odd['Over 2.5'] = val;
                         }
-            
-                        if (index%8 == 7) {
+
+                        if (index % 8 == 7) {
                             let val = item.textContent.replace('Under', '');
                             val = val.replace('2.5', '');
                             odd['Under 2.5'] = val;
                         }
-            
+
                         if (index == oddsDoc.length - 1) {
                             odds.push(odd);
                         }
                     });
-            
-                    fixtures.forEach(function(item, index) {
+
+                    fixtures.forEach(function (item, index) {
                         item.odds = odds[index]
                     });
                     document.querySelectorAll('.CQ')[0].children[3].click();
-                    return {fixtures: fixtures, time: time, timeObj: dateTimeObj};
+                    return { fixtures: fixtures, time: time, timeObj: dateTimeObj };
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating main fixtures'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating main fixtures' });
             }
-         
+
             await page.waitFor(3000);
-        
+
             try {
                 g = await page.evaluate(() => {
                     const odds = []
-            
+
                     oddsElem = document.querySelectorAll('.odd');
-                    
-                    oddsElem.forEach(function(item, index) {
-                        if (index%2 == 1) {
-                            odds.push({GG: oddsElem[index-1].textContent.substring(2), NG: item.textContent.substring(2)});
+
+                    oddsElem.forEach(function (item, index) {
+                        if (index % 2 == 1) {
+                            odds.push({ GG: oddsElem[index - 1].textContent.substring(2), NG: item.textContent.substring(2) });
                         }
                     });
-            
+
                     document.querySelectorAll('.itm2 > span')[0].click();
                     document.querySelectorAll('.CQ')[1].children[0].click();
-            
+
                     return odds;
-            
+
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating fixtures for GG and NG'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating fixtures for GG and NG' });
             }
             await page.waitFor(4000);
-        
+
             try {
                 overUnder1 = await page.evaluate(() => {
                     const odds = []
                     oddsElem = document.querySelectorAll('.odd');
                     let over1Str;
                     let under1Str;
-            
-                    oddsElem.forEach(function(item, index) {
-                        if (index%2 == 1) {
-                            over1Str = oddsElem[index-1].textContent;
+
+                    oddsElem.forEach(function (item, index) {
+                        if (index % 2 == 1) {
+                            over1Str = oddsElem[index - 1].textContent;
                             under1Str = item.textContent;
-                            odds.push({over1: over1Str.substring(4, over1Str.length - 3), 
-                                under1: under1Str.substring(5, under1Str.length - 3)});
+                            odds.push({
+                                over1: over1Str.substring(4, over1Str.length - 3),
+                                under1: under1Str.substring(5, under1Str.length - 3)
+                            });
                         }
                     });
-            
+
                     document.querySelectorAll('.CQ')[1].children[1].click();
                     return odds;
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating fixtures for over1 and under1'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating fixtures for over1 and under1' });
             }
-        
+
             await page.waitFor(3000);
-        
+
             try {
                 overUnder3 = await page.evaluate(() => {
                     const odds = []
                     oddsElem = document.querySelectorAll('.odd');
                     let over3Str;
                     let under3Str;
-            
-                    oddsElem.forEach(function(item, index) {
-                        if (index%2 == 1) {
-                            over3Str = oddsElem[index-1].textContent;
+
+                    oddsElem.forEach(function (item, index) {
+                        if (index % 2 == 1) {
+                            over3Str = oddsElem[index - 1].textContent;
                             under3Str = item.textContent;
-                            odds.push({over3: over3Str.substring(4, over3Str.length - 3), 
-                                under3: under3Str.substring(5, under3Str.length - 3)});
+                            odds.push({
+                                over3: over3Str.substring(4, over3Str.length - 3),
+                                under3: under3Str.substring(5, under3Str.length - 3)
+                            });
                         }
                     });
                     return odds;
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating fixtures for over3 and under3'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating fixtures for over3 and under3' });
             }
 
             console.log(g, 'GGGG')
             console.log(t.fixtures, 'Fixtures==>>')
-        
-            t.fixtures.forEach(function(item, index) {
+
+            t.fixtures.forEach(function (item, index) {
                 item.odds.GG = g[index].GG;
                 item.odds.NG = g[index].NG;
                 item.odds.over1 = overUnder1[index].over1;
@@ -1555,8 +2023,8 @@ const axios = require('axios');
             });
 
             await browser.close();
-        
-            return res.send({success: true, data: t.fixtures, time: t.time, dateTimeObj: t.timeObj});
+
+            return res.send({ success: true, data: t.fixtures, time: t.time, dateTimeObj: t.timeObj });
         })();
     }
 
@@ -1567,7 +2035,7 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
 
             const urls = {
@@ -1585,9 +2053,9 @@ const axios = require('axios');
 
             const url = urls[country];
             const page = await browser.newPage();
-         
+
             await page.setDefaultNavigationTimeout(0);
-            await page.goto(url, {waitUntil: 'networkidle2'});
+            await page.goto(url, { waitUntil: 'networkidle2' });
             await page.waitForSelector('.content-wrap');
             await page.waitFor(3000);
             let t;
@@ -1596,23 +2064,25 @@ const axios = require('axios');
             try {
                 t = await page.evaluate(() => {
                     const teams = [];
-    
+
                     const homeElem = document.querySelectorAll('tbody tr .text-right');
                     const awayElem = document.querySelectorAll('tbody tr .text-left');
                     const scoreElem = document.querySelectorAll('tbody tr .txt-y');
-                    
-                    homeElem.forEach(function(item, index) {
-                        if (index%2 == 0) {
-                            teams.push({home: item.textContent, away: awayElem[index].textContent, 
-                            score: scoreElem[index].textContent, 
-                            htScore: scoreElem[index+ 1].textContent.replace('HT', '')});
+
+                    homeElem.forEach(function (item, index) {
+                        if (index % 2 == 0) {
+                            teams.push({
+                                home: item.textContent, away: awayElem[index].textContent,
+                                score: scoreElem[index].textContent,
+                                htScore: scoreElem[index + 1].textContent.replace('HT', '')
+                            });
                         }
                     });
-                
+
                     return teams
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating scores'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating scores' });
             }
 
             await page.waitFor(3000);
@@ -1629,22 +2099,22 @@ const axios = require('axios');
                     const positions = document.querySelectorAll('.l-table__team-name');
                     f = [];
                     p = [];
-    
+
                     forms.forEach((item, index) => {
                         f.push(item.textContent);
                         p.push(positions[index].textContent);
                     });
-    
-                    return {forms: f, positions: p};
-    
+
+                    return { forms: f, positions: p };
+
                 });
-            } catch(e) {
-                return res.send({success: false, message: 'There is an error while generating forms'});
+            } catch (e) {
+                return res.send({ success: false, message: 'There is an error while generating forms' });
             }
 
             await browser.close();
 
-            return res.send({success: true, data: t, forms: tableInfo.forms, positions: tableInfo.positions});
+            return res.send({ success: true, data: t, forms: tableInfo.forms, positions: tableInfo.positions });
         })();
     }
 
@@ -1652,7 +2122,7 @@ const axios = require('axios');
         const maxGames = [];
         const risklessGames = [];
 
-        data.forEach(function(mData) {
+        data.forEach(function (mData) {
             let hOdd = Helper.determineHighestOdds(mData);
             let splitMoneyOdd = Helper.splitOddMoney(hOdd['win']['oddValue'], hOdd['draw']['oddValue'], hOdd['lost']['oddValue'], amount);
             hOdd['eval'] = splitMoneyOdd;
@@ -1662,7 +2132,7 @@ const axios = require('axios');
             }
         });
 
-        return {'all': maxGames, 'won': risklessGames}
+        return { 'all': maxGames, 'won': risklessGames }
     }
 
     static getPlayedBookingCode(data, res, country) {
@@ -1672,9 +2142,9 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-    
+
             const page = await browser.newPage();
             const urls = {
                 spain: 'https://web.bet9ja.com/Sport/Odds?EventID=567119',
@@ -1687,20 +2157,20 @@ const axios = require('axios');
             };
 
             console.log(country);
-            
+
             const url = urls[country];
             console.log(url, 'URL....');
-             
+
             await page.setDefaultNavigationTimeout(0);
-            await page.goto(url, {waitUntil: 'networkidle2'});
-    
-           // const data = [{match: 'Z.Arsenal - Z.Brighton', index: 0, outcome: '1'}, {match: 'Z.Arsenal - Z.Brighton', index: 3, outcome: '1'}, {match: 'Z.Chelsea - Z.Aston Villa', index: 1, outcome: 'GG'}];
-    
+            await page.goto(url, { waitUntil: 'networkidle2' });
+
+            // const data = [{match: 'Z.Arsenal - Z.Brighton', index: 0, outcome: '1'}, {match: 'Z.Arsenal - Z.Brighton', index: 3, outcome: '1'}, {match: 'Z.Chelsea - Z.Aston Villa', index: 1, outcome: 'GG'}];
+
             const main = [];
             const gg = [];
             const over1 = [];
-    
-            data.forEach(function(item) {
+
+            data.forEach(function (item) {
                 if (item.outcome == 'GG' || item.outcome == 'NG') {
                     gg.push(item);
                 } else if (item.outcome == 'Over 1.5') {
@@ -1710,13 +2180,13 @@ const axios = require('axios');
                 }
             });
 
-    
+
             const dataStr = JSON.stringify(data);
-    
+
             await page.exposeFunction('play', (e) => {
-                 return main;
+                return main;
             });
-    
+
             await page.exposeFunction('playG', (e) => {
                 return gg;
             });
@@ -1724,38 +2194,38 @@ const axios = require('axios');
             await page.exposeFunction('playOver1', (e) => {
                 return over1;
             });
-    
+
             if (main.length > 0) {
                 await page.evaluate(async () => {
                     const f = {
                         1: 0,
-                        'X':1,
-                        2:2,
-                        '1X':3,
-                        '12':4,
-                        'X2':5,
-                        'Over 2.5':6,
+                        'X': 1,
+                        2: 2,
+                        '1X': 3,
+                        '12': 4,
+                        'X2': 5,
+                        'Over 2.5': 6,
                         'Under 2.5': 7
                     }
-    
+
                     const elements = document.querySelectorAll('.odd');
                     const main = await window.play();
                     for (let i = 0; i < main.length; i++) {
                         obj = main[i];
-                        elements[(obj.index*8) + f[obj.outcome]].click();
+                        elements[(obj.index * 8) + f[obj.outcome]].click();
                     }
-    
+
                     return main.length;
                 });
             }
-    
+
             /**
              * Section for playing Goal Goal
              */
             if (gg.length > 0) {
                 await page.click('.CQ > li:nth-child(2)');
                 await page.waitFor(3000);
-    
+
                 await page.evaluate(async () => {
                     const elements = document.querySelectorAll('.odd');
                     const g = {
@@ -1766,7 +2236,7 @@ const axios = require('axios');
                     const gg = await window.playG();
                     for (let i = 0; i < gg.length; i++) {
                         obj = gg[i];
-                        elements[(obj.index*2) + g[obj.outcome]].click();
+                        elements[(obj.index * 2) + g[obj.outcome]].click();
                     }
                 });
             }
@@ -1776,9 +2246,9 @@ const axios = require('axios');
                     document.querySelectorAll('.itm2 > span')[0].click();
                     document.querySelectorAll('.CQ')[1].children[0].click();
                 });
-        
+
                 await page.waitFor(3000);
-        
+
                 await page.evaluate(async () => {
                     const elements = document.querySelectorAll('.odd');
                     const over1 = {
@@ -1788,65 +2258,65 @@ const axios = require('axios');
                     const gg = await window.playOver1();
                     for (let i = 0; i < gg.length; i++) {
                         obj = gg[i];
-                        elements[(obj.index*2) + over1[obj.outcome]].click();
+                        elements[(obj.index * 2) + over1[obj.outcome]].click();
                     }
                 });
             }
 
-    
-           await page.waitFor(3000);
-    
-           await page.click('#s_w_PC_cCouponISBets_lnkAvanti');
-           // await page.waitFor(4000);
-    
-           const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
-           await frame.waitForSelector('.rep');
-    
-           const optionsResult = await frame.$$eval('.rep > .item', (options) => {
-             const result = options.map(option => option.innerText);
-         
-             const f = [];
-         
-             for(let i = 0; i < result.length; i++) {
-                 if (i == 0)
-                     continue;
-                 
-                 f.push(result[i].replace(/(\r\n|\n|\r)/gm, "=="));
-             }
-         
-             return f;
-           });
-         
-           const dates = [];
-           const fixtures = [];
-           const outcomes = [];
-           const originalDate = [];
-         
-           optionsResult.forEach(function(item) {
-             const itemArr = item.split('==');
-             const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
-             dates.push(dt);
-             originalDate.push(itemArr[1]);
-             fixtures.push(itemArr[2]);
-             outcomes.push(itemArr[4]);
-           });
-         
-           const ans = {
-               dates: dates,
-               fixtures: fixtures,
-               outcomes: outcomes
-           }
-    
+
+            await page.waitFor(3000);
+
+            await page.click('#s_w_PC_cCouponISBets_lnkAvanti');
+            // await page.waitFor(4000);
+
+            const frame = await page.frames().find(frame => frame.name() === 'iframePrenotatoreSco');
+            await frame.waitForSelector('.rep');
+
+            const optionsResult = await frame.$$eval('.rep > .item', (options) => {
+                const result = options.map(option => option.innerText);
+
+                const f = [];
+
+                for (let i = 0; i < result.length; i++) {
+                    if (i == 0)
+                        continue;
+
+                    f.push(result[i].replace(/(\r\n|\n|\r)/gm, "=="));
+                }
+
+                return f;
+            });
+
+            const dates = [];
+            const fixtures = [];
+            const outcomes = [];
+            const originalDate = [];
+
+            optionsResult.forEach(function (item) {
+                const itemArr = item.split('==');
+                const dt = Helper.getDateTimeStrInUTC(itemArr[1]);
+                dates.push(dt);
+                originalDate.push(itemArr[1]);
+                fixtures.push(itemArr[2]);
+                outcomes.push(itemArr[4]);
+            });
+
+            const ans = {
+                dates: dates,
+                fixtures: fixtures,
+                outcomes: outcomes
+            }
+
             let bookingCode = await frame.$$eval('#bookHead > .number', (options) => {
-            const result = options.map(option => option.innerText);
-            return result;
-          });
-    
+                const result = options.map(option => option.innerText);
+                return result;
+            });
+
             bookingCode = bookingCode[0].split(':')[1];
             ans.bookingCode = bookingCode;
             await browser.close();
 
-            return res.send({success: true, data: ans});
+            return res.send({ success: true, data: ans });
         })();
     }
 
@@ -1857,47 +2327,47 @@ const axios = require('axios');
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                  ],
+                ],
             });
-    
+
             // const bookingNumber = 'PZM66B';
-    
+
             const page = await browser.newPage();
             const url = 'https://web.bet9ja.com/Sport/Default.aspx';
-             
+
             await page.setDefaultNavigationTimeout(0);
-            await page.goto(url, {waitUntil: 'networkidle2'});
-    
+            await page.goto(url, { waitUntil: 'networkidle2' });
+
             // const username = 'pythagoras1';
             // const password = 'Iloveodunayo123';
             // const amount = '100';
             await page.type('#h_w_cLogin_ctrlLogin_Username', username);
-            await page.type('#h_w_cLogin_ctrlLogin_Password', password); 
+            await page.type('#h_w_cLogin_ctrlLogin_Password', password);
             await page.click('#h_w_cLogin_ctrlLogin_lnkBtnLogin');
             await page.waitForSelector('#hl_w_PC_cCouponISBets_txtPrenotatore');
             await page.type('#hl_w_PC_cCouponISBets_txtPrenotatore', bookingNumber);
             await page.click('#hl_w_PC_cCouponISBets_lnkLoadPrenotazione');
             await page.waitFor(3000);
-    
+
             await page.type('#hl_w_PC_cCouponISBets_txtImporto', amount);
             await page.click('#hl_w_PC_cCouponISBets_lnkAvanti');
-            await page.pdf({path: 'output.pdf', format: 'A4'}); //
-    
+            await page.pdf({ path: 'output.pdf', format: 'A4' }); //
+
             await page.waitForSelector('#hl_w_PC_cCouponISBets_lnkConferma');
             await page.click('#hl_w_PC_cCouponISBets_lnkConferma');
-    
+
             await page.waitForSelector('#hl_w_PC_cCouponISBets_lblMsgScoAccettata');
             const ans = await page.evaluate(() => {
                 return document.querySelector('#hl_w_PC_cCouponISBets_lblMsgScoAccettata').textContent;
             });
-    
+
             await browser.close();
 
             if (ans) {
                 const betslip = ans.split(':')[1].trim();
-                return res.send({success: true, data: betslip});
+                return res.send({ success: true, data: betslip });
             } else {
-                return res.send({success: false, message: 'Check balance'});
+                return res.send({ success: false, message: 'Check balance' });
             }
         })();
     }

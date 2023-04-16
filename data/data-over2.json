@@ -1,0 +1,3083 @@
+{
+    "LEE": {
+      "MNU": {
+        "count": 50,
+        "total": 28,
+        "probability": "0.56",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "BUR": {
+        "count": 48,
+        "total": 27,
+        "probability": "0.56",
+        "awayTotal": 30,
+        "awayProbability": "0.56",
+        "awayCount": 54
+      },
+      "WAT": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 24,
+        "awayProbability": "0.45",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 54,
+        "total": 25,
+        "probability": "0.46",
+        "awayTotal": 26,
+        "awayProbability": "0.54",
+        "awayCount": 48
+      },
+      "NWC": {
+        "count": 52,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "ARS": {
+        "count": 51,
+        "total": 32,
+        "probability": "0.63",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 53,
+        "total": 25,
+        "probability": "0.47",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 54,
+        "total": 27,
+        "probability": "0.50",
+        "awayTotal": 24,
+        "awayProbability": "0.49",
+        "awayCount": 49
+      },
+      "WHU": {
+        "count": 50,
+        "total": 30,
+        "probability": "0.60",
+        "awayTotal": 28,
+        "awayProbability": "0.53",
+        "awayCount": 53
+      },
+      "CHE": {
+        "count": 53,
+        "total": 32,
+        "probability": "0.60",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "WOL": {
+        "count": 48,
+        "total": 23,
+        "probability": "0.48",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "TOT": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 32,
+        "awayProbability": "0.64",
+        "awayCount": 50
+      },
+      "NOR": {
+        "count": 51,
+        "total": 26,
+        "probability": "0.51",
+        "awayTotal": 15,
+        "awayProbability": "0.30",
+        "awayCount": 50
+      },
+      "LIV": {
+        "count": 49,
+        "total": 31,
+        "probability": "0.63",
+        "awayTotal": 37,
+        "awayProbability": "0.70",
+        "awayCount": 53
+      },
+      "MNC": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 34,
+        "awayProbability": "0.68",
+        "awayCount": 50
+      },
+      "ASV": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 28,
+        "awayProbability": "0.56",
+        "awayCount": 50
+      },
+      "BRI": {
+        "count": 54,
+        "total": 25,
+        "probability": "0.46",
+        "awayTotal": 28,
+        "awayProbability": "0.55",
+        "awayCount": 51
+      },
+      "LEI": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 24,
+        "awayProbability": "0.47",
+        "awayCount": 51
+      }
+    },
+    "MNU": {
+      "LEE": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 28,
+        "awayProbability": "0.56",
+        "awayCount": 50
+      },
+      "BUR": {
+        "count": 53,
+        "total": 40,
+        "probability": "0.75",
+        "awayTotal": 22,
+        "awayProbability": "0.44",
+        "awayCount": 50
+      },
+      "WAT": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 20,
+        "awayProbability": "0.39",
+        "awayCount": 51
+      },
+      "CRY": {
+        "count": 53,
+        "total": 29,
+        "probability": "0.55",
+        "awayTotal": 25,
+        "awayProbability": "0.52",
+        "awayCount": 48
+      },
+      "NWC": {
+        "count": 50,
+        "total": 30,
+        "probability": "0.60",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "ARS": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "EVE": {
+        "count": 50,
+        "total": 31,
+        "probability": "0.62",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      },
+      "BRN": {
+        "count": 50,
+        "total": 23,
+        "probability": "0.46",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "WHU": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 53,
+        "total": 29,
+        "probability": "0.55",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "WOL": {
+        "count": 53,
+        "total": 34,
+        "probability": "0.64",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 48,
+        "total": 24,
+        "probability": "0.50",
+        "awayTotal": 30,
+        "awayProbability": "0.57",
+        "awayCount": 53
+      },
+      "NOR": {
+        "count": 50,
+        "total": 27,
+        "probability": "0.54",
+        "awayTotal": 30,
+        "awayProbability": "0.60",
+        "awayCount": 50
+      },
+      "LIV": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 34,
+        "awayProbability": "0.67",
+        "awayCount": 51
+      },
+      "MNC": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 32,
+        "awayProbability": "0.59",
+        "awayCount": 54
+      },
+      "ASV": {
+        "count": 52,
+        "total": 34,
+        "probability": "0.65",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 53,
+        "total": 25,
+        "probability": "0.47",
+        "awayTotal": 28,
+        "awayProbability": "0.55",
+        "awayCount": 51
+      },
+      "LEI": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 25,
+        "awayProbability": "0.46",
+        "awayCount": 54
+      }
+    },
+    "BUR": {
+      "LEE": {
+        "count": 54,
+        "total": 30,
+        "probability": "0.56",
+        "awayTotal": 27,
+        "awayProbability": "0.56",
+        "awayCount": 48
+      },
+      "MNU": {
+        "count": 50,
+        "total": 22,
+        "probability": "0.44",
+        "awayTotal": 40,
+        "awayProbability": "0.75",
+        "awayCount": 53
+      },
+      "WAT": {
+        "count": 51,
+        "total": 22,
+        "probability": "0.43",
+        "awayTotal": 21,
+        "awayProbability": "0.44",
+        "awayCount": 48
+      },
+      "SOU": {
+        "count": 51,
+        "total": 29,
+        "probability": "0.57",
+        "awayTotal": 28,
+        "awayProbability": "0.53",
+        "awayCount": 53
+      },
+      "CRY": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 54,
+        "total": 22,
+        "probability": "0.41",
+        "awayTotal": 23,
+        "awayProbability": "0.48",
+        "awayCount": 48
+      },
+      "ARS": {
+        "count": 50,
+        "total": 33,
+        "probability": "0.66",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "EVE": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "BRN": {
+        "count": 49,
+        "total": 24,
+        "probability": "0.49",
+        "awayTotal": 28,
+        "awayProbability": "0.56",
+        "awayCount": 50
+      },
+      "WHU": {
+        "count": 52,
+        "total": 32,
+        "probability": "0.62",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 49,
+        "total": 26,
+        "probability": "0.53",
+        "awayTotal": 37,
+        "awayProbability": "0.70",
+        "awayCount": 53
+      },
+      "WOL": {
+        "count": 48,
+        "total": 22,
+        "probability": "0.46",
+        "awayTotal": 34,
+        "awayProbability": "0.64",
+        "awayCount": 53
+      },
+      "TOT": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 27,
+        "awayProbability": "0.51",
+        "awayCount": 53
+      },
+      "NOR": {
+        "count": 53,
+        "total": 24,
+        "probability": "0.45",
+        "awayTotal": 19,
+        "awayProbability": "0.37",
+        "awayCount": 51
+      },
+      "LIV": {
+        "count": 54,
+        "total": 27,
+        "probability": "0.50",
+        "awayTotal": 42,
+        "awayProbability": "0.79",
+        "awayCount": 53
+      },
+      "MNC": {
+        "count": 52,
+        "total": 35,
+        "probability": "0.67",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "ASV": {
+        "count": 52,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 26,
+        "awayProbability": "0.52",
+        "awayCount": 50
+      },
+      "LEI": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 32,
+        "awayProbability": "0.63",
+        "awayCount": 51
+      }
+    },
+    "WAT": {
+      "LEE": {
+        "count": 53,
+        "total": 24,
+        "probability": "0.45",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "MNU": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "BUR": {
+        "count": 48,
+        "total": 21,
+        "probability": "0.44",
+        "awayTotal": 22,
+        "awayProbability": "0.43",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 20,
+        "awayProbability": "0.41",
+        "awayCount": 49
+      },
+      "CRY": {
+        "count": 53,
+        "total": 30,
+        "probability": "0.57",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "NWC": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 53
+      },
+      "ARS": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 35,
+        "awayProbability": "0.65",
+        "awayCount": 54
+      },
+      "EVE": {
+        "count": 51,
+        "total": 32,
+        "probability": "0.63",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      },
+      "BRN": {
+        "count": 53,
+        "total": 23,
+        "probability": "0.43",
+        "awayTotal": 21,
+        "awayProbability": "0.41",
+        "awayCount": 51
+      },
+      "WHU": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 52,
+        "total": 33,
+        "probability": "0.63",
+        "awayTotal": 24,
+        "awayProbability": "0.47",
+        "awayCount": 51
+      },
+      "WOL": {
+        "count": 51,
+        "total": 29,
+        "probability": "0.57",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 50,
+        "total": 20,
+        "probability": "0.40",
+        "awayTotal": 34,
+        "awayProbability": "0.65",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "LIV": {
+        "count": 51,
+        "total": 26,
+        "probability": "0.51",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "MNC": {
+        "count": 53,
+        "total": 39,
+        "probability": "0.74",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "ASV": {
+        "count": 53,
+        "total": 23,
+        "probability": "0.43",
+        "awayTotal": 22,
+        "awayProbability": "0.43",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 16,
+        "awayProbability": "0.30",
+        "awayCount": 54
+      },
+      "LEI": {
+        "count": 50,
+        "total": 31,
+        "probability": "0.62",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      }
+    },
+    "SOU": {
+      "LEE": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "MNU": {
+        "count": 51,
+        "total": 20,
+        "probability": "0.39",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      },
+      "BUR": {
+        "count": 53,
+        "total": 28,
+        "probability": "0.53",
+        "awayTotal": 29,
+        "awayProbability": "0.57",
+        "awayCount": 51
+      },
+      "WAT": {
+        "count": 49,
+        "total": 20,
+        "probability": "0.41",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 49,
+        "total": 28,
+        "probability": "0.57",
+        "awayTotal": 22,
+        "awayProbability": "0.41",
+        "awayCount": 54
+      },
+      "NWC": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 26,
+        "awayProbability": "0.51",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 53,
+        "total": 32,
+        "probability": "0.60",
+        "awayTotal": 32,
+        "awayProbability": "0.64",
+        "awayCount": 50
+      },
+      "EVE": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 18,
+        "awayProbability": "0.38",
+        "awayCount": 48
+      },
+      "BRN": {
+        "count": 54,
+        "total": 22,
+        "probability": "0.41",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "WHU": {
+        "count": 53,
+        "total": 29,
+        "probability": "0.55",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "CHE": {
+        "count": 49,
+        "total": 26,
+        "probability": "0.53",
+        "awayTotal": 28,
+        "awayProbability": "0.53",
+        "awayCount": 53
+      },
+      "WOL": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 50,
+        "total": 26,
+        "probability": "0.52",
+        "awayTotal": 26,
+        "awayProbability": "0.53",
+        "awayCount": 49
+      },
+      "NOR": {
+        "count": 50,
+        "total": 27,
+        "probability": "0.54",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "LIV": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 35,
+        "awayProbability": "0.70",
+        "awayCount": 50
+      },
+      "MNC": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 39,
+        "awayProbability": "0.75",
+        "awayCount": 52
+      },
+      "ASV": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 23,
+        "awayProbability": "0.46",
+        "awayCount": 50
+      },
+      "LEI": {
+        "count": 54,
+        "total": 32,
+        "probability": "0.59",
+        "awayTotal": 24,
+        "awayProbability": "0.49",
+        "awayCount": 49
+      }
+    },
+    "CRY": {
+      "LEE": {
+        "count": 48,
+        "total": 26,
+        "probability": "0.54",
+        "awayTotal": 25,
+        "awayProbability": "0.46",
+        "awayCount": 54
+      },
+      "MNU": {
+        "count": 48,
+        "total": 25,
+        "probability": "0.52",
+        "awayTotal": 29,
+        "awayProbability": "0.55",
+        "awayCount": 53
+      },
+      "BUR": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 30,
+        "awayProbability": "0.57",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 54,
+        "total": 22,
+        "probability": "0.41",
+        "awayTotal": 28,
+        "awayProbability": "0.57",
+        "awayCount": 49
+      },
+      "NWC": {
+        "count": 51,
+        "total": 21,
+        "probability": "0.41",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "ARS": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 23,
+        "awayProbability": "0.45",
+        "awayCount": 51
+      },
+      "EVE": {
+        "count": 51,
+        "total": 29,
+        "probability": "0.57",
+        "awayTotal": 23,
+        "awayProbability": "0.45",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 53,
+        "total": 24,
+        "probability": "0.45",
+        "awayTotal": 29,
+        "awayProbability": "0.57",
+        "awayCount": 51
+      },
+      "WHU": {
+        "count": 53,
+        "total": 25,
+        "probability": "0.47",
+        "awayTotal": 23,
+        "awayProbability": "0.48",
+        "awayCount": 48
+      },
+      "CHE": {
+        "count": 49,
+        "total": 31,
+        "probability": "0.63",
+        "awayTotal": 29,
+        "awayProbability": "0.59",
+        "awayCount": 49
+      },
+      "WOL": {
+        "count": 51,
+        "total": 20,
+        "probability": "0.39",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 52,
+        "total": 34,
+        "probability": "0.65",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "NOR": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 23,
+        "awayProbability": "0.46",
+        "awayCount": 50
+      },
+      "LIV": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 36,
+        "awayProbability": "0.73",
+        "awayCount": 49
+      },
+      "MNC": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 21,
+        "awayProbability": "0.41",
+        "awayCount": 51
+      },
+      "ASV": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 34,
+        "awayProbability": "0.63",
+        "awayCount": 54
+      },
+      "BRI": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "LEI": {
+        "count": 50,
+        "total": 19,
+        "probability": "0.38",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      }
+    },
+    "NWC": {
+      "LEE": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 52
+      },
+      "MNU": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 30,
+        "awayProbability": "0.60",
+        "awayCount": 50
+      },
+      "BUR": {
+        "count": 48,
+        "total": 23,
+        "probability": "0.48",
+        "awayTotal": 22,
+        "awayProbability": "0.41",
+        "awayCount": 54
+      },
+      "WAT": {
+        "count": 53,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "SOU": {
+        "count": 51,
+        "total": 26,
+        "probability": "0.51",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 21,
+        "awayProbability": "0.41",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 23,
+        "awayProbability": "0.45",
+        "awayCount": 51
+      },
+      "EVE": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 19,
+        "awayProbability": "0.37",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 29,
+        "awayProbability": "0.54",
+        "awayCount": 54
+      },
+      "WHU": {
+        "count": 49,
+        "total": 30,
+        "probability": "0.61",
+        "awayTotal": 30,
+        "awayProbability": "0.57",
+        "awayCount": 53
+      },
+      "CHE": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "WOL": {
+        "count": 54,
+        "total": 25,
+        "probability": "0.46",
+        "awayTotal": 20,
+        "awayProbability": "0.40",
+        "awayCount": 50
+      },
+      "TOT": {
+        "count": 53,
+        "total": 29,
+        "probability": "0.55",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "LIV": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 20,
+        "awayProbability": "0.43",
+        "awayCount": 47
+      },
+      "MNC": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 40,
+        "awayProbability": "0.75",
+        "awayCount": 53
+      },
+      "ASV": {
+        "count": 50,
+        "total": 27,
+        "probability": "0.54",
+        "awayTotal": 17,
+        "awayProbability": "0.34",
+        "awayCount": 50
+      },
+      "BRI": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 52
+      },
+      "LEI": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 25,
+        "awayProbability": "0.47",
+        "awayCount": 53
+      }
+    },
+    "ARS": {
+      "LEE": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 32,
+        "awayProbability": "0.63",
+        "awayCount": 51
+      },
+      "MNU": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "BUR": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 33,
+        "awayProbability": "0.66",
+        "awayCount": 50
+      },
+      "WAT": {
+        "count": 54,
+        "total": 35,
+        "probability": "0.65",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 50,
+        "total": 32,
+        "probability": "0.64",
+        "awayTotal": 32,
+        "awayProbability": "0.60",
+        "awayCount": 53
+      },
+      "CRY": {
+        "count": 51,
+        "total": 23,
+        "probability": "0.45",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "NWC": {
+        "count": 51,
+        "total": 23,
+        "probability": "0.45",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 50,
+        "total": 19,
+        "probability": "0.38",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      },
+      "BRN": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "WHU": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "CHE": {
+        "count": 54,
+        "total": 22,
+        "probability": "0.41",
+        "awayTotal": 35,
+        "awayProbability": "0.66",
+        "awayCount": 53
+      },
+      "WOL": {
+        "count": 54,
+        "total": 32,
+        "probability": "0.59",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "TOT": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 28,
+        "awayProbability": "0.60",
+        "awayCount": 47
+      },
+      "NOR": {
+        "count": 54,
+        "total": 29,
+        "probability": "0.54",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "LIV": {
+        "count": 50,
+        "total": 26,
+        "probability": "0.52",
+        "awayTotal": 25,
+        "awayProbability": "0.51",
+        "awayCount": 49
+      },
+      "MNC": {
+        "count": 49,
+        "total": 26,
+        "probability": "0.53",
+        "awayTotal": 24,
+        "awayProbability": "0.45",
+        "awayCount": 53
+      },
+      "ASV": {
+        "count": 52,
+        "total": 33,
+        "probability": "0.63",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "LEI": {
+        "count": 50,
+        "total": 27,
+        "probability": "0.54",
+        "awayTotal": 13,
+        "awayProbability": "0.25",
+        "awayCount": 52
+      }
+    },
+    "EVE": {
+      "LEE": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 25,
+        "awayProbability": "0.47",
+        "awayCount": 53
+      },
+      "MNU": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 31,
+        "awayProbability": "0.62",
+        "awayCount": 50
+      },
+      "BUR": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 32,
+        "awayProbability": "0.63",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 48,
+        "total": 18,
+        "probability": "0.38",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 51,
+        "total": 23,
+        "probability": "0.45",
+        "awayTotal": 29,
+        "awayProbability": "0.57",
+        "awayCount": 51
+      },
+      "NWC": {
+        "count": 51,
+        "total": 19,
+        "probability": "0.37",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "ARS": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 19,
+        "awayProbability": "0.38",
+        "awayCount": 50
+      },
+      "BRN": {
+        "count": 49,
+        "total": 25,
+        "probability": "0.51",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "WHU": {
+        "count": 54,
+        "total": 23,
+        "probability": "0.43",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "CHE": {
+        "count": 53,
+        "total": 24,
+        "probability": "0.45",
+        "awayTotal": 31,
+        "awayProbability": "0.57",
+        "awayCount": 54
+      },
+      "WOL": {
+        "count": 51,
+        "total": 28,
+        "probability": "0.55",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "TOT": {
+        "count": 53,
+        "total": 28,
+        "probability": "0.53",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 51,
+        "total": 20,
+        "probability": "0.39",
+        "awayTotal": 27,
+        "awayProbability": "0.50",
+        "awayCount": 54
+      },
+      "LIV": {
+        "count": 53,
+        "total": 34,
+        "probability": "0.64",
+        "awayTotal": 33,
+        "awayProbability": "0.63",
+        "awayCount": 52
+      },
+      "MNC": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 30,
+        "awayProbability": "0.60",
+        "awayCount": 50
+      },
+      "ASV": {
+        "count": 53,
+        "total": 30,
+        "probability": "0.57",
+        "awayTotal": 24,
+        "awayProbability": "0.48",
+        "awayCount": 50
+      },
+      "BRI": {
+        "count": 51,
+        "total": 28,
+        "probability": "0.55",
+        "awayTotal": 21,
+        "awayProbability": "0.41",
+        "awayCount": 51
+      },
+      "LEI": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 29,
+        "awayProbability": "0.63",
+        "awayCount": 46
+      }
+    },
+    "WHU": {
+      "LEE": {
+        "count": 53,
+        "total": 28,
+        "probability": "0.53",
+        "awayTotal": 30,
+        "awayProbability": "0.60",
+        "awayCount": 50
+      },
+      "MNU": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "BUR": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 32,
+        "awayProbability": "0.62",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "SOU": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 29,
+        "awayProbability": "0.55",
+        "awayCount": 53
+      },
+      "CRY": {
+        "count": 48,
+        "total": 23,
+        "probability": "0.48",
+        "awayTotal": 25,
+        "awayProbability": "0.47",
+        "awayCount": 53
+      },
+      "NWC": {
+        "count": 53,
+        "total": 30,
+        "probability": "0.57",
+        "awayTotal": 30,
+        "awayProbability": "0.61",
+        "awayCount": 49
+      },
+      "ARS": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 23,
+        "awayProbability": "0.43",
+        "awayCount": 54
+      },
+      "BRN": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 53,
+        "total": 28,
+        "probability": "0.53",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "WOL": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "TOT": {
+        "count": 54,
+        "total": 30,
+        "probability": "0.56",
+        "awayTotal": 31,
+        "awayProbability": "0.63",
+        "awayCount": 49
+      },
+      "NOR": {
+        "count": 52,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 24,
+        "awayProbability": "0.48",
+        "awayCount": 50
+      },
+      "LIV": {
+        "count": 50,
+        "total": 24,
+        "probability": "0.48",
+        "awayTotal": 36,
+        "awayProbability": "0.67",
+        "awayCount": 54
+      },
+      "MNC": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 31,
+        "awayProbability": "0.62",
+        "awayCount": 50
+      },
+      "ASV": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 52,
+        "total": 35,
+        "probability": "0.67",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "LEI": {
+        "count": 52,
+        "total": 34,
+        "probability": "0.65",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      }
+    },
+    "CHE": {
+      "LEE": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 32,
+        "awayProbability": "0.60",
+        "awayCount": 53
+      },
+      "MNU": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 29,
+        "awayProbability": "0.55",
+        "awayCount": 53
+      },
+      "BUR": {
+        "count": 53,
+        "total": 37,
+        "probability": "0.70",
+        "awayTotal": 26,
+        "awayProbability": "0.53",
+        "awayCount": 49
+      },
+      "WAT": {
+        "count": 51,
+        "total": 24,
+        "probability": "0.47",
+        "awayTotal": 33,
+        "awayProbability": "0.63",
+        "awayCount": 52
+      },
+      "SOU": {
+        "count": 53,
+        "total": 28,
+        "probability": "0.53",
+        "awayTotal": 26,
+        "awayProbability": "0.53",
+        "awayCount": 49
+      },
+      "CRY": {
+        "count": 49,
+        "total": 29,
+        "probability": "0.59",
+        "awayTotal": 31,
+        "awayProbability": "0.63",
+        "awayCount": 49
+      },
+      "NWC": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 53,
+        "total": 35,
+        "probability": "0.66",
+        "awayTotal": 22,
+        "awayProbability": "0.41",
+        "awayCount": 54
+      },
+      "EVE": {
+        "count": 54,
+        "total": 31,
+        "probability": "0.57",
+        "awayTotal": 24,
+        "awayProbability": "0.45",
+        "awayCount": 53
+      },
+      "BRN": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "WHU": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 28,
+        "awayProbability": "0.53",
+        "awayCount": 53
+      },
+      "WOL": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 22,
+        "awayProbability": "0.43",
+        "awayCount": 51
+      },
+      "TOT": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 33,
+        "awayProbability": "0.63",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 32,
+        "awayProbability": "0.67",
+        "awayCount": 48
+      },
+      "LIV": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "MNC": {
+        "count": 52,
+        "total": 23,
+        "probability": "0.44",
+        "awayTotal": 30,
+        "awayProbability": "0.57",
+        "awayCount": 53
+      },
+      "ASV": {
+        "count": 51,
+        "total": 34,
+        "probability": "0.67",
+        "awayTotal": 28,
+        "awayProbability": "0.55",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 52,
+        "total": 19,
+        "probability": "0.37",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "LEI": {
+        "count": 49,
+        "total": 25,
+        "probability": "0.51",
+        "awayTotal": 21,
+        "awayProbability": "0.41",
+        "awayCount": 51
+      }
+    },
+    "WOL": {
+      "LEE": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 23,
+        "awayProbability": "0.48",
+        "awayCount": 48
+      },
+      "MNU": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 34,
+        "awayProbability": "0.64",
+        "awayCount": 53
+      },
+      "BUR": {
+        "count": 53,
+        "total": 34,
+        "probability": "0.64",
+        "awayTotal": 22,
+        "awayProbability": "0.46",
+        "awayCount": 48
+      },
+      "WAT": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 29,
+        "awayProbability": "0.57",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "CRY": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 20,
+        "awayProbability": "0.39",
+        "awayCount": 51
+      },
+      "NWC": {
+        "count": 50,
+        "total": 20,
+        "probability": "0.40",
+        "awayTotal": 25,
+        "awayProbability": "0.46",
+        "awayCount": 54
+      },
+      "ARS": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 32,
+        "awayProbability": "0.59",
+        "awayCount": 54
+      },
+      "EVE": {
+        "count": 50,
+        "total": 25,
+        "probability": "0.50",
+        "awayTotal": 28,
+        "awayProbability": "0.55",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 54,
+        "total": 33,
+        "probability": "0.61",
+        "awayTotal": 18,
+        "awayProbability": "0.35",
+        "awayCount": 51
+      },
+      "WHU": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "CHE": {
+        "count": 51,
+        "total": 22,
+        "probability": "0.43",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "LIV": {
+        "count": 49,
+        "total": 21,
+        "probability": "0.43",
+        "awayTotal": 27,
+        "awayProbability": "0.50",
+        "awayCount": 54
+      },
+      "MNC": {
+        "count": 52,
+        "total": 31,
+        "probability": "0.60",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "ASV": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "LEI": {
+        "count": 50,
+        "total": 26,
+        "probability": "0.52",
+        "awayTotal": 28,
+        "awayProbability": "0.56",
+        "awayCount": 50
+      }
+    },
+    "TOT": {
+      "LEE": {
+        "count": 50,
+        "total": 32,
+        "probability": "0.64",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "MNU": {
+        "count": 53,
+        "total": 30,
+        "probability": "0.57",
+        "awayTotal": 24,
+        "awayProbability": "0.50",
+        "awayCount": 48
+      },
+      "BUR": {
+        "count": 53,
+        "total": 27,
+        "probability": "0.51",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 52,
+        "total": 34,
+        "probability": "0.65",
+        "awayTotal": 20,
+        "awayProbability": "0.40",
+        "awayCount": 50
+      },
+      "SOU": {
+        "count": 49,
+        "total": 26,
+        "probability": "0.53",
+        "awayTotal": 26,
+        "awayProbability": "0.52",
+        "awayCount": 50
+      },
+      "CRY": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 34,
+        "awayProbability": "0.65",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 29,
+        "awayProbability": "0.55",
+        "awayCount": 53
+      },
+      "ARS": {
+        "count": 47,
+        "total": 28,
+        "probability": "0.60",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 28,
+        "awayProbability": "0.53",
+        "awayCount": 53
+      },
+      "BRN": {
+        "count": 54,
+        "total": 35,
+        "probability": "0.65",
+        "awayTotal": 23,
+        "awayProbability": "0.47",
+        "awayCount": 49
+      },
+      "WHU": {
+        "count": 49,
+        "total": 31,
+        "probability": "0.63",
+        "awayTotal": 30,
+        "awayProbability": "0.56",
+        "awayCount": 54
+      },
+      "CHE": {
+        "count": 52,
+        "total": 33,
+        "probability": "0.63",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "WOL": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 49,
+        "total": 30,
+        "probability": "0.61",
+        "awayTotal": 34,
+        "awayProbability": "0.64",
+        "awayCount": 53
+      },
+      "LIV": {
+        "count": 53,
+        "total": 26,
+        "probability": "0.49",
+        "awayTotal": 36,
+        "awayProbability": "0.67",
+        "awayCount": 54
+      },
+      "MNC": {
+        "count": 54,
+        "total": 31,
+        "probability": "0.57",
+        "awayTotal": 26,
+        "awayProbability": "0.54",
+        "awayCount": 48
+      },
+      "ASV": {
+        "count": 52,
+        "total": 34,
+        "probability": "0.65",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 52,
+        "total": 32,
+        "probability": "0.62",
+        "awayTotal": 32,
+        "awayProbability": "0.63",
+        "awayCount": 51
+      },
+      "LEI": {
+        "count": 50,
+        "total": 28,
+        "probability": "0.56",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      }
+    },
+    "NOR": {
+      "LEE": {
+        "count": 50,
+        "total": 15,
+        "probability": "0.30",
+        "awayTotal": 26,
+        "awayProbability": "0.51",
+        "awayCount": 51
+      },
+      "MNU": {
+        "count": 50,
+        "total": 30,
+        "probability": "0.60",
+        "awayTotal": 27,
+        "awayProbability": "0.54",
+        "awayCount": 50
+      },
+      "BUR": {
+        "count": 51,
+        "total": 19,
+        "probability": "0.37",
+        "awayTotal": 24,
+        "awayProbability": "0.45",
+        "awayCount": 53
+      },
+      "WAT": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 27,
+        "awayProbability": "0.54",
+        "awayCount": 50
+      },
+      "CRY": {
+        "count": 50,
+        "total": 23,
+        "probability": "0.46",
+        "awayTotal": 26,
+        "awayProbability": "0.50",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 29,
+        "awayProbability": "0.54",
+        "awayCount": 54
+      },
+      "EVE": {
+        "count": 54,
+        "total": 27,
+        "probability": "0.50",
+        "awayTotal": 20,
+        "awayProbability": "0.39",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 54,
+        "total": 27,
+        "probability": "0.50",
+        "awayTotal": 27,
+        "awayProbability": "0.56",
+        "awayCount": 48
+      },
+      "WHU": {
+        "count": 50,
+        "total": 24,
+        "probability": "0.48",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 48,
+        "total": 32,
+        "probability": "0.67",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "WOL": {
+        "count": 49,
+        "total": 27,
+        "probability": "0.55",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "TOT": {
+        "count": 53,
+        "total": 34,
+        "probability": "0.64",
+        "awayTotal": 30,
+        "awayProbability": "0.61",
+        "awayCount": 49
+      },
+      "LIV": {
+        "count": 50,
+        "total": 32,
+        "probability": "0.64",
+        "awayTotal": 32,
+        "awayProbability": "0.60",
+        "awayCount": 53
+      },
+      "MNC": {
+        "count": 53,
+        "total": 32,
+        "probability": "0.60",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "ASV": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 24,
+        "awayProbability": "0.49",
+        "awayCount": 49
+      },
+      "BRI": {
+        "count": 51,
+        "total": 24,
+        "probability": "0.47",
+        "awayTotal": 17,
+        "awayProbability": "0.31",
+        "awayCount": 54
+      },
+      "LEI": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      }
+    },
+    "LIV": {
+      "LEE": {
+        "count": 53,
+        "total": 37,
+        "probability": "0.70",
+        "awayTotal": 31,
+        "awayProbability": "0.63",
+        "awayCount": 49
+      },
+      "MNU": {
+        "count": 51,
+        "total": 34,
+        "probability": "0.67",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "BUR": {
+        "count": 53,
+        "total": 42,
+        "probability": "0.79",
+        "awayTotal": 27,
+        "awayProbability": "0.50",
+        "awayCount": 54
+      },
+      "WAT": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 26,
+        "awayProbability": "0.51",
+        "awayCount": 51
+      },
+      "SOU": {
+        "count": 50,
+        "total": 35,
+        "probability": "0.70",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 49,
+        "total": 36,
+        "probability": "0.73",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 47,
+        "total": 20,
+        "probability": "0.43",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 49,
+        "total": 25,
+        "probability": "0.51",
+        "awayTotal": 26,
+        "awayProbability": "0.52",
+        "awayCount": 50
+      },
+      "EVE": {
+        "count": 52,
+        "total": 33,
+        "probability": "0.63",
+        "awayTotal": 34,
+        "awayProbability": "0.64",
+        "awayCount": 53
+      },
+      "BRN": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 33,
+        "awayProbability": "0.62",
+        "awayCount": 53
+      },
+      "WHU": {
+        "count": 54,
+        "total": 36,
+        "probability": "0.67",
+        "awayTotal": 24,
+        "awayProbability": "0.48",
+        "awayCount": 50
+      },
+      "CHE": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "WOL": {
+        "count": 54,
+        "total": 27,
+        "probability": "0.50",
+        "awayTotal": 21,
+        "awayProbability": "0.43",
+        "awayCount": 49
+      },
+      "TOT": {
+        "count": 54,
+        "total": 36,
+        "probability": "0.67",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "NOR": {
+        "count": 53,
+        "total": 32,
+        "probability": "0.60",
+        "awayTotal": 32,
+        "awayProbability": "0.64",
+        "awayCount": 50
+      },
+      "MNC": {
+        "count": 49,
+        "total": 29,
+        "probability": "0.59",
+        "awayTotal": 21,
+        "awayProbability": "0.39",
+        "awayCount": 54
+      },
+      "ASV": {
+        "count": 47,
+        "total": 26,
+        "probability": "0.55",
+        "awayTotal": 23,
+        "awayProbability": "0.45",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 53,
+        "total": 38,
+        "probability": "0.72",
+        "awayTotal": 29,
+        "awayProbability": "0.55",
+        "awayCount": 53
+      },
+      "LEI": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 23,
+        "awayProbability": "0.46",
+        "awayCount": 50
+      }
+    },
+    "MNC": {
+      "LEE": {
+        "count": 50,
+        "total": 34,
+        "probability": "0.68",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "MNU": {
+        "count": 54,
+        "total": 32,
+        "probability": "0.59",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "BUR": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 35,
+        "awayProbability": "0.67",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 39,
+        "awayProbability": "0.74",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 52,
+        "total": 39,
+        "probability": "0.75",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 51,
+        "total": 21,
+        "probability": "0.41",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 53,
+        "total": 40,
+        "probability": "0.75",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      },
+      "ARS": {
+        "count": 53,
+        "total": 24,
+        "probability": "0.45",
+        "awayTotal": 26,
+        "awayProbability": "0.53",
+        "awayCount": 49
+      },
+      "EVE": {
+        "count": 50,
+        "total": 30,
+        "probability": "0.60",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "BRN": {
+        "count": 50,
+        "total": 31,
+        "probability": "0.62",
+        "awayTotal": 31,
+        "awayProbability": "0.62",
+        "awayCount": 50
+      },
+      "WHU": {
+        "count": 50,
+        "total": 31,
+        "probability": "0.62",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "CHE": {
+        "count": 53,
+        "total": 30,
+        "probability": "0.57",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "WOL": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 48,
+        "total": 26,
+        "probability": "0.54",
+        "awayTotal": 31,
+        "awayProbability": "0.57",
+        "awayCount": 54
+      },
+      "NOR": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 32,
+        "awayProbability": "0.60",
+        "awayCount": 53
+      },
+      "LIV": {
+        "count": 54,
+        "total": 21,
+        "probability": "0.39",
+        "awayTotal": 29,
+        "awayProbability": "0.59",
+        "awayCount": 49
+      },
+      "ASV": {
+        "count": 48,
+        "total": 25,
+        "probability": "0.52",
+        "awayTotal": 26,
+        "awayProbability": "0.48",
+        "awayCount": 54
+      },
+      "BRI": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 26,
+        "awayProbability": "0.52",
+        "awayCount": 50
+      },
+      "LEI": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 25,
+        "awayProbability": "0.46",
+        "awayCount": 54
+      }
+    },
+    "ASV": {
+      "LEE": {
+        "count": 50,
+        "total": 28,
+        "probability": "0.56",
+        "awayTotal": 26,
+        "awayProbability": "0.49",
+        "awayCount": 53
+      },
+      "MNU": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 34,
+        "awayProbability": "0.65",
+        "awayCount": 52
+      },
+      "BUR": {
+        "count": 52,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 20,
+        "awayProbability": "0.38",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 51,
+        "total": 22,
+        "probability": "0.43",
+        "awayTotal": 23,
+        "awayProbability": "0.43",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "CRY": {
+        "count": 54,
+        "total": 34,
+        "probability": "0.63",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "NWC": {
+        "count": 50,
+        "total": 17,
+        "probability": "0.34",
+        "awayTotal": 27,
+        "awayProbability": "0.54",
+        "awayCount": 50
+      },
+      "ARS": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 33,
+        "awayProbability": "0.63",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 50,
+        "total": 24,
+        "probability": "0.48",
+        "awayTotal": 30,
+        "awayProbability": "0.57",
+        "awayCount": 53
+      },
+      "BRN": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 21,
+        "awayProbability": "0.40",
+        "awayCount": 53
+      },
+      "WHU": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 51,
+        "total": 28,
+        "probability": "0.55",
+        "awayTotal": 34,
+        "awayProbability": "0.67",
+        "awayCount": 51
+      },
+      "WOL": {
+        "count": 52,
+        "total": 24,
+        "probability": "0.46",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      },
+      "TOT": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 34,
+        "awayProbability": "0.65",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 49,
+        "total": 24,
+        "probability": "0.49",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "LIV": {
+        "count": 51,
+        "total": 23,
+        "probability": "0.45",
+        "awayTotal": 26,
+        "awayProbability": "0.55",
+        "awayCount": 47
+      },
+      "MNC": {
+        "count": 54,
+        "total": 26,
+        "probability": "0.48",
+        "awayTotal": 25,
+        "awayProbability": "0.52",
+        "awayCount": 48
+      },
+      "BRI": {
+        "count": 49,
+        "total": 19,
+        "probability": "0.39",
+        "awayTotal": 23,
+        "awayProbability": "0.43",
+        "awayCount": 54
+      },
+      "LEI": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 30,
+        "awayProbability": "0.60",
+        "awayCount": 50
+      }
+    },
+    "BRI": {
+      "LEE": {
+        "count": 51,
+        "total": 28,
+        "probability": "0.55",
+        "awayTotal": 25,
+        "awayProbability": "0.46",
+        "awayCount": 54
+      },
+      "MNU": {
+        "count": 51,
+        "total": 28,
+        "probability": "0.55",
+        "awayTotal": 25,
+        "awayProbability": "0.47",
+        "awayCount": 53
+      },
+      "BUR": {
+        "count": 50,
+        "total": 26,
+        "probability": "0.52",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 54,
+        "total": 16,
+        "probability": "0.30",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "SOU": {
+        "count": 50,
+        "total": 23,
+        "probability": "0.46",
+        "awayTotal": 23,
+        "awayProbability": "0.44",
+        "awayCount": 52
+      },
+      "CRY": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 53
+      },
+      "NWC": {
+        "count": 52,
+        "total": 20,
+        "probability": "0.38",
+        "awayTotal": 27,
+        "awayProbability": "0.55",
+        "awayCount": 49
+      },
+      "ARS": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "EVE": {
+        "count": 51,
+        "total": 21,
+        "probability": "0.41",
+        "awayTotal": 28,
+        "awayProbability": "0.55",
+        "awayCount": 51
+      },
+      "BRN": {
+        "count": 48,
+        "total": 22,
+        "probability": "0.46",
+        "awayTotal": 30,
+        "awayProbability": "0.63",
+        "awayCount": 48
+      },
+      "WHU": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 35,
+        "awayProbability": "0.67",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 52,
+        "total": 25,
+        "probability": "0.48",
+        "awayTotal": 19,
+        "awayProbability": "0.37",
+        "awayCount": 52
+      },
+      "WOL": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 27,
+        "awayProbability": "0.53",
+        "awayCount": 51
+      },
+      "TOT": {
+        "count": 51,
+        "total": 32,
+        "probability": "0.63",
+        "awayTotal": 32,
+        "awayProbability": "0.62",
+        "awayCount": 52
+      },
+      "NOR": {
+        "count": 54,
+        "total": 17,
+        "probability": "0.31",
+        "awayTotal": 24,
+        "awayProbability": "0.47",
+        "awayCount": 51
+      },
+      "LIV": {
+        "count": 53,
+        "total": 29,
+        "probability": "0.55",
+        "awayTotal": 38,
+        "awayProbability": "0.72",
+        "awayCount": 53
+      },
+      "MNC": {
+        "count": 50,
+        "total": 26,
+        "probability": "0.52",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      },
+      "ASV": {
+        "count": 54,
+        "total": 23,
+        "probability": "0.43",
+        "awayTotal": 19,
+        "awayProbability": "0.39",
+        "awayCount": 49
+      },
+      "LEI": {
+        "count": 51,
+        "total": 25,
+        "probability": "0.49",
+        "awayTotal": 31,
+        "awayProbability": "0.61",
+        "awayCount": 51
+      }
+    },
+    "LEI": {
+      "LEE": {
+        "count": 51,
+        "total": 24,
+        "probability": "0.47",
+        "awayTotal": 24,
+        "awayProbability": "0.46",
+        "awayCount": 52
+      },
+      "MNU": {
+        "count": 54,
+        "total": 25,
+        "probability": "0.46",
+        "awayTotal": 25,
+        "awayProbability": "0.48",
+        "awayCount": 52
+      },
+      "BUR": {
+        "count": 51,
+        "total": 32,
+        "probability": "0.63",
+        "awayTotal": 31,
+        "awayProbability": "0.60",
+        "awayCount": 52
+      },
+      "WAT": {
+        "count": 50,
+        "total": 29,
+        "probability": "0.58",
+        "awayTotal": 31,
+        "awayProbability": "0.62",
+        "awayCount": 50
+      },
+      "SOU": {
+        "count": 49,
+        "total": 24,
+        "probability": "0.49",
+        "awayTotal": 32,
+        "awayProbability": "0.59",
+        "awayCount": 54
+      },
+      "CRY": {
+        "count": 52,
+        "total": 29,
+        "probability": "0.56",
+        "awayTotal": 19,
+        "awayProbability": "0.38",
+        "awayCount": 50
+      },
+      "NWC": {
+        "count": 53,
+        "total": 25,
+        "probability": "0.47",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "ARS": {
+        "count": 52,
+        "total": 13,
+        "probability": "0.25",
+        "awayTotal": 27,
+        "awayProbability": "0.54",
+        "awayCount": 50
+      },
+      "EVE": {
+        "count": 46,
+        "total": 29,
+        "probability": "0.63",
+        "awayTotal": 27,
+        "awayProbability": "0.52",
+        "awayCount": 52
+      },
+      "BRN": {
+        "count": 54,
+        "total": 36,
+        "probability": "0.67",
+        "awayTotal": 22,
+        "awayProbability": "0.41",
+        "awayCount": 54
+      },
+      "WHU": {
+        "count": 53,
+        "total": 31,
+        "probability": "0.58",
+        "awayTotal": 34,
+        "awayProbability": "0.65",
+        "awayCount": 52
+      },
+      "CHE": {
+        "count": 51,
+        "total": 21,
+        "probability": "0.41",
+        "awayTotal": 25,
+        "awayProbability": "0.51",
+        "awayCount": 49
+      },
+      "WOL": {
+        "count": 50,
+        "total": 28,
+        "probability": "0.56",
+        "awayTotal": 26,
+        "awayProbability": "0.52",
+        "awayCount": 50
+      },
+      "TOT": {
+        "count": 52,
+        "total": 28,
+        "probability": "0.54",
+        "awayTotal": 28,
+        "awayProbability": "0.56",
+        "awayCount": 50
+      },
+      "NOR": {
+        "count": 52,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 30,
+        "awayProbability": "0.58",
+        "awayCount": 52
+      },
+      "LIV": {
+        "count": 50,
+        "total": 23,
+        "probability": "0.46",
+        "awayTotal": 31,
+        "awayProbability": "0.58",
+        "awayCount": 53
+      },
+      "MNC": {
+        "count": 54,
+        "total": 25,
+        "probability": "0.46",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "ASV": {
+        "count": 50,
+        "total": 30,
+        "probability": "0.60",
+        "awayTotal": 33,
+        "awayProbability": "0.65",
+        "awayCount": 51
+      },
+      "BRI": {
+        "count": 51,
+        "total": 31,
+        "probability": "0.61",
+        "awayTotal": 25,
+        "awayProbability": "0.49",
+        "awayCount": 51
+      }
+    },
+    "BRN": {
+      "LEE": {
+        "count": 49,
+        "total": 24,
+        "probability": "0.49",
+        "awayTotal": 27,
+        "awayProbability": "0.50",
+        "awayCount": 54
+      },
+      "MNU": {
+        "count": 51,
+        "total": 33,
+        "probability": "0.65",
+        "awayTotal": 23,
+        "awayProbability": "0.46",
+        "awayCount": 50
+      },
+      "BUR": {
+        "count": 50,
+        "total": 28,
+        "probability": "0.56",
+        "awayTotal": 24,
+        "awayProbability": "0.49",
+        "awayCount": 49
+      },
+      "WAT": {
+        "count": 51,
+        "total": 21,
+        "probability": "0.41",
+        "awayTotal": 23,
+        "awayProbability": "0.43",
+        "awayCount": 53
+      },
+      "SOU": {
+        "count": 52,
+        "total": 26,
+        "probability": "0.50",
+        "awayTotal": 22,
+        "awayProbability": "0.41",
+        "awayCount": 54
+      },
+      "CRY": {
+        "count": 51,
+        "total": 29,
+        "probability": "0.57",
+        "awayTotal": 24,
+        "awayProbability": "0.45",
+        "awayCount": 53
+      },
+      "NWC": {
+        "count": 54,
+        "total": 29,
+        "probability": "0.54",
+        "awayTotal": 29,
+        "awayProbability": "0.56",
+        "awayCount": 52
+      },
+      "ARS": {
+        "count": 53,
+        "total": 22,
+        "probability": "0.42",
+        "awayTotal": 28,
+        "awayProbability": "0.54",
+        "awayCount": 52
+      },
+      "EVE": {
+        "count": 52,
+        "total": 30,
+        "probability": "0.58",
+        "awayTotal": 25,
+        "awayProbability": "0.51",
+        "awayCount": 49
+      },
+      "WHU": {
+        "count": 52,
+        "total": 27,
+        "probability": "0.52",
+        "awayTotal": 25,
+        "awayProbability": "0.50",
+        "awayCount": 50
+      },
+      "CHE": {
+        "count": 51,
+        "total": 27,
+        "probability": "0.53",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "WOL": {
+        "count": 51,
+        "total": 18,
+        "probability": "0.35",
+        "awayTotal": 33,
+        "awayProbability": "0.61",
+        "awayCount": 54
+      },
+      "TOT": {
+        "count": 49,
+        "total": 23,
+        "probability": "0.47",
+        "awayTotal": 35,
+        "awayProbability": "0.65",
+        "awayCount": 54
+      },
+      "NOR": {
+        "count": 48,
+        "total": 27,
+        "probability": "0.56",
+        "awayTotal": 27,
+        "awayProbability": "0.50",
+        "awayCount": 54
+      },
+      "LIV": {
+        "count": 53,
+        "total": 33,
+        "probability": "0.62",
+        "awayTotal": 29,
+        "awayProbability": "0.58",
+        "awayCount": 50
+      },
+      "MNC": {
+        "count": 50,
+        "total": 31,
+        "probability": "0.62",
+        "awayTotal": 31,
+        "awayProbability": "0.62",
+        "awayCount": 50
+      },
+      "ASV": {
+        "count": 53,
+        "total": 21,
+        "probability": "0.40",
+        "awayTotal": 22,
+        "awayProbability": "0.42",
+        "awayCount": 52
+      },
+      "BRI": {
+        "count": 48,
+        "total": 30,
+        "probability": "0.63",
+        "awayTotal": 22,
+        "awayProbability": "0.46",
+        "awayCount": 48
+      },
+      "LEI": {
+        "count": 54,
+        "total": 22,
+        "probability": "0.41",
+        "awayTotal": 36,
+        "awayProbability": "0.67",
+        "awayCount": 54
+      }
+    }
+  }
+  
