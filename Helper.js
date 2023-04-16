@@ -613,6 +613,7 @@ class Helper {
 
     static async fetchBabyFixtures(res) {
         const browser = await puppeteer.launch({
+            headless: true,
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
@@ -653,7 +654,7 @@ class Helper {
                     await page.click('.btn-danger');
                 }
                 await page.waitForSelector('#gamebets-wrapper');
-                ans = await saveFixtures();
+                ans = await saveFixtures(); 
             } catch (err) {
                 ans = undefined; // when there ia an error while loggin in
                 count += 1;
@@ -698,11 +699,8 @@ class Helper {
             return ans;
         }
 
-        const currentPlayingTeam = 'LIV';
-        const predicts = this.getTrainObj(ans.fixtures, 'GG');
-        console.log(predicts, 'Fucking predicts.....');
-
         const env = process.env;
+        console.log(env.BASE_URL, 'Base url..');
         // const users = await this.getBabyUsers();
         // await Promise.all(users.map((user) => this.playBaby(ans.fixtures, user, predicts)))
         const result = await axios({
