@@ -683,8 +683,8 @@ class Helper {
                         datum.GG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
                         datum.NG = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
 
-                        datum.over2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
-                        datum.under2 = docRow[i].querySelectorAll('.mainMarketsOdds')[2].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.over2 = docRow[i].querySelectorAll('.mainMarketsOdds')[3].querySelectorAll('.col-xs')[0].textContent.replace(/ /g, '').replace(/\n/g, '');
+                        datum.under2 = docRow[i].querySelectorAll('.mainMarketsOdds')[3].querySelectorAll('.col-xs')[1].textContent.replace(/ /g, '').replace(/\n/g, '');
 
                         fixtures.push(datum);
                     }
