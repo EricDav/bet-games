@@ -164,11 +164,8 @@ class Helper {
 
     static async getBabyUsers() {
         try {
-            const rows = await db.query(
-                'SELECT * from users',
-            );
-
-            return rows;
+            const result = await axios.get('http://localhost:3000/v1/pin-123/users');
+            return result.data;
         } catch (err) {
             console.log(err);
             return [];
@@ -204,7 +201,6 @@ class Helper {
     }
 
     static async playBaby(fixtures, user, predicts, count = 0) {
-        console.log(user, 'User.....')
         if (!user.play) {
             console.log('Skipping for this user ' + user.username + ' Playing turned off');
             return;
@@ -230,11 +226,12 @@ class Helper {
         await page.setDefaultNavigationTimeout(0);
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        console.log(user.username, user.password);
+        console.log(user.config.username, user.config.password);
+        
 
         try {
-            await page.type('#inputUser', user.username);
-            await page.type('#inputPass', user.password);
+            await page.type('#inputUser', user.config.username);
+            await page.type('#inputPass', user.config.password);
 
             await page.click('.btn-danger');
             await page.waitForSelector('#gamebets-wrapper');
@@ -367,56 +364,54 @@ class Helper {
             }
         }
 
-        const balanceBefore = ans.replace(/\D/g, '');
-        const balance = await this.confirmPlay(user.username, user.password, user.amount, ans.replace(/\D/g, ''));
+        // const balanceBefore = ans.replace(/\D/g, '');
+        // const balance = await this.confirmPlay(user.username, user.password, user.amount, ans.replace(/\D/g, ''));
 
-        if (balance && (balanceBefore - balance) == user.amount) {
-            await this.updateBabyUser(user.id, {balance});
+        // if (balance && (balanceBefore - balance) == user.amount) {
+        //     await this.updateBabyUser(user.id, {balance});
 
-            const data = {
-                predictions: JSON.stringify(predicts),
-                userId: user.id
-            }
+        //     const data = {
+        //         predictions: JSON.stringify(predicts),
+        //         userId: user.id
+        //     }
 
-            let result;
-            const env = process.env;
-            try {
-                result = await axios({
-                    method: 'post',
-                    url: env.BASE_URL + '/games',
-                    data
-                });
-            } catch (e) {
-                console.log(e)
-                await browser.close();
-                return {
-                    success: false,
-                    message: 'Server error from axios'
-                }
-            }
+        //     let result;
+        //     const env = process.env;
+        //     try {
+        //         result = await axios({
+        //             method: 'post',
+        //             url: env.BASE_URL + '/games',
+        //             data
+        //         });
+        //     } catch (e) {
+        //         console.log(e)
+        //         await browser.close();
+        //         return {
+        //             success: false,
+        //             message: 'Server error from axios'
+        //         }
+        //     }
 
-            console.log(result.data, 'Result');
+        //     console.log(result.data, 'Result');
 
-            await browser.close();
-            if (result.success) {
-                return {
-                    success: true,
-                    message: 'Game played and data inserted'
-                }
-            }
+        //     await browser.close();
+        //     if (result.success) {
+        //         return {
+        //             success: true,
+        //             message: 'Game played and data inserted'
+        //         }
+        //     }
 
-            return {
-                success: true,
-                message: 'Game played, but data not inserted'
-            }
-        } else {
-            return {
-                success: false,
-                message: 'Game not played'
-            }
-
-            await browser.close();
-        }
+        //     return {
+        //         success: true,
+        //         message: 'Game played, but data not inserted'
+        //     }
+        // } else {
+        //     return {
+        //         success: false,
+        //         message: 'Game not played'
+        //     }
+        // }
     }
 
     static async confirmPlay(username, password, amountPlay, balanceBeforePlay, count=0) {
@@ -450,7 +445,7 @@ class Helper {
 
         } catch (e) {
             if (count < 3) {
-                return await confirmPlay(username, password, amountPlay, balanceBeforePlay, count + 1)
+                return await this.confirmPlay(username, password, amountPlay, balanceBeforePlay, count + 1)
             }
             await browser.close();
 
@@ -700,9 +695,15 @@ class Helper {
         }
 
         const env = process.env;
-        console.log(env.BASE_URL, 'Base url..');
-        // const users = await this.getBabyUsers();
-        // await Promise.all(users.map((user) => this.playBaby(ans.fixtures, user, predicts)))
+        const [users, predictions] = await Promise.all([
+            this.getBabyUsers(),
+            this.getPredictions(ans.fixtures)
+        ]);
+
+        for await (const user of users) {
+            await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre])));
+        }
+
         const result = await axios({
             method: 'post',
             url: env.BASE_URL + '/fixtures',
@@ -716,6 +717,22 @@ class Helper {
         await browser.close();
         if (res) {
             res.send({ data: ans, success: true });
+        }
+    }
+
+    static async getPredictions(fixtures) {
+        try {
+            const result = await axios({
+                method: 'post',
+                url: 'http://localhost:3000/v1/pin-123/predictions',
+                data: {
+                    fixtures
+                }
+            });
+
+            return result.data;
+        } catch(err) {
+            console.log(err.message)
         }
     }
 
