@@ -164,7 +164,7 @@ class Helper {
 
     static async getBabyUsers() {
         try {
-            const result = await axios.get('http://localhost:3000/v1/pin-123/users');
+            const result = await axios.get('http://localhost:5001/v1/pin-123/users');
             return result.data;
         } catch (err) {
             console.log(err);
@@ -724,7 +724,7 @@ class Helper {
         try {
             const result = await axios({
                 method: 'post',
-                url: 'http://localhost:3000/v1/pin-123/predictions',
+                url: 'http://localhost:5001/v1/pin-123/predictions',
                 data: {
                     fixtures
                 }
