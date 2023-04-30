@@ -1,15 +1,16 @@
-const Pool = require('pg').Pool
+const mysql = require('mysql');
 const { config } = require('./config');
+const util = require('util');
+const connection = mysql.createPool({
+  connectionLimit: 100, //important
+  host: config.db.host,
+  user: config.db.user,
+  password: config.db.password,
+  database: config.db.database
+});
 
-console.log(config, 'Config....')
 
-const pool = new Pool(config.db);
-
-const query = async (query, params) => {
-    const {rows, fields} = await pool.query(query, params);
-
-    return rows;
-}
+const query = util.promisify(connection.query).bind(connection);
 
 module.exports = {
     query

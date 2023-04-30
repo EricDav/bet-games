@@ -8,7 +8,6 @@ const config = {
       user: env.PG_USER,
       password: env.PG_PASSWORD,
       database: env.PG_DATABASE,
-      ssl: { rejectUnauthorized: false },
     },
 };
 

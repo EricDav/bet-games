@@ -2,6 +2,20 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 require('dotenv').config();
 const db = require('./database');
+const HOME = '1';
+const AWAY = '2';
+const DRAW = 'X';
+const HOME_DRAW = '1X';
+const AWAY_DRAW = 'X2';
+const OVER_2_POINT_5 = 'Over 2.5';
+const UNDER_2_POINT_5 = 'Under 2.5';
+const GOAL_GOAL = 'GG';
+const NO_GOAL_GOAL = 'NG';
+const ANY_BODY_WIN = '12';
+const OVER_1_POINT_5 = 'Over 1.5';
+const UNDER_1_POINT_5 = 'Under 1.5';
+const OVER_3_POINT_5 = 'Over 3.5';
+const UNDER_3_POINT_5 = 'Under 3.5';
 
 class Helper {
     static format(d) {
@@ -157,17 +171,19 @@ class Helper {
 
             return null;
         } catch (err) {
-            console.log(err);
+            console.log(err.message);
             return null;
         }
     }
 
     static async getBabyUsers() {
         try {
-            const result = await axios.get('http://localhost:5001/v1/pin-123/users');
-            return result.data;
+            const users = await db.query(
+                'SELECT users.play, users.amount, configs.password, configs.username from users INNER JOIN configs WHERE users.configId = configs.id',
+            );
+            return users;
         } catch (err) {
-            console.log(err);
+            console.log(err.message);
             return [];
         }
     }
@@ -191,7 +207,7 @@ class Helper {
                 }
             }
         } catch (err) {
-            console.log(err);
+            console.log(err.message);
             return {
                 success: false,
                 message: err.message
@@ -226,22 +242,19 @@ class Helper {
         await page.setDefaultNavigationTimeout(0);
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        console.log(user.config.username, user.config.password);
-        
-
         try {
-            await page.type('#inputUser', user.config.username);
-            await page.type('#inputPass', user.config.password);
+            await page.type('#inputUser', user.username);
+            await page.type('#inputPass', user.password);
 
             await page.click('.btn-danger');
             await page.waitForSelector('#gamebets-wrapper');
         } catch (e) {
-            console.log(e);
+            console.log(e.message);
             // retry 3 times 
 
             if (count < 3) {
                 const val = await this.playBaby(fixtures, user, predicts, count + 1);
-                return alert;
+                return val;
             }
 
             return {
@@ -322,8 +335,6 @@ class Helper {
             ans = await page.evaluate(async () => {
                 const main = await window.play();
                 const price = await window.getPrice();
-
-                console.log(price, main)
                 for (let i = 0; i < main.length; i++) {
                     obj = main[i];
                     document.querySelectorAll('.row-matches-bets')[obj.row].querySelectorAll('.mainMarketsOdds')[obj.section].querySelectorAll('.col-xs')[obj.item].querySelector('.btn-odd').click();
@@ -344,7 +355,7 @@ class Helper {
                 return document.querySelectorAll('.event-countdown-text')[0].textContent;
             });
         } catch (e) {
-            console.log(e);
+            console.log(e.message);
             return {
                 success: false,
                 message: 'Error occured in evaluation function'
@@ -412,6 +423,7 @@ class Helper {
         //         message: 'Game not played'
         //     }
         // }
+        browser.close()
     }
 
     static async confirmPlay(username, password, amountPlay, balanceBeforePlay, count=0) {
@@ -431,7 +443,6 @@ class Helper {
             await page.setDefaultNavigationTimeout(0);
             await page.goto(url, { waitUntil: 'networkidle2' });
 
-            console.log(username, password);
             await page.type('#inputUser', username);
             await page.type('#inputPass', password);
             await page.click('.btn-danger');
@@ -588,21 +599,21 @@ class Helper {
             })
         }
 
-        const env = process.env;
-        const result = await axios({
-            method: 'post',
-            url: env.BASE_URL + '/results',
-            data
-        });
-
-        delete result.fixtures
-        console.log('Cron details log start for results ==>>>>>>>>>>');
-        console.log(result.data);
-        console.log('Cron details log end for results ==>>>>>>>>>>');
-
         await browser.close();
-        if (res) {
-            return res.send({ data, success: true });
+        const env = process.env;
+        try {
+            await axios({
+                method: 'post',
+                url: env.BASE_URL + '/results',
+                data
+            });
+            if (res) {
+                return res.send({ data, success: true });
+            }
+        }  catch(err) {
+            if (res) {
+                return res.send({ data: err.message, success: false });
+            }
         }
     }
 
@@ -700,18 +711,22 @@ class Helper {
             this.getPredictions(ans.fixtures)
         ]);
 
+        console.log(users, predictions, '==>>>');
         for await (const user of users) {
             await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre])));
         }
 
-        const result = await axios({
-            method: 'post',
-            url: env.BASE_URL + '/fixtures',
-            data: ans
-        });
-
         console.log('Cron details log start for fixtures ==>>>>>>>>>>');
-        console.log(result.data);
+        try {
+            const result = await axios({
+                method: 'post',
+                url: env.BASE_URL + '/fixtures',
+                data: ans
+            });
+            console.log(result.data)
+        } catch(err) {
+            console.log(err.message)
+        }
         console.log('Cron details log end for fixtures ==>>>>>>>>>>');
 
         await browser.close();
@@ -722,15 +737,28 @@ class Helper {
 
     static async getPredictions(fixtures) {
         try {
-            const result = await axios({
-                method: 'post',
-                url: 'http://localhost:5001/v1/pin-123/predictions',
-                data: {
-                    fixtures
-                }
-            });
+            const query = `SELECT * FROM predictions where percentage_win > 11 ORDER BY percentage_win DESC`
 
-            return result.data;
+            const predictions = await db.query(query);
+            const predicts = [];
+            for await (const fix of fixtures) {
+                predictions.forEach((p) => {
+                    if (p.home === fix.homeTeam && p.away === fix.awayTeam) {
+                        let preType = p.type;
+                        if (preType === OVER_2_POINT_5) {
+                            preType = 'over2'
+                        } else if (preType === UNDER_2_POINT_5) {
+                            preType = 'under2';
+                        }
+                        predicts.push({
+                            homeTeam: p.home,
+                            awayTeam: p.away,
+                            prediction: preType 
+                        })
+                    }
+                });
+            }
+            return predicts;
         } catch(err) {
             console.log(err.message)
         }
