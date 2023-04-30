@@ -711,7 +711,6 @@ class Helper {
             this.getPredictions(ans.fixtures)
         ]);
 
-        console.log(users, predictions, '==>>>');
         for await (const user of users) {
             await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre])));
         }
