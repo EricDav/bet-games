@@ -621,7 +621,7 @@ class Helper {
 
     static async fetchBabyFixtures(res) {
         const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/chromium-browser',
+            executablePath: '/usr/bin/chromium',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
