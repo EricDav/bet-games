@@ -225,6 +225,7 @@ class Helper {
         console.log('<<<=======Begining of Playing baby  =======>>>', user.username);
         const puppeteer = require('puppeteer');
         const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
@@ -466,6 +467,7 @@ class Helper {
 
     static async fetchBabyResult(res) {
         const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
@@ -619,7 +621,7 @@ class Helper {
 
     static async fetchBabyFixtures(res) {
         const browser = await puppeteer.launch({
-            headless: true,
+            executablePath: '/usr/bin/chromium-browser',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
