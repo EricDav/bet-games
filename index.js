@@ -1,5 +1,6 @@
 const express = require('express');
 const helper = require('./Helper');
+const baby = require('./baby');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const cron = require('node-cron');
@@ -12,20 +13,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cors())
-cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', () => {
+cron.schedule('3,9,15,21,27,33,39,45,51,57 * * * *', async () => {
     try {
         console.log('Cron started......');
-        helper.fetchBabyFixtures(null);
-        helper.fetchBabyResult(null);
+        const b = new baby();
+        const result = await Promise.all([b.fetchBabyFixtures(), b.fetchBabyResult()]);
+        console.log('End of Cron.....')
     } catch(e) {
         console.log(e, 'Error occured');
     }
 });
 
-app.get('/health', (req, res) => {
+app.get('/health', async (req, res) => {
     try {
+        console.log('Cron started......');
+        const b = new baby();
+        const result = await Promise.all([b.fetchBabyFixtures(), b.fetchBabyResult()]);
+        console.log(result, 'Results...')
+        console.log('End of Cron.....')
         helper.health(res);
     } catch (e) {
+        console.log(e.message)
         res.send({message: 'Server not healthy sad!', success: false});
     } 
 });
