@@ -189,7 +189,7 @@ class Baby {
         ]);
 
         for await (const user of users) {
-            await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre], browser)));
+            await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre])));
         }
 
         await this.closeBrowser();
@@ -239,7 +239,7 @@ class Baby {
         }
     }
 
-    async playBaby(fixtures, user, predicts, count = 0, browser) {
+    async playBaby(fixtures, user, predicts, count = 0) {
         if (!user.play) {
             console.log('Skipping for this user ' + user.name + ' Playing turned off');
             return;
@@ -269,7 +269,7 @@ class Baby {
             // retry 3 times 
 
             if (count < 3) {
-                const val = await this.playBaby(fixtures, user, predicts, count + 1, browser);
+                const val = await this.playBaby(fixtures, user, predicts, count + 1);
                 return val;
             }
 
