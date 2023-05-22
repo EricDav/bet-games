@@ -20,6 +20,7 @@ class Baby {
 
     async setBrowser() {
         const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
@@ -34,6 +35,7 @@ class Baby {
             return this.browser
         }
         const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium',
             ignoreDefaultArgs: ['--disable-extensions'],
             args: [
                 '--no-sandbox',
@@ -441,6 +443,7 @@ class Baby {
         console.log('Result.........')
         const browser = await puppeteer.launch({
             ignoreDefaultArgs: ['--disable-extensions'],
+            executablePath: '/usr/bin/chromium',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
