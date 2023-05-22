@@ -68,7 +68,6 @@ class Baby {
             const users = await db.query(
                 'SELECT users.play, users.amount, configs.password, configs.username from users INNER JOIN configs WHERE users.configId = configs.id',
             );
-            console.log(users, 'Users..')
             return users;
         } catch (err) {
             console.log(err.message);
@@ -187,6 +186,10 @@ class Baby {
             this.getBabyUsers(),
             this.getPredictions(ans.fixtures)
         ]);
+
+        if (predictions.length === 0) {
+            console.log('.......No predictions for this round.......');
+        }
 
         for await (const user of users) {
             await Promise.all(predictions.map(pre => this.playBaby(ans.fixtures, user, [pre])));
