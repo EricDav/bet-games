@@ -245,6 +245,8 @@ class Baby {
             return;
         }
 
+        const browser = await this.getBrowser();
+
         console.log('<<<=======Begining of Playing baby  =======>>>', user.name);
         // Inputs ----
         const price = user.amount;
