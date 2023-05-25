@@ -215,7 +215,7 @@ class Baby {
 
     async getPredictions(fixtures) {
         try {
-            const query = `SELECT * FROM predictions where average_percentage_win > 0.3 ORDER BY percentage_win DESC`
+            const query = `SELECT * FROM predictions where average_percentage_win > 0.1 ORDER BY percentage_win DESC`
 
             const predictions = await db.query(query);
             const predicts = [];
